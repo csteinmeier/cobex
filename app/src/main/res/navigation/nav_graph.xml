@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/Home">
+
+    <fragment
+        android:id="@+id/Home"
+        android:name="com.example.tinetest1.FirstFragment"
+        android:label="@string/home_screen_label"
+        tools:layout="@layout/fragment_first">
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/SecondFragment"
+        android:name="com.example.tinetest1.SecondFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_second">
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/Home" />
+        <action
+            android:id="@+id/action_SecondFragment_to_CreateNew"
+            app:destination="@id/CreateNew" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/CreateNew"
+        android:name="com.example.tinetest1.CreateNew"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_create_new">
+
+        <action
+            android:id="@+id/action_CreateNew_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
+
+</navigation>
