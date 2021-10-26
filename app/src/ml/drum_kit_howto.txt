@@ -1,0 +1,16 @@
+Generate a drum track
+BUNDLE_PATH=<absolute path of .mag file>
+CONFIG=<one of 'one_drum' or 'drum_kit', matching the bundle>
+
+drums_rnn_generate \
+--config=${CONFIG} \
+--bundle_file=${BUNDLE_PATH} \
+--output_dir=/tmp/drums_rnn/generated \
+--num_outputs=10 \
+--num_steps=128 \
+--primer_drums="[(36,)]"
+
+This will generate a drum track starting with a bass drum hit. If you'd like, you can also supply priming drums using a string representation of a Python list. The values in the list should be tuples of integer MIDI pitches representing the drums that are played simultaneously at each step. For example --primer_drums="[(36, 42), (), (42,)]" would prime the model with one step of bass drum and hi-hat, then one step of rest, then one step of just hi-hat. Instead of using --primer_drums, we can use --primer_midi to prime our model with drums stored in a MIDI file.
+
+Beispiel:
+drums_rnn_generate --config=drum_kit --bundle_file=F:/ML/generatives/drum_kit_rnn.mag --output_dir=/tmp/drums_rnn/generated --num_outputs=10 --num_steps=128 --primer_drums="[(36,)]"

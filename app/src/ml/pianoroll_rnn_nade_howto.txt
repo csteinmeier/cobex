@@ -1,0 +1,31 @@
+BUNDLE_PATH=<absolute path of .mag file>
+
+pianoroll_rnn_nade_generate \
+--bundle_file=${BUNDLE_PATH} \
+--output_dir=/tmp/pianoroll_rnn_nade/generated \
+--num_outputs=10 \
+--num_steps=128 \
+--primer_pitches="[67,64,60]"
+
+This will generate a polyphonic pianoroll sequence using a C Major chord as a primer.
+
+There are several command line options for controlling the generation process:
+
+primer_pitches: A string representation of a Python list of pitches that will be used as a starting chord with a quarter note duration. For example: "[60, 64, 67]".
+primer_pianoroll: A string representation of a Python list of note_seq.PianorollSequence event values (tuples of active MIDI pitches for a sequence of steps). For example: "[(55,), (54,), (55, 53), (50,), (62, 52), (), (63, 55)]".
+primer_midi: The path to a MIDI file containing a polyphonic track that will be used as a priming track.
+For a full list of command line options, run pianoroll_rnn_nade_generate --help.
+
+Here's an example that is primed with two bars of Twinkle, Twinkle, Little Star set in two-voice counterpoint:
+
+BUNDLE_PATH=<absolute path of .mag file>
+
+pianoroll_rnn_nade_generate \
+--bundle_file=${BUNDLE_PATH} \
+--output_dir=/tmp/pianoroll_rnn_nade/generated \
+--qpm=90 \
+--num_outputs=10 \
+--num_steps=64 \
+--primer_pianoroll="[(55,), (54,), (55, 52), (50,), (62, 52), (57,), "\
+"(62, 55), (59,), (64, 52), (60,), (64, 59), (57,), (62, 59), (62, 55), "\
+"(62, 52), (62, 55)]"
