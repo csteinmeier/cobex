@@ -37,6 +37,14 @@
         <action
             android:id="@+id/action_CreateNew_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_CreateNew_to_captureSound"
+            app:destination="@id/captureSound" />
     </fragment>
+    <fragment
+        android:id="@+id/captureSound"
+        android:name="com.example.tinetest1.CaptureSound"
+        android:label="fragment_capture_sound"
+        tools:layout="@layout/fragment_capture_sound" />
 
 </navigation>

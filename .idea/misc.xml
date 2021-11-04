@@ -3,6 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ML/cobex/app/src/main/res/layout/activity_main.xml" value="0.5280797101449275" />
+        <entry key="..\:/ML/cobex/app/src/main/res/layout/content_main.xml" value="0.5280797101449275" />
+        <entry key="..\:/ML/cobex/app/src/main/res/layout/fragment_capture_sound.xml" value="0.6666666666666666" />
+        <entry key="..\:/ML/cobex/app/src/main/res/layout/fragment_create_new.xml" value="0.5280797101449275" />
+        <entry key="..\:/ML/cobex/app/src/main/res/layout/fragment_first.xml" value="0.5280797101449275" />
+        <entry key="..\:/ML/cobex/app/src/main/res/layout/fragment_input_melody.xml" value="0.5280797101449275" />
+        <entry key="..\:/ML/cobex/app/src/main/res/layout/fragment_second.xml" value="0.5280797101449275" />
         <entry key="..\:/Users/csteinmeier/AndroidStudioProjects/TineTest1/app/src/main/res/layout/activity_main.xml" value="0.4483695652173913" />
         <entry key="..\:/Users/csteinmeier/AndroidStudioProjects/TineTest1/app/src/main/res/layout/content_main.xml" value="0.4483695652173913" />
         <entry key="..\:/Users/csteinmeier/AndroidStudioProjects/TineTest1/app/src/main/res/layout/fragment_create_new.xml" value="0.41041666666666665" />
