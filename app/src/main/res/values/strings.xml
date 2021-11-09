@@ -14,7 +14,6 @@
 
     <!-- Button Texts -->
     <string name="buttonStart">Start</string>
-    <string name="buttonStop">Stop</string>
     <string name="buttonBack">Back</string>
 
     <string name="buttonCreateNew">Create New</string>
@@ -29,7 +28,6 @@
     <string name="buttonActionInput">Capture Action</string>
     <string name="buttonNext">Next</string>
 
-    <string name="hello_blank_fragment">Capture Sounds</string>
     <string name="textSoundCapture">Press START to record audio!</string>
     <string name="textSelectSoundCaptureType">Select which type of audio you will record:</string>
     <string name="Environment">Environment Sounds</string>

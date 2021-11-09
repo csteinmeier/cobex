@@ -1,14 +1,581 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1A7E74"
+    android:gravity="top|center"
     tools:context=".InputMelody">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <HorizontalScrollView
+        android:id="@+id/scrollpiano"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="220dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        >
 
-</FrameLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!--region PianoKeyButtons-->
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w1"
+                style="@style/firstwhitekey" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w2"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w3"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w2" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w4"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w3" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w5"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w4" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w6"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w5" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w7"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w6" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w8"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w7" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w9"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w8" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w10"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w9" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w11"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w10" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w12"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w11" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w13"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w12" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w14"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w13" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w15"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w14" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w16"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w15" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w17"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w16" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w18"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w17" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w19"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w18" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w20"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w19" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w21"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w20" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w22"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w21" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w23"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w22" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w24"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w23" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w25"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w24" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w26"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w25" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w27"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w26" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w28"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w27" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w29"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w28" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w30"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w29" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w31"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w30" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w32"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w31" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w33"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w32" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w34"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w33" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/w35"
+                style="@style/whitekey"
+                android:layout_toRightOf="@id/w34" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b1"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b2"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w2" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b3"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w4" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b4"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w5" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b5"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w6" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b6"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w8" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b7"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w9" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b8"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w11" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b9"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w12" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b10"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w13" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b11"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w15" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b12"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w16" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b13"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w18" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b14"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w19" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b15"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w20" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b16"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w22" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b17"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w23" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b18"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w25" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b19"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w26" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b20"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w27" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b21"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w29" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b22"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w30" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b23"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w32" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b24"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w33" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/b25"
+                style="@style/blackkey"
+                android:layout_toRightOf="@id/w34" />
+            <!--endregion-->
+
+            <!--region PianoKeyButtonLabels-->
+            <TextView
+                android:id="@+id/tc3"
+                style="@style/keytext3"
+                android:layout_toLeftOf="@id/w2"
+                android:stateListAnimator="@null"
+                android:text="C3" />
+
+            <TextView
+                android:id="@+id/td3"
+                style="@style/keytext3"
+                android:layout_toLeftOf="@id/w3"
+                android:text="D3" />
+
+            <TextView
+                android:id="@+id/te3"
+                style="@style/keytext3"
+                android:layout_toLeftOf="@id/w4"
+                android:text="E3" />
+
+            <TextView
+                android:id="@+id/tf3"
+                style="@style/keytext3"
+                android:layout_toLeftOf="@id/w5"
+                android:text="F3" />
+
+            <TextView
+                android:id="@+id/tg3"
+                style="@style/keytext3"
+                android:layout_toLeftOf="@id/w6"
+                android:text="G3" />
+
+            <TextView
+                android:id="@+id/ta3"
+                style="@style/keytext3"
+                android:layout_toLeftOf="@id/w7"
+                android:text="A3" />
+
+            <TextView
+                android:id="@+id/tb3"
+                style="@style/keytext3"
+                android:layout_toLeftOf="@id/w8"
+                android:text="B3" />
+
+
+            <TextView
+                android:id="@+id/tc4"
+                style="@style/keytext4"
+                android:layout_toLeftOf="@id/w9"
+                android:text="C4" />
+
+            <TextView
+                android:id="@+id/td4"
+                style="@style/keytext4"
+                android:layout_toLeftOf="@id/w10"
+                android:text="D4" />
+
+            <TextView
+                android:id="@+id/te4"
+                style="@style/keytext4"
+                android:layout_toLeftOf="@id/w11"
+                android:text="E4" />
+
+            <TextView
+                android:id="@+id/tf4"
+                style="@style/keytext4"
+                android:layout_toLeftOf="@id/w12"
+                android:text="F4" />
+
+            <TextView
+                android:id="@+id/tg4"
+                style="@style/keytext4"
+                android:layout_toLeftOf="@id/w13"
+                android:text="G4" />
+
+            <TextView
+                android:id="@+id/ta4"
+                style="@style/keytext4"
+                android:layout_toLeftOf="@id/w14"
+                android:text="A4" />
+
+            <TextView
+                android:id="@+id/tb4"
+                style="@style/keytext4"
+                android:layout_toLeftOf="@id/w15"
+                android:text="B4" />
+
+            <TextView
+                android:id="@+id/tc5"
+                style="@style/keytext5"
+                android:layout_toLeftOf="@id/w16"
+                android:text="C5" />
+
+            <TextView
+                android:id="@+id/td5"
+                style="@style/keytext5"
+                android:layout_toLeftOf="@id/w17"
+                android:text="D5" />
+
+            <TextView
+                android:id="@+id/te5"
+                style="@style/keytext5"
+                android:layout_toLeftOf="@id/w18"
+                android:text="E5" />
+
+            <TextView
+                android:id="@+id/tf5"
+                style="@style/keytext5"
+                android:layout_toLeftOf="@id/w19"
+                android:text="F5" />
+
+            <TextView
+                android:id="@+id/tg5"
+                style="@style/keytext5"
+                android:layout_toLeftOf="@id/w20"
+                android:text="G5" />
+
+            <TextView
+                android:id="@+id/ta5"
+                style="@style/keytext5"
+                android:layout_toLeftOf="@id/w21"
+                android:text="A5" />
+
+            <TextView
+                android:id="@+id/tb5"
+                style="@style/keytext5"
+                android:layout_toLeftOf="@id/w22"
+                android:text="B5" />
+
+            <TextView
+                android:id="@+id/tc6"
+                style="@style/keytext6"
+                android:layout_toLeftOf="@id/w23"
+                android:text="C6" />
+
+            <TextView
+                android:id="@+id/td6"
+                style="@style/keytext6"
+                android:layout_toLeftOf="@id/w24"
+                android:text="D6" />
+
+            <TextView
+                android:id="@+id/te6"
+                style="@style/keytext6"
+                android:layout_toLeftOf="@id/w25"
+                android:text="E6" />
+
+            <TextView
+                android:id="@+id/tf6"
+                style="@style/keytext6"
+                android:layout_toLeftOf="@id/w26"
+                android:text="F6" />
+
+            <TextView
+                android:id="@+id/tg6"
+                style="@style/keytext6"
+                android:layout_toLeftOf="@id/w27"
+                android:text="G6" />
+
+            <TextView
+                android:id="@+id/ta6"
+                style="@style/keytext6"
+                android:layout_toLeftOf="@id/w28"
+                android:text="A6" />
+
+            <TextView
+                android:id="@+id/tb6"
+                style="@style/keytext6"
+                android:layout_toLeftOf="@id/w29"
+                android:text="B6" />
+
+            <TextView
+                android:id="@+id/tc7"
+                style="@style/keytext7"
+                android:layout_toLeftOf="@id/w30"
+                android:text="C7" />
+
+            <TextView
+                android:id="@+id/td7"
+                style="@style/keytext7"
+                android:layout_toLeftOf="@id/w31"
+                android:text="D7" />
+
+            <TextView
+                android:id="@+id/te7"
+                style="@style/keytext7"
+                android:layout_toLeftOf="@id/w32"
+                android:text="E7" />
+
+            <TextView
+                android:id="@+id/tf7"
+                style="@style/keytext7"
+                android:layout_toLeftOf="@id/w33"
+                android:text="F7" />
+
+            <TextView
+                android:id="@+id/tg7"
+                style="@style/keytext7"
+                android:layout_toLeftOf="@id/w34"
+                android:text="G7" />
+
+            <TextView
+                android:id="@+id/ta7"
+                style="@style/keytext7"
+                android:layout_toLeftOf="@id/w35"
+                android:text="A7" />
+
+            <TextView
+                android:id="@+id/tb7"
+                style="@style/keytextendkey"
+                android:layout_toRightOf="@id/w34"
+                android:text="B7" />
+
+            <!--endregion-->
+
+        </RelativeLayout>
+    </HorizontalScrollView>
+
+    <Button
+        android:id="@+id/play"
+        android:layout_width="220dp"
+        android:layout_height="70dp"
+        android:background="@drawable/playbutton"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        android:text="Play"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/record"
+        app:layout_constraintHorizontal_bias="0.247"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollpiano" />
+
+    <Button
+        android:id="@+id/record"
+        android:layout_width="220dp"
+        android:layout_height="70dp"
+        android:background="@drawable/recordbutton"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        android:text="Record"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/play"
+        app:layout_constraintTop_toBottomOf="@+id/scrollpiano" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -38,6 +38,10 @@ class CreateNew : Fragment() {
         binding.buttonInputMic.setOnClickListener {
             findNavController().navigate(R.id.action_CreateNew_to_captureSound)
         }
+
+        binding.buttonInputMelody.setOnClickListener {
+            findNavController().navigate(R.id.action_CreateNew_to_inputMelody)
+        }
     }
 
     override fun onDestroyView() {

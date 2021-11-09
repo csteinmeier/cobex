@@ -29,8 +29,8 @@ class CaptureSound : Fragment() {
 
         _binding = FragmentCaptureSoundBinding.inflate(inflater, container, false)
         return binding.root
-
     }
+
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,11 +71,38 @@ class CaptureSound : Fragment() {
         }
     }
 
-    private fun startRecording() {
+
+    private fun startRecording()
+    {
+        if (CheckPermissions())
+        {
+
+        }
+        else
+        {
+            RequestPermissions()
+        }
+    }
+
+    private fun RequestPermissions() {
         TODO("Not yet implemented")
     }
 
-    private fun toggleSoundInputType() {
+
+    private fun CheckPermissions(): Boolean {
+        TODO("Not yet implemented")
+/*        // this method is used to check permission
+        val result = ContextCompat.checkSelfPermission(
+            ApplicationProvider.getApplicationContext<Context>(),
+            WRITE_EXTERNAL_STORAGE)
+        val result1 = ContextCompat.checkSelfPermission(
+            ApplicationProvider.getApplicationContext<Context>(),
+            RECORD_AUDIO)
+        return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED*/
+    }
+
+
+private fun toggleSoundInputType() {
         if (environmentSounds)
         {
             binding.buttonEnvironment.setBackgroundColor(Color.BLACK)

@@ -1,3 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="corner_radius">5dp</dimen>
+    <dimen name="layer_padding">10dp</dimen>
 </resources>

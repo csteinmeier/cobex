@@ -40,11 +40,19 @@
         <action
             android:id="@+id/action_CreateNew_to_captureSound"
             app:destination="@id/captureSound" />
+        <action
+            android:id="@+id/action_CreateNew_to_inputMelody"
+            app:destination="@id/inputMelody" />
     </fragment>
     <fragment
         android:id="@+id/captureSound"
         android:name="com.example.tinetest1.CaptureSound"
         android:label="fragment_capture_sound"
         tools:layout="@layout/fragment_capture_sound" />
+    <fragment
+        android:id="@+id/inputMelody"
+        android:name="com.example.tinetest1.InputMelody"
+        android:label="fragment_input_melody"
+        tools:layout="@layout/fragment_input_melody" />
 
 </navigation>
