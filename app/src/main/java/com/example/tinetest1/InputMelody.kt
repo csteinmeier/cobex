@@ -51,7 +51,7 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
 
         }
 
-        binding.instrumentSpinner.onItemClickListener = this
+        //binding.instrumentSpinner.onItemClickListener = this
         binding.instrumentSpinner.onItemSelectedListener = this
 
         //region listener binding for piano keys
@@ -139,10 +139,10 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
 
             if (event != null) {
                 if (event.action == MotionEvent.ACTION_UP) {
-                    stopNote(noteNumber, false);
+                    stopNote(noteNumber, false)
                 }
                 if (event.action == MotionEvent.ACTION_DOWN) {
-                    playNote(noteNumber);
+                    playNote(noteNumber)
                 }
             }
         }

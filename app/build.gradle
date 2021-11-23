@@ -9,6 +9,18 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdk 31
 
+
+    externalNativeBuild {
+//        ndkBuild {
+//            path 'src/main/java/com/example/tinetest1/jni/Android.mk'
+//        }
+
+         cmake {
+             path 'src/main/java/com/example/tinetest1/jni/CMakeLists.txt'
+         }
+    }
+
+
     defaultConfig {
         applicationId "com.example.tinetest1"
         minSdk 29
@@ -19,6 +31,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        prefab true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -26,9 +42,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
+        encoding = 'UTF-8'
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    lintOptions {
+        disable 'OldTargetApi', 'ExpiredTargetSdkVersion'
+    }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -46,7 +68,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation files("libs\\MidiDriver-1.11\\MidiDriver-1.11.aar")
+    implementation 'com.google.oboe:oboe:1.6.1'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

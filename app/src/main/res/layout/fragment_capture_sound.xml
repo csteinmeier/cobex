@@ -93,10 +93,10 @@
             android:backgroundTint="#FF6200EE"
             android:text="@string/Environment" />
 
-        <Space
+        <View
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.3" />
+            android:layout_weight="1159" />
 
         <Button
             android:id="@+id/buttonMusic"

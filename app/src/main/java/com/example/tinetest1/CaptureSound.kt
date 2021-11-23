@@ -19,8 +19,8 @@ class CaptureSound : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private var environmentSounds = false;
-    private var started = false;
+    private var environmentSounds = false
+    private var started = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,8 +50,8 @@ class CaptureSound : Fragment() {
         }
 
         var web = binding.webView
-        web.setBackgroundColor(Color.TRANSPARENT); //for gif without background
-        web.loadUrl("file:///android_asset/htmls/gif.html");
+        web.setBackgroundColor(Color.TRANSPARENT) //for gif without background
+        web.loadUrl("file:///android_asset/htmls/gif.html")
         web.visibility= View.INVISIBLE
     }
 
