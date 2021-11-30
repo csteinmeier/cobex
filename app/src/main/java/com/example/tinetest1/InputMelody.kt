@@ -1,58 +1,107 @@
 package com.example.tinetest1
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.media.MediaPlayer
+import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import androidx.appcompat.widget.AppCompatButton
+import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.tinetest1.databinding.FragmentInputMelodyBinding
+
+
+
+
 
 /**
  * A simple [Fragment] subclass.
  * Use the [InputMelody.newInstance] factory method to
  * create an instance of this fragment.
  */
-class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelectedListener,
-    AdapterView.OnItemClickListener {
+class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelectedListener {
 
     private var _binding: FragmentInputMelodyBinding? = null
     private lateinit var event: ByteArray
     private var midihelper : MidiHelper = MidiHelper()
 
+    private var mRecorder: MediaRecorder? = null
+    private val mPlayer: MediaPlayer? = null
+
+    // we can record up to 5 melodies for each experience
+    var mFileName1: String? = null
+    var mFileName2: String? = null
+    var mFileName3: String? = null
+    var mFileName4: String? = null
+    var mFileName5: String? = null
+    var recordingno = 1
+
+    var mStartRecording = true
+    var mStartPlaying = false
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val button = AppCompatButton(inflater.context)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentInputMelodyBinding.inflate(inflater, container, false)
 
+        //mFileName1 = activity?.externalCacheDir?.absolutePath  <-- use if recordings should be only temporary
+        mFileName1 = activity?.filesDir?.absolutePath
+        mFileName1 += "/audiorec1.3gp"
+        mFileName2 = activity?.filesDir?.absolutePath
+        mFileName2 += "/audiorec2.3gp"
+        mFileName3 = activity?.filesDir?.absolutePath
+        mFileName3 += "/audiorec3.3gp"
+        mFileName4 = activity?.filesDir?.absolutePath
+        mFileName4 += "/audiorec4.3gp"
+        mFileName5 = activity?.filesDir?.absolutePath
+        mFileName5 += "/audiorec5.3gp"
+
+        getPermissionToRecordAudio()
+
         return binding.root
-
-
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.record.setOnClickListener {
-
+            record(view)
         }
 
         binding.play.setOnClickListener {
 
         }
 
-        //binding.instrumentSpinner.onItemClickListener = this
+        //region set instruments for spinner
         binding.instrumentSpinner.onItemSelectedListener = this
+        var instruments = arrayOf("Acoustic Piano", "Bright Piano", "Electric Grand Piano", "Honky-tonk Piano", "Electric Piano 1", "Electric Piano 2", "Harpsichord",
+                                "Clavi", "Celesta", "Glockenspiel", "Musical box", "Vibraphone", "Marimba" , "Xylophone" , "Tubular Bell" , "Dulcimer", "Drawbar Organ" ,
+                                "Percussive Organ" , "Rock Organ" , "Church organ" , "Reed organ" , "Accordion" , "Harmonica" , "Tango Accordion" , "Acoustic Guitar (nylon)" ,
+                                "Acoustic Guitar (steel)" , "Electric Guitar (jazz)" , "Electric Guitar (clean)" , "Electric Guitar (muted)" , "Overdriven Guitar" ,
+                                "Distortion Guitar" , "Guitar harmonics" , "Acoustic Bass" , "Electric Bass (finger)" , "Electric Bass (pick)" , "Fretless Bass" ,
+                                "Slap Bass 1" , "Slap Bass 2" , "Synth Bass 1" , "Synth Bass 2" , "Violin" , "Viola" , "Cello" , "Double bass" , "Tremolo Strings" ,
+                                "Pizzicato Strings" , "Orchestral Harp" , "Timpani" , "String Ensemble 1" , "String Ensemble 2" , "Synth Strings 1" , "Synth Strings 2" ,
+                                "Voice Aahs" , "Voice Oohs" , "Synth Voice" , "Orchestra Hit" , "Trumpet" , "Trombone" , "Tuba" , "Muted Trumpet" , "French horn" ,
+                                "Brass Section" , "Synth Brass 1" , "Synth Brass 2" , "Soprano Sax" , "Alto Sax" , "Tenor Sax" , "Baritone Sax" , "Oboe" , "English Horn" ,
+                                "Bassoon" , "Clarinet" , "Piccolo" , "Flute" , "Recorder" , "Pan Flute" , "Blown Bottle" , "Shakuhachi" , "Whistle" , "Ocarina")
+
+        val aa= activity?.let { ArrayAdapter(it.baseContext,android.R.layout.simple_spinner_item, instruments) }
+
+        with(aa) {
+            this?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.instrumentSpinner.adapter = aa
+        }
+        //endregion
 
         //region listener binding for piano keys
         binding.w1.setOnTouchListener(this)
@@ -119,6 +168,100 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
 //endregion
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun record(view: View?) {
+        onRecord(mStartRecording)
+        if (mStartRecording) {
+            binding.record.setText("Finish")
+            binding.record.setBackgroundResource(R.drawable.recordbutton)
+        } else {
+            binding.record.setText("Record")
+            binding.record.setBackgroundResource(R.drawable.recordbutton)
+        }
+        mStartRecording = !mStartRecording
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun onRecord(start: Boolean) {
+        if (start) {
+            startRecording()
+        } else {
+            stopRecording()
+            if (recordingno == 1) {
+                val recordingmsg = Toast.makeText(activity?.baseContext, "Song " + 5 + " saved", Toast.LENGTH_SHORT)
+                recordingmsg.show()
+            } else {
+                val temprecordingno = recordingno - 1
+                val recordingmsg = Toast.makeText(activity?.baseContext,"Song $temprecordingno Saved", Toast.LENGTH_LONG)
+                recordingmsg.show()
+            }
+        }
+    }
+
+    private fun stopRecording() {
+        mRecorder?.stop();
+        mRecorder?.release();
+        mRecorder = null;
+    }
+
+    fun getPermissionToRecordAudio() {
+        if (activity?.let { ContextCompat.checkSelfPermission(it?.baseContext, Manifest.permission.RECORD_AUDIO) } != PackageManager.PERMISSION_GRANTED ||
+            activity?.let { ContextCompat.checkSelfPermission(it?.baseContext, Manifest.permission.READ_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED ||
+            activity?.let { ContextCompat.checkSelfPermission(it?.baseContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED )
+        {
+            // The permission is NOT already granted. Check if the user has been asked about this permission already and denied it.
+            // If so, we want to give more explanation about why the permission is needed.
+            // Fire off an async request to actually get the permission. This will show the standard permission request dialog UI
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), 13
+            )
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun startRecording() {
+
+        mRecorder = MediaRecorder()
+        mRecorder?.setAudioSource(MediaRecorder.AudioSource.DEFAULT)
+        mRecorder?.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+
+        when (recordingno) {
+            1 -> {
+                mRecorder?.setOutputFile(mFileName1)
+                recordingno++
+                if (recordingno == 5) recordingno = 1
+            }
+            2 -> {
+                mRecorder?.setOutputFile(mFileName2)
+                recordingno++
+                if (recordingno == 5) recordingno = 1
+            }
+            3 -> {
+                mRecorder?.setOutputFile(mFileName3)
+                recordingno++
+                if (recordingno == 5) recordingno = 1
+            }
+            4 -> {
+                mRecorder?.setOutputFile(mFileName4)
+                recordingno++
+                if (recordingno == 5) recordingno = 1
+            }
+            5 -> {
+                mRecorder?.setOutputFile(mFileName5)
+                recordingno++
+                if (recordingno == 5) recordingno = 1
+            }
+        }
+
+        mRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+        mRecorder?.prepare()
+        mRecorder?.start()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -128,18 +271,80 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         if (v != null) {
             var noteNumber = 0
             when (v.id) {
+                // 1st octave
                 R.id.w1 -> noteNumber = 36 //C3
                 R.id.b1 -> noteNumber = 37 //C#3
                 R.id.w2 -> noteNumber = 38 //D3
                 R.id.b2 -> noteNumber = 39 //D#3
                 R.id.w3 -> noteNumber = 40 //E3
                 R.id.w4 -> noteNumber = 41 //F3
-                //todo: implement this...
+                R.id.b3 -> noteNumber = 42 //F#3
+                R.id.w5 -> noteNumber = 43 //G3
+                R.id.b4 -> noteNumber = 44 //G#3
+                R.id.w6 -> noteNumber = 45 //A3
+                R.id.b5 -> noteNumber = 46 //A#3
+                R.id.w7 -> noteNumber = 47 //B3
+
+                // 2nd octave
+                R.id.w8 -> noteNumber = 48 //C4
+                R.id.b6 -> noteNumber = 49 //C#4
+                R.id.w9 -> noteNumber = 50 //D4
+                R.id.b7 -> noteNumber = 51 //D#4
+                R.id.w10 -> noteNumber = 52 //E4
+                R.id.w11 -> noteNumber = 53 //F4
+                R.id.b8 -> noteNumber = 54 //F#4
+                R.id.w12 -> noteNumber = 55 //G4
+                R.id.b9 -> noteNumber = 56 //G#4
+                R.id.w13 -> noteNumber = 57 //A4
+                R.id.b10 -> noteNumber = 58 //A#4
+                R.id.w14 -> noteNumber = 59 //B4
+
+                // 3rd octave
+                R.id.w15 -> noteNumber = 60 //C5
+                R.id.b11 -> noteNumber = 61 //C#5
+                R.id.w16 -> noteNumber = 62 //D5
+                R.id.b12 -> noteNumber = 63 //D#5
+                R.id.w17 -> noteNumber = 64 //E5
+                R.id.w18 -> noteNumber = 65 //F5
+                R.id.b13 -> noteNumber = 66 //F#5
+                R.id.w19 -> noteNumber = 67 //G5
+                R.id.b14 -> noteNumber = 68 //G#5
+                R.id.w20 -> noteNumber = 69 //A5
+                R.id.b15 -> noteNumber = 70 //A#5
+                R.id.w21 -> noteNumber = 71 //B5
+
+                // 4th octave
+                R.id.w22 -> noteNumber = 72 //C6
+                R.id.b16 -> noteNumber = 73 //C#6
+                R.id.w23 -> noteNumber = 74 //D6
+                R.id.b17 -> noteNumber = 75 //D#6
+                R.id.w24 -> noteNumber = 76 //E6
+                R.id.w25 -> noteNumber = 77 //F6
+                R.id.b18 -> noteNumber = 78 //F#6
+                R.id.w26 -> noteNumber = 79 //G6
+                R.id.b19 -> noteNumber = 80 //G#6
+                R.id.w27 -> noteNumber = 81 //A6
+                R.id.b20 -> noteNumber = 82 //A#6
+                R.id.w28 -> noteNumber = 83 //B6
+
+                // 5th octave
+                R.id.w29 -> noteNumber = 84 //C7
+                R.id.b21 -> noteNumber = 85 //C#7
+                R.id.w30 -> noteNumber = 86 //D7
+                R.id.b22 -> noteNumber = 87 //D#7
+                R.id.w31 -> noteNumber = 88 //E7
+                R.id.w32 -> noteNumber = 89 //F7
+                R.id.b23 -> noteNumber = 90 //F#7
+                R.id.w33 -> noteNumber = 91 //G7
+                R.id.b24 -> noteNumber = 92 //G#7
+                R.id.w34 -> noteNumber = 93 //A7
+                R.id.b25 -> noteNumber = 94 //A#7
+                R.id.w35 -> noteNumber = 95 //B7
             }
 
             if (event != null) {
                 if (event.action == MotionEvent.ACTION_UP) {
-                    stopNote(noteNumber, false)
+                    stopNote(noteNumber)
                 }
                 if (event.action == MotionEvent.ACTION_DOWN) {
                     playNote(noteNumber)
@@ -149,22 +354,15 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         return false
     }
 
-    private fun stopNote(noteNumber: Int, sustainUpEvent: Boolean) {
-
-        // Stop the note unless the sustain button is currently pressed. Or stop the note if the
-        // sustain button was depressed and the note's button is not pressed.
-        // Stop the note unless the sustain button is currently pressed. Or stop the note if the
-        // sustain button was depressed and the note's button is not pressed.
-        if (sustainUpEvent) {
+    private fun stopNote(noteNumber: Int) {
             // Construct a note OFF message for the note at minimum velocity on channel 1:
             event = ByteArray(3)
             event[0] = (0x80 or 0x00).toByte() // 0x80 = note Off, 0x00 = channel 1
-            event[1] = noteNumber as Byte
+            event[1] = noteNumber.toByte()
             event[2] = 0x00.toByte() // 0x00 = the minimum velocity (0)
 
             // Send the MIDI event to the synthesizer.
             midihelper.write(event)
-        }
     }
 
     private fun playNote(noteNumber: Int) {
@@ -172,7 +370,7 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         // Construct a note ON message for the note at maximum velocity on channel 1:
         event = ByteArray(3)
         event[0] = (0x90 or 0x00).toByte() // 0x90 = note On, 0x00 = channel 1
-        event[1] = noteNumber as Byte
+        event[1] = noteNumber.toByte()
         event[2] = 0x7F.toByte() // 0x7F = the maximum velocity (127)
 
         // Send the MIDI event to the synthesizer.
@@ -199,25 +397,11 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        TODO("Not yet implemented")
+        midihelper.selectInstrument(position)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        TODO("Not yet implemented")
+        midihelper.selectInstrument(1)
     }
 
-    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        TODO("Not yet implemented")
-    }
-
-}
-
-data class SpinnerEntry(
-    // define whatever properties you want
-    val label: String,
-    val key: Int,
-) {
-    override fun toString(): String {
-        return label // this will display to user
-    }
 }

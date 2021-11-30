@@ -10,15 +10,15 @@ android {
     compileSdk 31
 
 
-    externalNativeBuild {
-//        ndkBuild {
-//            path 'src/main/java/com/example/tinetest1/jni/Android.mk'
-//        }
-
-         cmake {
-             path 'src/main/java/com/example/tinetest1/jni/CMakeLists.txt'
-         }
-    }
+//    externalNativeBuild {
+////        ndkBuild {
+////            path 'src/main/java/com/example/tinetest1/jni/Android.mk'
+////        }
+//
+//         cmake {
+//             path 'src/main/java/com/example/tinetest1/jni/CMakeLists.txt'
+//         }
+//    }
 
 
     defaultConfig {
@@ -69,6 +69,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.oboe:oboe:1.6.1'
+    implementation files("F:\\ML\\cobex\\app\\MidiDriver\\MidiDriver-1.24.aar")
+    implementation 'androidx.test:core-ktx:1.4.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

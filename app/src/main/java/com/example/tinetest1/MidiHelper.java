@@ -2,8 +2,7 @@ package com.example.tinetest1;
 
 import android.util.Log;
 
-import com.example.tinetest1.mididriver.MidiDriver;
-
+import org.billthefarmer.mididriver.MidiDriver;
 import org.jetbrains.annotations.NotNull;
 
 public class MidiHelper implements MidiDriver.OnMidiStartListener {
