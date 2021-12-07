@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#1A7E74"
-    tools:context=".FirstFragment">
+    tools:context="com.example.cobex.FirstFragment">
 
     <TextView
         android:id="@+id/textview_first"

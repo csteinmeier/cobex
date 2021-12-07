@@ -1,4 +1,4 @@
-package com.example.tinetest1;
+package com.example.cobex;
 
 import android.util.Log;
 

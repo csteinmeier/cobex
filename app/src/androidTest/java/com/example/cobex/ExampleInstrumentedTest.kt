@@ -1,4 +1,4 @@
-package com.example.tinetest1
+package com.example.cobex
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.tinetest1", appContext.packageName)
+        assertEquals("com.example.cobex", appContext.packageName)
     }
 }

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#1A7E74"
     android:gravity="top|center"
-    tools:context=".InputMelody">
+    tools:context="com.example.cobex.InputMelody">
 
     <Spinner
         android:id="@+id/instrumentSpinner"

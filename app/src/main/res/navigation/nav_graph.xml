@@ -7,8 +7,8 @@
 
     <fragment
         android:id="@+id/Home"
-        android:name="com.example.tinetest1.FirstFragment"
-        android:label="@string/home_screen_label"
+        android:name="com.example.cobex.FirstFragment"
+        android:label="@string/heading_label"
         tools:layout="@layout/fragment_first">
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
@@ -17,8 +17,8 @@
 
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.example.tinetest1.SecondFragment"
-        android:label="@string/second_fragment_label"
+        android:name="com.example.cobex.SecondFragment"
+        android:label="@string/heading_label"
         tools:layout="@layout/fragment_second">
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
@@ -30,8 +30,8 @@
 
     <fragment
         android:id="@+id/CreateNew"
-        android:name="com.example.tinetest1.CreateNew"
-        android:label="@string/second_fragment_label"
+        android:name="com.example.cobex.CreateNew"
+        android:label="@string/heading_label"
         tools:layout="@layout/fragment_create_new">
 
         <action
@@ -46,13 +46,13 @@
     </fragment>
     <fragment
         android:id="@+id/captureSound"
-        android:name="com.example.tinetest1.CaptureSound"
-        android:label="fragment_capture_sound"
+        android:name="com.example.cobex.CaptureSound"
+        android:label="@string/captureSound_label"
         tools:layout="@layout/fragment_capture_sound" />
     <fragment
         android:id="@+id/inputMelody"
-        android:name="com.example.tinetest1.InputMelody"
-        android:label="fragment_input_melody"
+        android:name="com.example.cobex.InputMelody"
+        android:label="@string/inputMelody_label"
         tools:layout="@layout/fragment_input_melody" />
 
 </navigation>

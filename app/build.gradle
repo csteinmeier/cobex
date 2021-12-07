@@ -12,17 +12,17 @@ android {
 
 //    externalNativeBuild {
 ////        ndkBuild {
-////            path 'src/main/java/com/example/tinetest1/jni/Android.mk'
+////            path 'src/main/java/com/example/cobex/jni/Android.mk'
 ////        }
 //
 //         cmake {
-//             path 'src/main/java/com/example/tinetest1/jni/CMakeLists.txt'
+//             path 'src/main/java/com/example/cobex/jni/CMakeLists.txt'
 //         }
 //    }
 
 
     defaultConfig {
-        applicationId "com.example.tinetest1"
+        applicationId "com.example.cobex"
         minSdk 29
         targetSdk 31
         versionCode 1

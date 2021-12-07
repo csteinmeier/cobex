@@ -5,8 +5,7 @@
     <string name="action_settings">Settings</string>
 
     <!-- Strings used for fragments for navigation -->
-    <string name="home_screen_label">Composed by Experience | Home</string>
-    <string name="second_fragment_label">Composed by Experience</string>
+    <string name="heading_label">Composed by Experience</string>
 
     <string name="textFirstPage">Press START to begin</string>
     <string name="textSecondPage">Menu</string>
@@ -32,6 +31,8 @@
     <string name="textSelectSoundCaptureType">Select which type of audio you will record:</string>
     <string name="Environment">Environment Sounds</string>
     <string name="Music">(Music) Sing a Song</string>
+    <string name="inputMelody_label">Play a Melody</string>
+    <string name="captureSound_label">Record Sounds</string>
 
 
 </resources>

@@ -1,4 +1,4 @@
-package com.example.tinetest1
+package com.example.cobex
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.tinetest1.databinding.FragmentCreateNewBinding
+import com.example.cobex.databinding.FragmentCreateNewBinding
 
 /**
  * A simple [Fragment] subclass.

@@ -1,4 +1,4 @@
-package com.example.tinetest1
+package com.example.cobex
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -15,7 +15,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.tinetest1.databinding.FragmentInputMelodyBinding
+import com.example.cobex.databinding.FragmentInputMelodyBinding
 
 
 
@@ -199,15 +199,15 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
     }
 
     private fun stopRecording() {
-        mRecorder?.stop();
-        mRecorder?.release();
-        mRecorder = null;
+        mRecorder?.stop()
+        mRecorder?.release()
+        mRecorder = null
     }
 
     fun getPermissionToRecordAudio() {
-        if (activity?.let { ContextCompat.checkSelfPermission(it?.baseContext, Manifest.permission.RECORD_AUDIO) } != PackageManager.PERMISSION_GRANTED ||
-            activity?.let { ContextCompat.checkSelfPermission(it?.baseContext, Manifest.permission.READ_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED ||
-            activity?.let { ContextCompat.checkSelfPermission(it?.baseContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED )
+        if (activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.RECORD_AUDIO) } != PackageManager.PERMISSION_GRANTED ||
+            activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.READ_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED ||
+            activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED )
         {
             // The permission is NOT already granted. Check if the user has been asked about this permission already and denied it.
             // If so, we want to give more explanation about why the permission is needed.
