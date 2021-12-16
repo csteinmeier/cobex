@@ -233,27 +233,22 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
             1 -> {
                 mRecorder?.setOutputFile(mFileName1)
                 recordingno++
-                if (recordingno == 5) recordingno = 1
             }
             2 -> {
                 mRecorder?.setOutputFile(mFileName2)
                 recordingno++
-                if (recordingno == 5) recordingno = 1
             }
             3 -> {
                 mRecorder?.setOutputFile(mFileName3)
                 recordingno++
-                if (recordingno == 5) recordingno = 1
             }
             4 -> {
                 mRecorder?.setOutputFile(mFileName4)
                 recordingno++
-                if (recordingno == 5) recordingno = 1
             }
             5 -> {
                 mRecorder?.setOutputFile(mFileName5)
-                recordingno++
-                if (recordingno == 5) recordingno = 1
+                recordingno = 1
             }
         }
 
