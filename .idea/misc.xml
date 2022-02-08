@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Coding/android/app/src/main/res/layout/fragment_capture_sound.xml" value="0.532608695652174" />
+        <entry key="..\:/Coding/android/app/src/main/res/layout/fragment_create_new.xml" value="0.39114583333333336" />
+        <entry key="..\:/Coding/android/app/src/main/res/layout/fragment_first.xml" value="0.39114583333333336" />
+        <entry key="..\:/Coding/android/app/src/main/res/layout/fragment_input_keyword.xml" value="0.39114583333333336" />
         <entry key="..\:/ML/cobex/app/src/main/res/drawable-v24/loadnext.xml" value="0.3101851851851852" />
         <entry key="..\:/ML/cobex/app/src/main/res/drawable-v24/pressed.xml" value="0.31614583333333335" />
         <entry key="..\:/ML/cobex/app/src/main/res/drawable-v24/shadowselector.xml" value="0.21875" />

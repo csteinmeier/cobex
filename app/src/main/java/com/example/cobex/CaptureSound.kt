@@ -114,7 +114,7 @@ class CaptureSound : Fragment() {
             activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.READ_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED ||
             activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED )
         {
-            // The permission is NOT already granted. Check if the user has been asked about this permission already and denied it.
+            // The permission is NOT already granted. Check if the user has been asked about this permission already and denied it.m
             // If so, we want to give more explanation about why the permission is needed.
             // Fire off an async request to actually get the permission. This will show the standard permission request dialog UI
             requestPermissions(

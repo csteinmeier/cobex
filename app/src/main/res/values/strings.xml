@@ -33,6 +33,11 @@
     <string name="Music">(Music) Sing a Song</string>
     <string name="inputMelody_label">Play a Melody</string>
     <string name="captureSound_label">Record Sounds</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textInputKeyword">Select Keywords</string>
+    <string name="buttonFeelings">Feelings</string>
+    <string name="buttonEnvironment">Environment</string>
 
 
 </resources>
