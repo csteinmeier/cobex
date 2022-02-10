@@ -27,17 +27,51 @@
     <string name="buttonActionInput">Capture Action</string>
     <string name="buttonNext">Next</string>
 
+    <!-- Buttons Texts used for fragment inputKeyword-->
+    <string name="buttonHappy">Happy</string>
+    <string name="textInputKeyword">Select Keywords</string>
+    <string name="buttonFeelings">Feelings</string>
+    <string name="buttonEnvironment">Environment</string>
+    <string name="buttonApartment">Apartment</string>
+    <string name="buttonCity">City</string>
+    <string name="buttonForest">Forest</string>
+    <string name="buttonMountains">Mountains</string>
+    <string name="buttonSea">Sea</string>
+    <string name="buttonWindy">windy</string>
+    <string name="buttonBright">Bright</string>
+    <string name="buttonDark">Dark</string>
+    <string name="buttonTidy">Tidy</string>
+    <string name="buttonChaotic">Chaotic</string>
+    <string name="buttonQuiet">Quiet</string>
+    <string name="buttonLoud">Loud</string>
+    <string name="buttonColorful">Colorful</string>
+    <string name="buttonGrey">Grey</string>
+    <string name="buttonSad">Sad</string>
+    <string name="buttonTired">Tired</string>
+    <string name="buttonExcited">Excited</string>
+    <string name="buttonCalm">Calm</string>
+    <string name="buttonCrazy">Crazy</string>
+    <string name="buttonWarm">Warm</string>
+    <string name="buttonCold">Cold</string>
+    <string name="buttonStrong">Strong</string>
+    <string name="buttonWeak">Weak</string>
+    <string name="buttonAngry">Angry</string>
+    <string name="buttonLoving">Loving</string>
+    <string name="buttonInsecure">Insecure</string>
+    <string name="buttonConfident">Confident</string>
+    <string name="buttonSunny">Sunny</string>
+    <string name="buttonRainy">Rainy</string>
+
+
     <string name="textSoundCapture">Press START to record audio!</string>
     <string name="textSelectSoundCaptureType">Select which type of audio you will record:</string>
     <string name="Environment">Environment Sounds</string>
     <string name="Music">(Music) Sing a Song</string>
     <string name="inputMelody_label">Play a Melody</string>
     <string name="captureSound_label">Record Sounds</string>
+    <string name="inputKeyword_label">Choose your Keywords</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="textInputKeyword">Select Keywords</string>
-    <string name="buttonFeelings">Feelings</string>
-    <string name="buttonEnvironment">Environment</string>
 
 
 </resources>

@@ -43,6 +43,10 @@
         <action
             android:id="@+id/action_CreateNew_to_inputMelody"
             app:destination="@id/inputMelody" />
+        <action
+            android:id="@+id/action_CreateNew_to_inputKeyword"
+            app:destination="@+id/inputKeyword" />
+
     </fragment>
     <fragment
         android:id="@+id/captureSound"
@@ -54,5 +58,17 @@
         android:name="com.example.cobex.InputMelody"
         android:label="@string/inputMelody_label"
         tools:layout="@layout/fragment_input_melody" />
+    <fragment
+        android:id="@+id/inputKeyword"
+        android:name="com.example.cobex.InputKeyword"
+        android:label="@string/inputKeyword_label"
+        tools:layout="@layout/fragment_input_keyword" />
+
+        <action
+            android:id="@+id/action_inputKeyword_to_CreateNew"
+            app:destination="@+id/CreateNew" />
+        <action
+            android:id="@+id/action_inputKeyword_to_inputMelody"
+            app:destination="@+id/inputMelody"/>
 
 </navigation>
