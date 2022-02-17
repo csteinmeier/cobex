@@ -38,6 +38,7 @@
     <string name="textInputKeyword">Select Keywords</string>
     <string name="buttonFeelings">Feelings</string>
     <string name="buttonEnvironment">Environment</string>
+    <string name="textBPM">BPM:</string>
 
 
 </resources>
