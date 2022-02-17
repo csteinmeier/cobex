@@ -48,6 +48,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="#0B0A0A" />
 
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="310dp"
@@ -58,137 +59,161 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <Button
             android:id="@+id/buttonFeelings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/buttonFeelings" />
 
+
         <TableLayout
             android:id="@+id/table_feelings"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:stretchColumns="0,1">
+            android:stretchColumns="0,1"
+            android:visibility="gone">
 
             <TableRow
-                android:id="@+id/row1"
+                android:id="@+id/rowFeelings1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/buttonF1"
+                    android:id="@+id/buttonHappy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:text="Happy" />
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonHappy" />
 
                 <Button
-                    android:id="@+id/buttonF2"
+                    android:id="@+id/buttonSad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="Sad" />
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonSad" />
 
             </TableRow>
 
             <TableRow
-                android:id="@+id/row2"
+                android:id="@+id/rowFeelings2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/buttonF3"
+                    android:id="@+id/buttonTired"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:text="Tired" />
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonTired" />
 
                 <Button
-                    android:id="@+id/buttonF4"
+                    android:id="@+id/buttonExcited"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
-                    android:text="Excited" />
+                    android:text="@string/buttonExcited" />
             </TableRow>
 
             <TableRow
-                android:id="@+id/row3"
+                android:id="@+id/rowFeelings3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/buttonF5"
+                    android:id="@+id/buttonCalm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:text="Calm" />
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonCalm" />
 
                 <Button
-                    android:id="@+id/buttonF6"
+                    android:id="@+id/buttonCrazy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="Crazy" />
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonCrazy" />
             </TableRow>
 
             <TableRow
-                android:id="@+id/row4"
+                android:id="@+id/rowFeelings4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/buttonF7"
+                    android:id="@+id/buttonWarm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:text="Warm" />
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonWarm" />
 
                 <Button
-                    android:id="@+id/buttonF8"
+                    android:id="@+id/buttonCold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="Cold" />
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonCold" />
             </TableRow>
 
             <TableRow
-                android:id="@+id/row5"
+                android:id="@+id/rowFeelings5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/buttonF9"
+                    android:id="@+id/buttonStrong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:text="Strong" />
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonStrong" />
 
                 <Button
-                    android:id="@+id/buttonF10"
+                    android:id="@+id/buttonWeak"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="Weak" />
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonWeak" />
             </TableRow>
 
             <TableRow
-                android:id="@+id/row6"
+                android:id="@+id/rowFeelings6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/buttonF11"
+                    android:id="@+id/buttonAngry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:text="Angry" />
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonAngry" />
 
                 <Button
-                    android:id="@+id/buttonF12"
+                    android:id="@+id/buttonLoving"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="Loving" />
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonLoving" />
+            </TableRow>
+
+
+            <TableRow
+                android:id="@+id/rowFeelings7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonInsecure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonInsecure" />
+
+                <Button
+                    android:id="@+id/buttonConfident"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonConfident" />
             </TableRow>
 
         </TableLayout>
@@ -203,52 +228,205 @@
             android:id="@+id/table_env"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:stretchColumns="0,1">
+            android:stretchColumns="0,1"
+            android:visibility="gone">
+
 
             <TableRow
-                android:id="@+id/row_e1"
+                android:id="@+id/rowEnvironment1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/buttonE1"
+                    android:id="@+id/buttonApartment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:text="Happy" />
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonApartment" />
 
                 <Button
-                    android:id="@+id/buttonE2"
+                    android:id="@+id/buttonCity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="Sad" />
-
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonCity" />
             </TableRow>
 
             <TableRow
-                android:id="@+id/row_e2"
+                android:id="@+id/rowEnvironment2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/buttonE3"
+                    android:id="@+id/buttonForest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
-                    android:text="Crazy" />
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonForest" />
 
                 <Button
-                    android:id="@+id/buttonE4"
+                    android:id="@+id/buttonMountains"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="Excited" />
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonMountains" />
             </TableRow>
+
+            <TableRow
+                android:id="@+id/rowEnvironment3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonSea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonSea" />
+
+                <Button
+                    android:id="@+id/buttonWindy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonWindy" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/rowEnvironment4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonBright"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonBright" />
+
+                <Button
+                    android:id="@+id/buttonDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonDark" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/rowEnvironment5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonTidy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonTidy" />
+
+                <Button
+                    android:id="@+id/buttonChaotic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonChaotic" />
+            </TableRow>
+
+
+            <TableRow
+                android:id="@+id/rowEnvironment6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonQuiet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonQuiet" />
+
+                <Button
+                    android:id="@+id/buttonLoud"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonLoud" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/rowEnvironment7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonColorful"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonColorful" />
+
+                <Button
+                    android:id="@+id/buttonGrey"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonGrey" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/rowEnvironment8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/buttonSunny"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="@string/buttonSunny" />
+
+                <Button
+                    android:id="@+id/buttonRainy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@string/buttonRainy" />
+            </TableRow>
+
 
         </TableLayout>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/counterKeywordsFeeling"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/circle"
+        android:gravity="center"
+        android:text="0"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+
+    <TextView
+        android:id="@+id/counterKeywordsEnvironment"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/circle"
+        android:gravity="center"
+        android:text="0"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/counterKeywordsFeeling" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
