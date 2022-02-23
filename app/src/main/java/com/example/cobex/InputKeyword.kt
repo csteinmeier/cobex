@@ -1,8 +1,5 @@
 package com.example.cobex
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import androidx.fragment.app.Fragment
@@ -12,72 +9,92 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TableLayout
 import android.widget.TableRow
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
-import androidx.core.view.forEach
 import androidx.navigation.fragment.findNavController
 import com.example.cobex.databinding.FragmentInputKeywordBinding
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 
 /**
  * If a new Generic Term should be added to the XML, only the following things have to be modified:
  *
- * A new list must be created for the new terms.
  *
- * @TermType  must be extended.
+ * @KeywordType  this enum has to be extended.
  *
- * @modifyTermListCounter modifyTermListCounter must be extended
+ * @onViewCreated :
+ *      - counterList has to extended with the new KeywordCounter
+ *      - a New "ButtonGenericKeyword" with the Generic Term has to be added in
+ *        "listButtonGenericKeyword"
  *
- * @onViewCreated the new previously created list has to be filled like buttonKeyWordFeelingList
- *                and has to be added in "savedList", so that this list is also loaded
- *
- * @onDestroy the new list has to be saved with "saveInstanceOfButtons"
  *
  * */
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [InputKeyword.newInstance] factory method to
- * create an instance of this fragment.
- */
 class InputKeyword : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    private var counter = 0
 
     /** Binding */
     private var _binding: FragmentInputKeywordBinding? = null
     private val binding get() = _binding!!
 
-    /** List of Button that stands for the respective term*/
-    private val buttonKeywordFeelingList: MutableList<ButtonKeyword> = mutableListOf()
-    private val buttonKeywordEnvironmentList: MutableList<ButtonKeyword> = mutableListOf()
+    /** List of Button that stands for the respective keyword*/
+    private lateinit var listButtonGenericKeyword: List<ButtonGenericKeyword>
 
     /**Counter used for the TextView*/
-    private var feelingTermListCounter = 0
-    private var environmentTermListCounter = 0
+    private lateinit var counterList: List<KeywordCounter>
 
-    /**All existing term types are to be added here*/
-    private enum class TermTyp{
+
+    /**All existing keyword types are to be added here*/
+    enum class KeywordType{
         FEELING,
         ENVIRONMENT
+        /**New KeywordType here*/
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+        binding.buttonNext.setOnClickListener {
+            findNavController().navigate(R.id.action_inputKeyword_to_inputMelody)
         }
+
+        binding.buttonBackCreate.setOnClickListener {
+            findNavController().navigate(R.id.action_inputKeyword_to_CreateNew)
+        }
+
+
+        counterList = listOf(
+            KeywordCounter(binding.counterKeywordsFeeling, KeywordType.FEELING),
+            KeywordCounter(binding.counterKeywordsEnvironment, KeywordType.ENVIRONMENT)
+            /**New Keyword Counter should be initialized here*/
+        )
+
+
+        listButtonGenericKeyword = listOf(
+            ButtonGenericKeyword(binding.buttonFeelings, this, binding.tableFeelings, KeywordType.FEELING),
+            ButtonGenericKeyword(binding.buttonEnvironment, this, binding.tableEnv, KeywordType.ENVIRONMENT)
+            /**New Generic Buttons should be added here*/
+        )
+
+        if(CompositionArtifact.isSavedPreferenceAvailable(this.requireActivity())){
+            recreateOldState()
+        }
+    }
+
+    private fun recreateOldState(){
+        // Set of Saved Buttons
+        val savedSet = CompositionArtifact.getPreferences(this.requireActivity()).getStringSet(
+            CompositionArtifact.PreferenceKeywords.CLICKED_KEYWORDS.name, setOf())
+
+        //Must be reset otherwise it will simply continue to count on it
+        CompositionArtifact.clickedKeywords = 0
+
+        savedSet?.forEach { s ->
+            listButtonGenericKeyword.forEach{ it.recreateState(extractButtonStringText(s))}
+        }
+    }
+
+    private fun extractButtonStringText(string: String): String {
+        return string.substringAfterLast(':').dropLast(1)
     }
 
 
@@ -90,58 +107,34 @@ class InputKeyword : Fragment() {
         return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment InputKeyword.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            InputKeyword().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+
+    private fun updateKeyWordCounter(value: Int, keywordType: KeywordType){
+        val counter = counterList.single { keywordType == it.keywordType }
+        counter.update(value)
     }
 
 
-    /**
-     *
-     * Change the Counter for the specific TermType
-     *
-     * @param value value that has to be added, usually 1 or -1
-     * @param termTyp The type of term to be incremented or decremented
-     *
-     *
-     * */
-    private fun modifyTermListCounter(value: Int, termTyp: TermTyp){
-        when(termTyp) {
+    private class KeywordCounter(var counterField : TextView, val keywordType: KeywordType) {
+        var counter : Int = 0
 
-            TermTyp.FEELING -> {
-                feelingTermListCounter += value
-                binding.counterKeywordsFeeling.text =
-                    Editable.Factory.getInstance().newEditable(feelingTermListCounter.toString())
-            }
+        private fun setVisibility(){
+            counterField.visibility = if(counter > 0) View.VISIBLE else View.GONE
+        }
 
-            TermTyp.ENVIRONMENT -> {
-                environmentTermListCounter += value
-                binding.counterKeywordsEnvironment.text =
-                    Editable.Factory.getInstance().newEditable(environmentTermListCounter.toString())
-            }
+        fun update(value: Int){
+            counter += value
+            counterField.text = Editable.Factory.getInstance().newEditable(counter.toString())
+            setVisibility()
         }
     }
+
 
 
     /**********************************************************************************/
     /***************************Parent Button Class************************************/
     /**********************************************************************************/
-    private abstract class ButtonStruct(val button: Button, context: InputKeyword,) :
+    private abstract class ButtonStruct(val button: Button,
+                                        protected val context: InputKeyword,) :
     View.OnClickListener{
 
         enum class ButtonState{
@@ -150,17 +143,27 @@ class InputKeyword : Fragment() {
         }
 
         var state = ButtonState.DEACTIVATED
-        var context : InputKeyword = context
 
 
         /**Depending on the state, the colors of the buttons are set*/
-        fun setButtonColour() {
+        protected fun setButtonColour() {
             when(state) {
                 ButtonState.ACTIVATED -> button.setBackgroundColor(
                     ContextCompat.getColor( context.requireContext(), R.color.orange))
+
                 ButtonState.DEACTIVATED -> button.setBackgroundColor(
                     ContextCompat.getColor( context.requireContext(), R.color.purple_500))
             }
+        }
+
+        protected open fun setActivated(){
+            state = ButtonState.ACTIVATED
+            setButtonColour()
+        }
+
+        protected open fun setDeactivated(){
+            state = ButtonState.DEACTIVATED
+            setButtonColour()
         }
     }
 
@@ -169,51 +172,38 @@ class InputKeyword : Fragment() {
      *  The class that represents the simple terms in the form of the button
      *
      *  @param button which stands for a term
-     *  @param term To determine the number of buttons clicked for the matching generic term
+     *  @param keywordType To determine the number of buttons clicked for the matching generic keyword
      *
      */
-    private class ButtonKeyword (button: Button, context: InputKeyword, var term: TermTyp)
+    private class ButtonKeyword (button: Button, context: InputKeyword, var keywordType: KeywordType)
         : ButtonStruct(button, context) {
 
         init {
             button.setOnClickListener (this)
         }
 
-        fun modifyState(i: Int){
-            if(i == 1){
-                state = ButtonState.ACTIVATED
-                setButtonColour()
-                modifyCounter()
-            }
+        fun recreateState(){
+            setActivated()
+        }
+
+        override fun toString(): String {
+            return ("[KeywordType:${keywordType.name}]:[KeywordName:${button.text}]")
         }
 
         override fun onClick(p0: View?) {
-            if(state == ButtonState.DEACTIVATED) {
-                state = ButtonState.ACTIVATED
-                setButtonColour()
-                modifyCounter()
-
-            } else {
-                state = ButtonState.DEACTIVATED
-                setButtonColour()
-                modifyCounter()
-            }
+           if(state == ButtonState.DEACTIVATED) setActivated() else setDeactivated()
         }
 
-        fun modifyCounter(){
-            if(state == ButtonState.ACTIVATED) {
-                TermTyp.values().forEach {
-                    if (term == it) {
-                        context.modifyTermListCounter(1, term)
-                    }
-                }
-            } else {
-                TermTyp.values().forEach {
-                    if(term == it){
-                        context.modifyTermListCounter(-1, term)
-                    }
-                }
-            }
+        override fun setActivated() {
+            super.setActivated()
+            context.updateKeyWordCounter(1, keywordType)
+            CompositionArtifact.clickedKeywords +=1
+        }
+
+        override fun setDeactivated() {
+            super.setDeactivated()
+            context.updateKeyWordCounter(-1, keywordType)
+            CompositionArtifact.clickedKeywords -=1
         }
     }
 
@@ -229,131 +219,117 @@ class InputKeyword : Fragment() {
      * @param tableLayout Associated layout which opens and closes with the button
      *
      * */
-    private class ButtonGenericKeyword(button: Button, context: InputKeyword, tableLayout: TableLayout):
+    private class ButtonGenericKeyword(button: Button, context: InputKeyword,
+                                       private val tableLayout: TableLayout,
+                                       private val keywordType: KeywordType):
         ButtonStruct(button,context) {
-        var table: TableLayout = tableLayout
+        private val table: TableLayout = tableLayout
+
+        private var listButtonKeywords : MutableList<ButtonKeyword> = mutableListOf()
 
         init {
             button.setOnClickListener(this)
+            getButtonSequenceFromTable().forEach { listButtonKeywords.add(createButtonKeyword(it)) }
         }
 
-        @SuppressLint("UseRequireInsteadOfGet")
+
         override fun onClick(p0: View?) {
            if(state == ButtonState.DEACTIVATED){
-                state = ButtonState.ACTIVATED
-                setButtonColour()
+               setActivated()
 
-                table.visibility = View.VISIBLE
-                context.lastClick?.setOff(context.lastClick!!)
-                context.lastClick = this
+               context.lastClick?.setDeactivated()
+               context.lastClick = this
             }else{
-                state = ButtonState.DEACTIVATED
-                setButtonColour()
+               setDeactivated()
 
-                table.visibility = View.GONE
-                context.lastClick = null
+               context.lastClick = null
             }
         }
 
-        /**To set off the last clicked button*/
-        private fun setOff(genericButtonGenericTerm: ButtonGenericKeyword) {
-            genericButtonGenericTerm.state = ButtonState.DEACTIVATED
-            setButtonColour()
-            table.visibility = View.GONE
+        override fun setActivated(){
+            super.setActivated()
+            setTableVisibility()
         }
 
+        override fun setDeactivated() {
+            super.setDeactivated()
+            setTableVisibility()
+        }
+
+        /**
+         * @param button text of the button, serves as identifier
+         *
+         * */
+        fun recreateState(button: String){
+            //Should only be one possible Button
+            val toRecreate = listButtonKeywords.firstOrNull { it.button.text == button }
+            toRecreate?.recreateState()
+        }
+
+        /**
+         * @return true as soon as one of the buttons is clicked
+         * */
+        fun isButtonPressed() : Boolean{
+            return listButtonKeywords.any { it.state == ButtonState.ACTIVATED }
+        }
+
+        /**
+         * @return all buttons that were clicked as sequence
+         * */
+        fun getClickedButtonsAsSequence() : Sequence<ButtonKeyword>{
+            return listButtonKeywords.filter { it.state == ButtonState.ACTIVATED }.asSequence()
+        }
+
+        private fun setTableVisibility(){
+            table.visibility = if(state == ButtonState.ACTIVATED) View.VISIBLE else View.GONE
+        }
+
+        private fun createButtonKeyword(button: Button): ButtonKeyword{
+            return ButtonKeyword(button, context, keywordType)
+        }
+
+
+        private fun getButtonSequenceFromTable(): Sequence<Button> {
+            return getRowSequenceFromTable().flatMap { it.children.filterIsInstance<Button>()}
+        }
+
+        private fun getRowSequenceFromTable(): Sequence<TableRow> {
+            return tableLayout.children.filterIsInstance<TableRow>()
+        }
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-       binding.buttonNext.setOnClickListener {
-           findNavController().navigate(R.id.action_inputKeyword_to_inputMelody)
-       }
-
-        binding.buttonBackCreate.setOnClickListener {
-            findNavController().navigate(R.id.action_inputKeyword_to_CreateNew)
+    private fun isKeywordButtonPressed(): Boolean{
+        listButtonGenericKeyword.forEach{
+            if(it.isButtonPressed())
+                return true
         }
-
-
-        /**New Generic Buttons should be generate here*/
-        ButtonGenericKeyword(binding.buttonFeelings, this, binding.tableFeelings)
-        ButtonGenericKeyword(binding.buttonEnvironment, this, binding.tableEnv)
-
-        /**New Tables should be generate here*/
-        buttonKeywordEnvironmentList.addAll(
-            generateButtonTermFromTable(binding.tableEnv, TermTyp.ENVIRONMENT))
-        buttonKeywordFeelingList.addAll(
-        generateButtonTermFromTable(binding.tableFeelings, TermTyp.FEELING))
-
-
-
-        /** Recreates a saved instance of pressed Button if there is one*/
-        val sharedPreferences = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-        val savedList : MutableList<ButtonKeyword> = mutableListOf()
-
-        /**New List has to be added here*/
-        savedList.addAll(buttonKeywordEnvironmentList)
-        savedList.addAll(buttonKeywordFeelingList)
-
-        sharedPreferences.all?.forEach{
-            val buttonKey = it.key.toString().substringAfter(':')
-            savedList.forEach{ term->
-                recreateSavedInstanceOfButton(term, buttonKey, it.value as Int)
-            }
-        }
+        return false
     }
-
-    private fun recreateSavedInstanceOfButton(keyword: ButtonKeyword, btnKeyword: String, value: Int){
-        if(keyword.button.text.toString() == btnKeyword) {
-            keyword.modifyState(value)
-        }
-    }
-
-    /**
-     *
-     *Will iterate the given table layout and generate a ButtonTerm from the existing buttons.
-     *
-     * @param tableLayout which should be iterate
-     * @param term to recognize the category of the button
-     *
-     * */
-    private fun generateButtonTermFromTable(tableLayout: TableLayout, term: TermTyp):
-            MutableList<ButtonKeyword> {
-        val list  = mutableListOf<ButtonKeyword>()
-        tableLayout.children.forEach { child -> if (child is TableRow){
-                child.forEach { child_child -> if(child_child is Button) {
-                        /**Create a new ButtonTerm*/
-                        list.add(ButtonKeyword(child_child, this, term))
-                    }
-                }
-            }
-        }
-        return list
-    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
-        val  keywords = activity?.getPreferences(Context.MODE_PRIVATE) ?:return
-        with(keywords.edit()){
-            clear()
+        if(isKeywordButtonPressed()){
 
-            /**New List has to be added here*/
-            saveInstanceOfButtons(buttonKeywordEnvironmentList, this)
-            saveInstanceOfButtons(buttonKeywordFeelingList, this)
+            CompositionArtifact.createInstanceOfPreference(requireActivity())
 
-            commit()
-
+            CompositionArtifact.getPreferenceEditor(this.requireActivity()).apply {
+                putStringSet(CompositionArtifact.PreferenceKeywords.CLICKED_KEYWORDS.name, getSetOfPressedButtons()).apply()
+                putInt(CompositionArtifact.PreferenceKeywords.KEYWORD_AMOUNT.name, getSetOfPressedButtons().size).apply()
+            }
         }
         _binding = null
     }
 
-    private fun saveInstanceOfButtons(list: List<ButtonKeyword>, edit: SharedPreferences.Editor) {
-        list.forEach{term -> edit.putInt(
-            term.term.ordinal.toString() + ":" + term.button.text.toString(), term.state.ordinal)}
+
+    /**
+     * @return a sequence of all clicked buttons
+     * */
+    private fun getSetOfPressedButtons(): Set<String>{
+        val tmp = mutableSetOf<String>()
+        val allPressedButton = listButtonGenericKeyword.flatMap { it.getClickedButtonsAsSequence()}
+        allPressedButton.forEach{tmp.add(it.toString())}
+        return tmp
     }
 
 }
