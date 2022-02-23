@@ -1,10 +1,13 @@
 package com.example.cobex
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import com.example.cobex.databinding.FragmentCreateNewBinding
 
@@ -28,6 +31,7 @@ class CreateNew : Fragment() {
         return binding.root
 
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -43,9 +47,17 @@ class CreateNew : Fragment() {
             findNavController().navigate(R.id.action_CreateNew_to_inputMelody)
         }
 
-        binding.buttonKeyword.setOnClickListener{
+        binding.buttonKeyword.setOnClickListener {
             findNavController().navigate(R.id.action_CreateNew_to_inputKeyword)
         }
+
+        if(CompositionArtifact.clickedKeywords > 0) {
+            binding.counterKeywordsFeeling.apply {
+                visibility = View.VISIBLE
+                text = CompositionArtifact.clickedKeywords.toString()
+            }
+        }
+
     }
 
     override fun onDestroyView() {

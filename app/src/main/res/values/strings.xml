@@ -18,6 +18,7 @@
     <string name="buttonCreateNew">Create New</string>
     <string name="buttonGallery">My Experiences</string>
     <string name="buttonHelp">Help</string>
+    <string name="buttonContinue">Continue</string>
 
     <string name="buttonKeywordInput">Input Keyword</string>
     <string name="buttonMelodyInput">Input Melody</string>
@@ -72,6 +73,7 @@
     <string name="inputKeyword_label">Choose your Keywords</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 
 </resources>
