@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_CreateNew_to_inputKeyword"
             app:destination="@+id/inputKeyword" />
+        <action
+            android:id="@+id/action_CreateNew_to_InputPicture"
+            app:destination="@id/capturePicture" />
 
     </fragment>
     <fragment
@@ -70,5 +73,16 @@
         <action
             android:id="@+id/action_inputKeyword_to_inputMelody"
             app:destination="@+id/inputMelody"/>
+
+    <fragment
+        android:id="@+id/capturePicture"
+        android:name="com.example.cobex.CapturePicture"
+        android:label="CapturePicture"
+        tools:layout="@layout/fragment_capture_picture">
+
+        <action
+            android:id="@+id/action_capturePicture_to_CreateNew"
+            app:destination="@id/CreateNew" />
+    </fragment>
 
 </navigation>

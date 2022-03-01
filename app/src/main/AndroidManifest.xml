@@ -4,6 +4,7 @@
 
     <!--Permission for recording audio and storage of audio in users device-->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.STORAGE"/>
     <uses-feature android:name="android.software.midi" android:required="true"/>

@@ -1,13 +1,11 @@
 package com.example.cobex
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import com.example.cobex.databinding.FragmentCreateNewBinding
 
@@ -51,13 +49,23 @@ class CreateNew : Fragment() {
             findNavController().navigate(R.id.action_CreateNew_to_inputKeyword)
         }
 
-        if(CompositionArtifact.clickedKeywords > 0) {
-            binding.counterKeywordsFeeling.apply {
-                visibility = View.VISIBLE
-                text = CompositionArtifact.clickedKeywords.toString()
-            }
+        binding.buttonInputCam.setOnClickListener {
+            findNavController().navigate(R.id.action_CreateNew_to_InputPicture)
         }
 
+
+        setCounter(binding.counterKeywordsFeeling, CompositionArtifact.clickedKeywords)
+        setCounter(binding.counterPictures, CompositionArtifact.capturedPicture)
+
+    }
+
+    private fun setCounter(textView: TextView, counter: Int){
+        if(counter > 0){
+            textView.apply {
+                visibility = View.VISIBLE
+                text = counter.toString()
+            }
+        }
     }
 
     override fun onDestroyView() {
