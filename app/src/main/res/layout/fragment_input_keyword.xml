@@ -8,68 +8,62 @@
     tools:context=".InputKeyword">
 
 
-    <TextView
-        android:id="@+id/textview_first3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        android:text="@string/textInputKeyword"
-        android:textColor="#FAFAFA"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.116" />
-
-    <Button
-        android:id="@+id/buttonNext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
-        android:backgroundTint="#2B2929"
-        android:text="@string/buttonNext"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonBackCreate"
-        app:strokeColor="#0B0A0A" />
-
-    <Button
-        android:id="@+id/buttonBackCreate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="36dp"
-        android:backgroundTint="#2B2929"
-        android:text="@string/buttonBack"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonNext"
-        app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="#0B0A0A" />
-
-
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="310dp"
+        android:layout_width="335dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.71"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499">
+
+        <TextView
+            android:id="@+id/textview_first3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+
+            android:text="@string/textInputKeyword"
+            android:textColor="#FAFAFA"
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            />
 
 
-        <Button
-            android:id="@+id/buttonFeelings"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/buttonFeelings" />
+            android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/buttonFeelings"
+                android:layout_width="310dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:text="@string/buttonFeelings" />
+
+            <TextView
+                android:id="@+id/counterKeywordsFeeling"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+        </LinearLayout>
 
         <TableLayout
             android:id="@+id/table_feelings"
-            android:layout_width="match_parent"
+            android:layout_width="310dp"
             android:layout_height="match_parent"
             android:stretchColumns="0,1"
             android:visibility="gone">
@@ -218,15 +212,34 @@
 
         </TableLayout>
 
-        <Button
-            android:id="@+id/buttonEnvironment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonEnvironment" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:id="@+id/buttonEnvironment"
+                android:layout_width="310dp"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonEnvironment" />
+
+            <TextView
+                android:id="@+id/counterKeywordsEnvironment"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/circle"
+                android:gravity="center"
+                android:visibility="gone"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
 
         <TableLayout
             android:id="@+id/table_env"
-            android:layout_width="match_parent"
+            android:layout_width="310dp"
             android:layout_height="wrap_content"
             android:stretchColumns="0,1"
             android:visibility="gone">
@@ -393,40 +406,39 @@
                     android:text="@string/buttonRainy" />
             </TableRow>
 
-
         </TableLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonBackCreate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="36dp"
+                android:backgroundTint="#2B2929"
+                android:text="@string/buttonBack"
+                app:strokeColor="#0B0A0A" />
+
+
+            <View
+                android:layout_width="135dp"
+                android:layout_height="0dp" />
+
+            <Button
+                android:id="@+id/buttonNext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="36dp"
+                android:backgroundTint="#2B2929"
+                android:text="@string/buttonNext"
+                app:strokeColor="#0B0A0A" />
+
+        </LinearLayout>
+
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/counterKeywordsFeeling"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/circle"
-        android:gravity="center"
-        android:text="0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
-
-    <TextView
-        android:id="@+id/counterKeywordsEnvironment"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/circle"
-        android:gravity="center"
-        android:text="0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout"
-        app:layout_constraintTop_toBottomOf="@+id/counterKeywordsFeeling" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
