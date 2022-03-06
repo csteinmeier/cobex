@@ -2,6 +2,7 @@ package com.example.cobex
 
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +30,7 @@ import com.example.cobex.databinding.FragmentInputKeywordBinding
  *
  * */
 
-class InputKeyword : Fragment() {
+class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
 
     /** Binding */
     private var _binding: FragmentInputKeywordBinding? = null
@@ -75,9 +76,9 @@ class InputKeyword : Fragment() {
             /**New Generic Buttons should be added here*/
         )
 
-        if(CompositionArtifact.isSavedPreferenceAvailable(this.requireActivity())){
-            recreateOldState()
-        }
+        if(isInstanceOfSavedPreferencesAvailable(requireActivity()))
+            if(isInstanceOfSavedPreferencesAvailable(requireActivity(), CompositionArtifact.PreferenceKeywords.KEYWORD_INIT))
+                recreateOldState()
     }
 
     private fun recreateOldState(){
@@ -310,11 +311,14 @@ class InputKeyword : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         if(isKeywordButtonPressed()){
-
-            CompositionArtifact.createInstanceOfPreference(requireActivity())
-
+            //A Boolean to signal the button "Continue" in SecondFragment to be visible and
+            createInstanceOfSavedPreferences(requireActivity())
+            //a boolean to signal that there is a stored instance for this fragment
+            createInstanceOfSavedPreferences(requireActivity(), CompositionArtifact.PreferenceKeywords.KEYWORD_INIT)
             CompositionArtifact.getPreferenceEditor(this.requireActivity()).apply {
+
                 putStringSet(CompositionArtifact.PreferenceKeywords.CLICKED_KEYWORDS.name, getSetOfPressedButtons()).apply()
+
                 putInt(CompositionArtifact.PreferenceKeywords.KEYWORD_AMOUNT.name, getSetOfPressedButtons().size).apply()
             }
         }

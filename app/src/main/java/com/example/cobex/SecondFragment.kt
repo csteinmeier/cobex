@@ -53,7 +53,12 @@ class SecondFragment : Fragment() {
 
         binding.buttonContinue.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_CreateNew)
-            CompositionArtifact.clickedKeywords = CompositionArtifact.getSavedAmountOfKeywords(requireActivity())
+            CompositionArtifact.clickedKeywords =
+                CompositionArtifact.getSavedAmountOfKeywords(requireActivity(),
+                CompositionArtifact.PreferenceKeywords.KEYWORD_AMOUNT)
+            CompositionArtifact.capturedPicture =
+                CompositionArtifact.getSavedAmountOfKeywords(requireActivity(),
+                CompositionArtifact.PreferenceKeywords.PICTURE_AMOUNT)
         }
     }
 
@@ -72,6 +77,7 @@ class SecondFragment : Fragment() {
         CompositionArtifact.clearSavedPreference(this.requireActivity())
         findNavController().navigate(R.id.action_SecondFragment_to_CreateNew)
         CompositionArtifact.clickedKeywords = 0
+        CompositionArtifact.capturedPicture = 0
     }
 
 
