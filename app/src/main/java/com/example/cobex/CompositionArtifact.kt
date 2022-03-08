@@ -105,6 +105,10 @@ object CompositionArtifact {
         ).apply()
     }
 
+    fun deleteAllTakenPictures(activity: Activity){
+        InputPicture.getImageFileDir(activity).deleteRecursively()
+    }
+
     interface IArtifact{
 
         /**Will save a boolean to indicate a saved Instance is available*/

@@ -76,7 +76,7 @@
 
     <fragment
         android:id="@+id/capturePicture"
-        android:name="com.example.cobex.CapturePicture"
+        android:name="com.example.cobex.InputPicture"
         android:label="CapturePicture"
         tools:layout="@layout/fragment_capture_picture">
 

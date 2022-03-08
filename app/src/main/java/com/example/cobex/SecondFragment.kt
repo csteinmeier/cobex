@@ -75,9 +75,10 @@ class SecondFragment : Fragment() {
 
     private fun deleteOldInstanceListener() {
         CompositionArtifact.clearSavedPreference(this.requireActivity())
-        findNavController().navigate(R.id.action_SecondFragment_to_CreateNew)
         CompositionArtifact.clickedKeywords = 0
         CompositionArtifact.capturedPicture = 0
+        CompositionArtifact.deleteAllTakenPictures(requireActivity())
+        findNavController().navigate(R.id.action_SecondFragment_to_CreateNew)
     }
 
 

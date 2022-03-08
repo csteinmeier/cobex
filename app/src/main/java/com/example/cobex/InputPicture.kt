@@ -40,7 +40,7 @@ import java.time.Instant
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
+class InputPicture : Fragment(), CompositionArtifact.IArtifact {
 
     private val binding get() = _binding!!
     private var _binding: FragmentCapturePictureBinding? = null
@@ -49,6 +49,9 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
     companion object {
         private const val CAMARA_PERMISSION_CODE = 1
         private const val CAMARA_REQUEST_CODE = 2
+
+        fun getImageFileDir(activity: Activity) =
+            ContextWrapper(activity).getDir("images", Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -69,6 +72,8 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
                 if(checkIfPermissionIsGranted()) {
                     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     startActivityForResult(intent, CAMARA_REQUEST_CODE)
+                }else {
+
                 }
             }
         }
@@ -160,7 +165,7 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
                 val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 startActivityForResult(intent, CAMARA_REQUEST_CODE)
             }
-        } else {
+        }/* else {
             //If permission is not granted... maybe more option with "showRational.." or something like that
             Toast.makeText(
                 this.requireContext(),
@@ -168,6 +173,7 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
                         "Please change it in the settings", Toast.LENGTH_SHORT
             ).show()
         }
+        */
     }
 
     /**
@@ -358,7 +364,7 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
         if (pictureListManager.isPictureTaken()) {
 
             //Delete all old picture so it will not duplicate each time we destroy the view
-            deleteRecursive(getFileDir()!!)
+            getImageFileDir(requireActivity())!!.deleteRecursively()
 
             //A Boolean to signal the button "Continue" in SecondFragment to be visible and
             createInstanceOfSavedPreferences(requireActivity())
@@ -380,13 +386,6 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
         _binding = null
     }
 
-    private fun deleteRecursive(fileOrDirectory: File) {
-        if (fileOrDirectory.isDirectory)
-            for (child in fileOrDirectory.listFiles()!!)
-                deleteRecursive(child)
-        fileOrDirectory.delete()
-    }
-
     private fun getPictureUriSetToSave(): MutableSet<String> {
         val pictureSet = mutableSetOf<String>()
         pictureListManager.getTakenPictures()?.forEach {
@@ -397,13 +396,9 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
         return pictureSet
     }
 
-    private fun getFileDir(): File? {
-        return ContextWrapper(activity).getDir("images", Context.MODE_PRIVATE)
-    }
-
     private fun saveImageInternal(bitmap: Bitmap): Uri? {
         val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
-        val file = File(getFileDir(), "$timeStamp.jpg")
+        val file = File(getImageFileDir(requireActivity()), "$timeStamp.jpg")
         try {
             val stream: OutputStream = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
