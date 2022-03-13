@@ -1,6 +1,7 @@
 package com.example.cobex
 
 import android.content.Context
+import android.text.BoringLayout
 
 open class SingletonHolder<out T : Any, in A>(creator: (A) -> T) {
     private var creator: ((A) -> T)? = creator
@@ -51,6 +52,8 @@ class CompositionArtifact private constructor(private val context: Context) {
 
         // Used to indicate a integer which stands for a counter
         COUNTER,
+
+        BOOLEAN
     }
 
     private fun getPreferences() =
@@ -88,6 +91,12 @@ class CompositionArtifact private constructor(private val context: Context) {
 
     private fun getCounter(identifier: String) =
         getPreferences().getInt("${Keywords.COUNTER.name} $identifier", 0)
+
+    private fun putBoolean(identifier: String, boolean: Boolean) =
+        getPreferencesEditor().putBoolean("${Keywords.BOOLEAN.name} $identifier", boolean)
+
+    private fun getBoolean(identifier: String) =
+        getPreferences().getBoolean("${Keywords.BOOLEAN.name} $identifier", false)
 
     /**
      * To write data to the artifact,
@@ -160,6 +169,14 @@ class CompositionArtifact private constructor(private val context: Context) {
 
         fun <T>putCounter(context: Context, clazz: Class<T>, counter: Int) =
             CompositionArtifact.getInstance(context).putCounter(clazz.name, counter)
+
+        fun <T>putBoolean(context: Context, clazz: Class<T>, boolean: Boolean) =
+            CompositionArtifact.getInstance(context).putBoolean(clazz.name, boolean)
+
+        fun <T>getBoolean(context: Context, clazz: Class<T>) =
+            CompositionArtifact.getInstance(context).getBoolean(clazz.name)
     }
+
+
 }
 
