@@ -17,17 +17,16 @@ import androidx.navigation.fragment.findNavController
 import com.example.cobex.databinding.FragmentInputKeywordBinding
 
 /**
+ *
+ * Class which represent the Fragment of InputKeyword
+ *
  * If a new Generic Term should be added to the XML, only the following things have to be modified:
+ * * [KeywordType]  this enum has to be extended.
  *
- *
- * @KeywordType  this enum has to be extended.
- *
- * @onViewCreated :
- *      - counterList has to extended with the new KeywordCounter
- *      - a New "ButtonGenericKeyword" with the Generic Term has to be added in
- *        "listButtonGenericKeyword"
- *
- *
+ * * [onViewCreated] :
+ *      - [counterList] has to be extended with the new [KeywordCounter]
+ *      - a New [ButtonGenericKeyword] with the Generic Term has to be added in
+ *        [listButtonGenericKeyword]
  * */
 
 class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
@@ -76,18 +75,16 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
             /**New Generic Buttons should be added here*/
         )
 
-        if(isInstanceOfSavedPreferencesAvailable(requireActivity()))
-            if(isInstanceOfSavedPreferencesAvailable(requireActivity(), CompositionArtifact.PreferenceKeywords.KEYWORD_INIT))
-                recreateOldState()
+        if(isInstanceOfSavedPreferencesAvailable(requireContext(), this.javaClass))
+            recreateOldState()
     }
 
     private fun recreateOldState(){
         // Set of Saved Buttons
-        val savedSet = CompositionArtifact.getPreferences(this.requireActivity()).getStringSet(
-            CompositionArtifact.PreferenceKeywords.CLICKED_KEYWORDS.name, setOf())
+        val savedSet = getStringSet(requireContext(), this.javaClass)
 
         //Must be reset otherwise it will simply continue to count on it
-        CompositionArtifact.clickedKeywords = 0
+        CreateNew.clickedKeyword = 0
 
         savedSet?.forEach { s ->
             listButtonGenericKeyword.forEach{ it.recreateState(extractButtonStringText(s))}
@@ -198,13 +195,13 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
         override fun setActivated() {
             super.setActivated()
             context.updateKeyWordCounter(1, keywordType)
-            CompositionArtifact.clickedKeywords +=1
+            CreateNew.clickedKeyword +=1
         }
 
         override fun setDeactivated() {
             super.setDeactivated()
             context.updateKeyWordCounter(-1, keywordType)
-            CompositionArtifact.clickedKeywords -=1
+            CreateNew.clickedKeyword -=1
         }
     }
 
@@ -311,16 +308,14 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
     override fun onDestroyView() {
         super.onDestroyView()
         if(isKeywordButtonPressed()){
-            //A Boolean to signal the button "Continue" in SecondFragment to be visible and
-            createInstanceOfSavedPreferences(requireActivity())
-            //a boolean to signal that there is a stored instance for this fragment
-            createInstanceOfSavedPreferences(requireActivity(), CompositionArtifact.PreferenceKeywords.KEYWORD_INIT)
-            CompositionArtifact.getPreferenceEditor(this.requireActivity()).apply {
 
-                putStringSet(CompositionArtifact.PreferenceKeywords.CLICKED_KEYWORDS.name, getSetOfPressedButtons()).apply()
+            markAsSavedIfNotMarkedAsSaved(requireContext(), this.javaClass)
 
-                putInt(CompositionArtifact.PreferenceKeywords.KEYWORD_AMOUNT.name, getSetOfPressedButtons().size).apply()
-            }
+            val pressedButtons = getSetOfPressedButtons()
+
+            putStringSet(requireContext(), this.javaClass, pressedButtons)
+
+            putCounter(requireContext(), this.javaClass, pressedButtons.size)
         }
         _binding = null
     }
