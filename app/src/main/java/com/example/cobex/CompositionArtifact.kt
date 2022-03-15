@@ -1,7 +1,13 @@
 package com.example.cobex
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.text.BoringLayout
+import java.io.File
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 open class SingletonHolder<out T : Any, in A>(creator: (A) -> T) {
     private var creator: ((A) -> T)? = creator
@@ -78,7 +84,7 @@ class CompositionArtifact private constructor(private val context: Context) {
         getPreferencesEditor().putBoolean(clazz.name, true).apply()
 
     private fun deleteTakenPictures() =
-        CapturePicture.getImageFileDir(context).deleteRecursively()
+        getImageFileDir().deleteRecursively()
 
     private fun putStringSet(identifier: String, set: Set<String>) =
         getPreferencesEditor().putStringSet("${Keywords.SET.name} $identifier", set).apply()
@@ -97,6 +103,11 @@ class CompositionArtifact private constructor(private val context: Context) {
 
     private fun getBoolean(identifier: String) =
         getPreferences().getBoolean("${Keywords.BOOLEAN.name} $identifier", false)
+
+    fun getImageFileDir(): File =
+        ContextWrapper(context).getDir("images", Context.MODE_PRIVATE)
+
+    fun getTimeStamp() = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
 
     /**
      * To write data to the artifact,
@@ -175,6 +186,8 @@ class CompositionArtifact private constructor(private val context: Context) {
 
         fun <T>getBoolean(context: Context, clazz: Class<T>) =
             CompositionArtifact.getInstance(context).getBoolean(clazz.name)
+
+
     }
 
 
