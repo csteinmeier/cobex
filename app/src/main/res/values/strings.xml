@@ -84,7 +84,10 @@
     <string name="inputKeyword_label">Choose your Keywords</string>
     <string name="capturePicture_label">Capture some Picture</string>
     <string name="captureAction_label">Record your Activities</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textPictureCapture">Press Capture to take a Photos!</string>
+    <string name="buttonCapture">Capture</string>
+    <string name="textBPM">BPM:</string>
 
     <!-- Activities in Capture Activity -->
     <string name="activityStill">Record: You stand still</string>
