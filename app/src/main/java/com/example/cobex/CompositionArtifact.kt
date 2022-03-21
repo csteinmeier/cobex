@@ -1,136 +1,182 @@
 package com.example.cobex
 
-import android.app.Activity
 import android.content.Context
-import android.content.SharedPreferences
-import android.util.Log
-import android.view.View
-import com.google.android.material.textfield.TextInputEditText
+import android.text.BoringLayout
 
-object CompositionArtifact {
+open class SingletonHolder<out T : Any, in A>(creator: (A) -> T) {
+    private var creator: ((A) -> T)? = creator
 
-    enum class PreferenceKeywords {
-        /**Keyword for the boolean value if an instance is available */
+    @Volatile
+    private var instance: T? = null
+
+    fun getInstance(arg: A): T {
+        val checkInstance = instance
+        if (checkInstance != null) {
+            return checkInstance
+        }
+
+        return synchronized(this) {
+            val checkInstanceAgain = instance
+            if (checkInstanceAgain != null) {
+                checkInstanceAgain
+            } else {
+                val created = creator!!(arg)
+                instance = created
+                creator = null
+                created
+            }
+        }
+    }
+}
+
+/**
+ *
+ * Class to store data entered by the user,
+ * for easy use the interface IArtifact must be implemented
+ *
+ */
+class CompositionArtifact private constructor(private val context: Context) {
+
+    companion object : SingletonHolder<CompositionArtifact, Context>(::CompositionArtifact)
+
+    private enum class Keywords {
+
+        // File name of the shared data
+        COMPOSITION_ARTIFACT,
+
+        // Flag name to indicate a saved instance
         INITIALIZED,
-        /**Keyword for the boolean value if an instance of Keywords is available*/
-        KEYWORD_INIT,
-        /**Keyword to recognize the amount of clicked keywords in InputKeyword*/
-        KEYWORD_AMOUNT,
-        /**Keyword to recognize a Set of Clicked Keywords <br>
-         * Saved like this: <br>
-         * [KeywordType:FEELING]:[KeywordName:Strong] <br>
-         * [KeywordType:FEELING]:[KeywordName:Loving]*/
-        CLICKED_KEYWORDS,
-        /**Keyword for the boolean value if an instance of CapturePicture is available*/
-        PICTURE_INIT,
-        /**Keyword to recognize the amount of taken pictures in InputKeyword*/
-        PICTURE_AMOUNT,
 
-        TAKEN_PICTURES
+        // Used to indicate set of strings in Shared Preferences
+        SET,
+
+        // Used to indicate a integer which stands for a counter
+        COUNTER,
+
+        BOOLEAN
     }
 
-    var clickedKeywords = 0
-    var capturedPicture = 0
+    private fun getPreferences() =
+        context.getSharedPreferences(Keywords.COMPOSITION_ARTIFACT.name, Context.MODE_PRIVATE)
 
+    private fun getPreferencesEditor() =
+        getPreferences().edit()
+
+    private fun isSavedInstanceAvailable() =
+        getPreferences().getBoolean(Keywords.INITIALIZED.name, false)
+
+    private fun isSavedInstanceOfCategoryAvailable(identifier: String) =
+        getPreferences().getBoolean(identifier, false)
+
+    private fun clearSavedInstance() =
+        getPreferencesEditor().clear().apply()
+
+    private fun createInstanceOfPreference() =
+        getPreferencesEditor().putBoolean(Keywords.INITIALIZED.name, true).apply()
+
+    private fun <T>createInstanceOfPreference(clazz: Class<T>) =
+        getPreferencesEditor().putBoolean(clazz.name, true).apply()
+
+    private fun deleteTakenPictures() =
+        CapturePicture.getImageFileDir(context).deleteRecursively()
+
+    private fun putStringSet(identifier: String, set: Set<String>) =
+        getPreferencesEditor().putStringSet("${Keywords.SET.name} $identifier", set).apply()
+
+    private fun getStringSet(identifier: String) =
+        getPreferences().getStringSet("${Keywords.SET.name} $identifier", setOf())
+
+    private fun putCounter(identifier: String, counter: Int) =
+        getPreferencesEditor().putInt("${Keywords.COUNTER.name} $identifier", counter).apply()
+
+    private fun getCounter(identifier: String) =
+        getPreferences().getInt("${Keywords.COUNTER.name} $identifier", 0)
+
+    private fun putBoolean(identifier: String, boolean: Boolean) =
+        getPreferencesEditor().putBoolean("${Keywords.BOOLEAN.name} $identifier", boolean)
+
+    private fun getBoolean(identifier: String) =
+        getPreferences().getBoolean("${Keywords.BOOLEAN.name} $identifier", false)
 
     /**
+     * To write data to the artifact,
+     * this interface should be implemented in the respective class.
      *
-     * @return number of clicked keywords in fragment "InputKeyword"
-     */
-    fun getSavedAmountOfKeywords(activity: Activity, preferenceKeywords: PreferenceKeywords): Int {
-        return getPreferences(activity).getInt(preferenceKeywords.name, 0)
-    }
-
-    /**
+     * * To signal that an instance of an artifact has been started,
+     * a Boolean can be saved with the command
+     * [markAsSavedIfNotMarkedAsSaved].
+     * Here a Boolean is stored which signals that something has been
+     * placed in SharedPreferences as well as the executing class
+     * which has saved data.
      *
-     * @return true if an instance of the SharedPreferences was created
-     */
-    fun isSavedPreferenceAvailable(activity: Activity): Boolean {
-        return activity.getPreferences(Context.MODE_PRIVATE).getBoolean(
-            PreferenceKeywords.INITIALIZED.name, false
-        )
-    }
-
-    /**
+     * * To see if data was written [isInstanceOfSavedPreferencesAvailable] can be used.
+     * This can be done with the context alone or with the help of the respective class.
      *
-     * @return true if an instance of the SharedPreferences was created
-     */
-    fun isSavedPreferenceAvailable(activity: Activity,  preferenceKeywords: PreferenceKeywords): Boolean {
-        return activity.getPreferences(Context.MODE_PRIVATE).getBoolean(
-            preferenceKeywords.name, false
-        )
-    }
-
-    /**
+     * * To write concrete data to the references it is enough to use one of the methods:
+     * [putStringSet], [putCounter]
+     * Internally the methods of SharedPreferences are used
      *
-     * will clear all values
-     */
-    fun clearSavedPreference(activity: Activity) {
-        activity.getPreferences(Context.MODE_PRIVATE).edit().clear().apply()
-    }
-
-    /**
+     * * To get the concrete data use one of this methods:
+     * [getCounter], [getStringSet]
      *
-     * @return editor to modify values in SharedPreferences
+     * * To delete everything saved use [clearSavedInstance]
      */
-    fun getPreferenceEditor(activity: Activity): SharedPreferences.Editor {
-        return activity.getPreferences(Context.MODE_PRIVATE).edit()
-    }
+    interface IArtifact {
 
-    /**
-     *
-     * @return SharedPreferences in Context.MODE_PRIVATE
-     */
-    fun getPreferences(activity: Activity): SharedPreferences {
-        return activity.getPreferences(Context.MODE_PRIVATE)
-    }
+        fun clearSavedInstance(context: Context){
+            CompositionArtifact.getInstance(context).clearSavedInstance()
 
-    /***
-     *  will save a boolean in SharedPreferences to indicate that a saved instance is available
-     */
-    fun createInstanceOfPreference(activity: Activity) {
-        Log.i("Instance of", "preference was created")
-        activity.getPreferences(Context.MODE_PRIVATE).edit().putBoolean(
-            PreferenceKeywords.INITIALIZED.name, true
-        ).apply()
-    }
-
-    /***
-     *  will save a boolean in SharedPreferences to indicate that a saved instance is available
-     */
-    fun createInstanceOfPreference(activity: Activity, preferenceKeywords: PreferenceKeywords) {
-        Log.i("Instance of", "$preferenceKeywords was created")
-        activity.getPreferences(Context.MODE_PRIVATE).edit().putBoolean(
-            preferenceKeywords.name, true
-        ).apply()
-    }
-
-    interface IArtifact{
-
-        /**Will save a boolean to indicate a saved Instance is available*/
-        fun createInstanceOfSavedPreferences(activity: Activity){
-            if(!isSavedPreferenceAvailable(activity)){
-                createInstanceOfPreference(activity)
-            }
+            if(getStringSet(context, CapturePicture::class.java)!!.isNotEmpty())
+                CompositionArtifact.getInstance(context).deleteTakenPictures()
         }
 
-        /**Will save a boolean to indicate a saved Instance is available*/
-        fun createInstanceOfSavedPreferences(activity: Activity, preferenceKeywords: PreferenceKeywords){
-            if(!isSavedPreferenceAvailable(activity, preferenceKeywords)){
-                createInstanceOfPreference(activity, preferenceKeywords)
-            }
+        /**
+         * @return true if a saved instance of preferences is available
+         *
+         * */
+        fun isInstanceOfSavedPreferencesAvailable(context: Context): Boolean =
+            CompositionArtifact.getInstance(context).isSavedInstanceAvailable()
+
+        /**
+         * @param clazz which stands for a part of the artifact
+         *
+         * @return true if a saved instance of preferences is available
+         * */
+        fun <T>isInstanceOfSavedPreferencesAvailable(context: Context, clazz: Class<T>)
+            = CompositionArtifact.getInstance(context).isSavedInstanceOfCategoryAvailable(clazz.name)
+
+        /**
+         * Stores a truth value which signals that the class has stored a part of the artifact
+         * and a general boolean that a project has started.
+         *
+         *  @param clazz which stands for a part of the artifact
+         */
+        fun <T>markAsSavedIfNotMarkedAsSaved(context: Context, clazz: Class<T>){
+            if(!isInstanceOfSavedPreferencesAvailable(context))
+                CompositionArtifact.getInstance(context).createInstanceOfPreference()
+            if(!isInstanceOfSavedPreferencesAvailable(context, clazz))
+                CompositionArtifact.getInstance(context).createInstanceOfPreference(clazz)
         }
 
-        /** @return true if a saved instance of preferences is available*/
-        fun isInstanceOfSavedPreferencesAvailable(activity: Activity): Boolean {
-            return isSavedPreferenceAvailable(activity)
-        }
+        fun <T>getStringSet(context: Context, clazz: Class<T>): Set<String>? =
+            CompositionArtifact.getInstance(context).getStringSet(clazz.name)
 
-        /** @return true if a saved instance of preferences is available*/
-        fun isInstanceOfSavedPreferencesAvailable(activity: Activity, preferenceKeywords: PreferenceKeywords): Boolean {
-            return isSavedPreferenceAvailable(activity, preferenceKeywords)
-        }
+        fun <T>putStringSet(context: Context, clazz: Class<T>, set: Set<String>) =
+            CompositionArtifact.getInstance(context).putStringSet(clazz.name, set)
 
+        fun <T>getCounter(context: Context, clazz: Class<T>) =
+            CompositionArtifact.getInstance(context).getCounter(clazz.name)
+
+        fun <T>putCounter(context: Context, clazz: Class<T>, counter: Int) =
+            CompositionArtifact.getInstance(context).putCounter(clazz.name, counter)
+
+        fun <T>putBoolean(context: Context, clazz: Class<T>, boolean: Boolean) =
+            CompositionArtifact.getInstance(context).putBoolean(clazz.name, boolean)
+
+        fun <T>getBoolean(context: Context, clazz: Class<T>) =
+            CompositionArtifact.getInstance(context).getBoolean(clazz.name)
     }
+
+
 }
 

@@ -8,25 +8,18 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
-import android.icu.text.SimpleDateFormat
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
-import android.util.Base64
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -34,21 +27,23 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cobex.databinding.FragmentCapturePictureBinding
-import java.io.*
-
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
 import java.time.Instant
 import java.time.format.DateTimeFormatter
-import java.util.*
 
-class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
+class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelper.IRequirePermission {
 
     private val binding get() = _binding!!
     private var _binding: FragmentCapturePictureBinding? = null
     private lateinit var pictureListManager: PictureListManager
 
     companion object {
-        private const val CAMARA_PERMISSION_CODE = 1
-        private const val CAMARA_REQUEST_CODE = 2
+
+        fun getImageFileDir(context: Context): File =
+            ContextWrapper(context).getDir("images", Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -63,23 +58,17 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        binding.apply {
-            buttonCapture.setOnClickListener {
-                if(checkIfPermissionIsGranted()) {
-                    val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    startActivityForResult(intent, CAMARA_REQUEST_CODE)
-                }
-            }
+        binding.buttonCapture.setOnClickListener {
+            hasPermission { takePicture() }
         }
 
         if (isInstanceOfSavedPreferencesAvailable(
-                requireActivity(),
-                CompositionArtifact.PreferenceKeywords.PICTURE_INIT
+                requireContext(),
+                this.javaClass
             )
         ) {
             //Has to be reset so it will not double the amount
-            CompositionArtifact.capturedPicture = 0
+            //CompositionArtifact.capturedPicture = 0
 
             //Manage the Adapter of recyclerView
             pictureListManager = PictureListManager(
@@ -94,13 +83,32 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
         }
     }
 
+    fun takePicture(){
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(intent, PermissionHelper.CAMARA_REQUEST_CODE)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        helperOnRequestPermissionResult(
+            requestCode = requestCode,
+            permission = permissions,
+            grantResults = grantResults,
+            hasPermission = { takePicture() },
+            null
+            )
+    }
+
 
     private fun recreateListOfOldImages(): MutableList<Bitmap> {
         val imgList = mutableListOf<Bitmap>()
         // load all saved uri in string style
-        val setOfPictureUris = CompositionArtifact.getPreferences(requireActivity()).getStringSet(
-            CompositionArtifact.PreferenceKeywords.TAKEN_PICTURES.name, setOf()
-        )
+        val setOfPictureUris = getStringSet(requireContext(), this.javaClass)
+
         setOfPictureUris?.forEach {
             //convert string to image
             val uri = File(it).toUri()
@@ -111,65 +119,6 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
         return imgList
     }
 
-
-    /**
-     * Checks if Permission is Granted, if then a picture is recorded
-     */
-    private fun checkIfPermissionIsGranted(): Boolean {
-        return if (permissionIsNotGranted(Manifest.permission.CAMERA) ||
-            permissionIsNotGranted(Manifest.permission.READ_EXTERNAL_STORAGE) ||
-            permissionIsNotGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        ) {
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ), CAMARA_PERMISSION_CODE
-            )
-            false
-        }else{
-            true
-        }
-    }
-
-
-    private fun permissionIsNotGranted(string: String): Boolean {
-        return checkSelfPermission(string) != PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun checkSelfPermission(string: String) =
-        ActivityCompat.checkSelfPermission(requireContext(), string)
-
-
-    /**
-     *
-     * After permission request
-     *
-     */
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //Camara Picture?
-        if (requestCode == CAMARA_REQUEST_CODE) {
-            //Permissions granted?
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(intent, CAMARA_REQUEST_CODE)
-            }
-        } else {
-            //If permission is not granted... maybe more option with "showRational.." or something like that
-            Toast.makeText(
-                this.requireContext(),
-                "Oops you just denied a required permission " +
-                        "Please change it in the settings", Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
     /**
      *
      *  Function which received the taken picture
@@ -178,7 +127,7 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == CAMARA_REQUEST_CODE) {
+            if (requestCode == PermissionHelper.CAMARA_REQUEST_CODE) {
                 val uri = data?.extras?.get("data")
                 pictureListManager.addNewPicture(uri as Bitmap)
             }
@@ -204,7 +153,8 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
             val gridLayoutManager = GridLayoutManager(context, numberOfColumns)
 
             //Instance of the Adapter
-            pictureListAdapter = PictureListAdapter(lifecycleOwner, context, list, buttonCapturePicture)
+            pictureListAdapter =
+                PictureListAdapter(lifecycleOwner, context, list, buttonCapturePicture)
 
             //setup recycler
             recycler.apply {
@@ -249,8 +199,8 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
             /**Adds a new Bitmap Picture to the List*/
             fun addNewImage(bitmap: Bitmap) {
                 listHolder.find { !it.isBitmapPicture() }?.addImage(bitmap)
-                CompositionArtifact.capturedPicture += 1
-                capturePicture.isEnabled = CompositionArtifact.capturedPicture <= itemCount
+                CreateNew.takenPicture += 1
+                capturePicture.isEnabled = CreateNew.takenPicture <= itemCount
             }
 
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
@@ -265,7 +215,7 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
                 holder.image.setImageResource(R.drawable.ic_lense_24)
                 holder.picture.observe(lifecycleOwner, holder)
                 //Add the saved Pictures
-                if(list != null && list.size -1 >= position){
+                if (list != null && list.size - 1 >= position) {
                     addNewImage(list[position])
                 }
             }
@@ -311,7 +261,7 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
                 /**Removes the taken picture*/
                 fun removeImage() {
                     _pictures.value = CapturedPicture(placeholder = R.drawable.ic_lense_24)
-                    CompositionArtifact.capturedPicture -= 1
+                    CreateNew.takenPicture -= 1
                 }
 
                 fun isBitmapPicture(): Boolean {
@@ -319,7 +269,7 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
                 }
 
                 fun getBitmapPicture(): Bitmap? {
-                    return _pictures.value?.bitmap
+                    return picture.value?.bitmap
                 }
 
                 override fun onChanged(changedPicture: CapturedPicture?) {
@@ -343,8 +293,7 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
                     return AlertDialog.Builder(context)
                         .setTitle("Delete Picture")
                         .setMessage("Do you want to remove this picture? ")
-                        .setNegativeButton(android.R.string.no, null)
-                        .setPositiveButton(android.R.string.yes) { _, _ -> holder.removeImage() }
+                        .setPositiveButton(android.R.string.ok) { _, _ -> holder.removeImage() }
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show()
                 }
@@ -358,33 +307,15 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
         if (pictureListManager.isPictureTaken()) {
 
             //Delete all old picture so it will not duplicate each time we destroy the view
-            deleteRecursive(getFileDir()!!)
+            getImageFileDir(requireActivity())!!.deleteRecursively()
 
-            //A Boolean to signal the button "Continue" in SecondFragment to be visible and
-            createInstanceOfSavedPreferences(requireActivity())
-            //a boolean to signal that there is a stored instance for this fragment
-            createInstanceOfSavedPreferences(requireActivity(), CompositionArtifact.PreferenceKeywords.PICTURE_INIT)
+            markAsSavedIfNotMarkedAsSaved(requireContext(), this.javaClass)
 
-            //Save Amount
-            CompositionArtifact.getPreferenceEditor(requireActivity()).apply {
-                pictureListManager.getAmountOfTakenPictures()
-                    ?.let { putInt(CompositionArtifact.PreferenceKeywords.PICTURE_AMOUNT.name, it) }
+            putCounter(requireContext(), this.javaClass, pictureListManager.getAmountOfTakenPictures()!!)
+            putStringSet(requireContext(), this.javaClass, getPictureUriSetToSave())
 
-                // Save Pictures
-                putStringSet(
-                    CompositionArtifact.PreferenceKeywords.TAKEN_PICTURES.name,
-                    getPictureUriSetToSave()
-                ).apply()
-            }
         }
         _binding = null
-    }
-
-    private fun deleteRecursive(fileOrDirectory: File) {
-        if (fileOrDirectory.isDirectory)
-            for (child in fileOrDirectory.listFiles()!!)
-                deleteRecursive(child)
-        fileOrDirectory.delete()
     }
 
     private fun getPictureUriSetToSave(): MutableSet<String> {
@@ -397,13 +328,9 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
         return pictureSet
     }
 
-    private fun getFileDir(): File? {
-        return ContextWrapper(activity).getDir("images", Context.MODE_PRIVATE)
-    }
-
     private fun saveImageInternal(bitmap: Bitmap): Uri? {
         val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
-        val file = File(getFileDir(), "$timeStamp.jpg")
+        val file = File(getImageFileDir(requireActivity()), "$timeStamp.jpg")
         try {
             val stream: OutputStream = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
@@ -415,5 +342,17 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact {
         Log.i("Uri Path", Uri.parse(file.absolutePath).toString())
         return Uri.parse(file.absolutePath)
     }
+
+    override fun mainPermission() = Manifest.permission.CAMERA
+
+    override fun fragment() = this
+
+    override fun fragmentCode() = PermissionHelper.FRAGMENT_CAPTURE_PICTURE_CODE
+
+    override fun requiredPermissions() = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
 
 }

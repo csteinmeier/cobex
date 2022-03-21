@@ -1,9 +1,6 @@
 package com.example.cobex
 
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,13 +12,15 @@ import com.example.cobex.databinding.FragmentSecondBinding
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class SecondFragment : Fragment() {
+class SecondFragment : Fragment(), CompositionArtifact.IArtifact {
 
     private var _binding: FragmentSecondBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private lateinit var artifact: CompositionArtifact
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +35,9 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val isOldInstanceAvailable = CompositionArtifact.isSavedPreferenceAvailable(this.requireActivity())
+        artifact = CompositionArtifact.getInstance(requireContext())
+
+        val isOldInstanceAvailable = isInstanceOfSavedPreferencesAvailable(requireContext())
 
 
         binding.buttonSecond.setOnClickListener {
@@ -53,12 +54,9 @@ class SecondFragment : Fragment() {
 
         binding.buttonContinue.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_CreateNew)
-            CompositionArtifact.clickedKeywords =
-                CompositionArtifact.getSavedAmountOfKeywords(requireActivity(),
-                CompositionArtifact.PreferenceKeywords.KEYWORD_AMOUNT)
-            CompositionArtifact.capturedPicture =
-                CompositionArtifact.getSavedAmountOfKeywords(requireActivity(),
-                CompositionArtifact.PreferenceKeywords.PICTURE_AMOUNT)
+
+            CreateNew.clickedKeyword = getCounter(requireContext(), InputKeyword::class.java)
+            CreateNew.takenPicture = getCounter(requireContext(), CapturePicture::class.java)
         }
     }
 
@@ -74,10 +72,10 @@ class SecondFragment : Fragment() {
     }
 
     private fun deleteOldInstanceListener() {
-        CompositionArtifact.clearSavedPreference(this.requireActivity())
+        clearSavedInstance(requireContext())
+        CreateNew.takenPicture = 0
+        CreateNew.clickedKeyword = 0
         findNavController().navigate(R.id.action_SecondFragment_to_CreateNew)
-        CompositionArtifact.clickedKeywords = 0
-        CompositionArtifact.capturedPicture = 0
     }
 
 

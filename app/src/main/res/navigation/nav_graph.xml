@@ -49,8 +49,12 @@
         <action
             android:id="@+id/action_CreateNew_to_InputPicture"
             app:destination="@id/capturePicture" />
+        <action
+            android:id="@+id/action_CreateNew_to_captureAction"
+            app:destination="@id/captureAction" />
 
     </fragment>
+
     <fragment
         android:id="@+id/captureSound"
         android:name="com.example.cobex.CaptureSound"
@@ -77,11 +81,21 @@
     <fragment
         android:id="@+id/capturePicture"
         android:name="com.example.cobex.CapturePicture"
-        android:label="CapturePicture"
+        android:label="@string/capturePicture_label"
         tools:layout="@layout/fragment_capture_picture">
 
         <action
             android:id="@+id/action_capturePicture_to_CreateNew"
+            app:destination="@id/CreateNew" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/captureAction"
+        android:name="com.example.cobex.CaptureAction"
+        android:label="@string/captureAction_label"
+        tools:layout="@layout/fragment_capture_action" >
+        <action
+            android:id="@+id/action_captureAction_to_CreateNew"
             app:destination="@id/CreateNew" />
     </fragment>
 

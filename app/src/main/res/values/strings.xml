@@ -28,6 +28,17 @@
     <string name="buttonActionInput">Capture Action</string>
     <string name="buttonNext">Next</string>
 
+    <!-- CaptureAction -->
+    <string name="titleOfFragmentCaptureAction">Track your Activities !</string>
+    <string name="button_Switch_OFF">OFF</string>
+    <string name="button_Switch_ON">ON</string>
+
+    <!-- CapturePicture -->
+    <string name="buttonTakePicture">Press Capture to take a Photos!</string>
+    <string name="buttonCapture">Capture</string>
+    <string name="titleOfFragmentCapturePicture">Capture \n Your Pictures</string>
+
+
     <!-- Buttons Texts used for fragment inputKeyword-->
     <string name="buttonHappy">Happy</string>
     <string name="textInputKeyword">Select Keywords</string>
@@ -71,11 +82,33 @@
     <string name="inputMelody_label">Play a Melody</string>
     <string name="captureSound_label">Record Sounds</string>
     <string name="inputKeyword_label">Choose your Keywords</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="capturePicture_label">Capture some Picture</string>
+    <string name="captureAction_label">Record your Activities</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="textPictureCapture">Press Capture to take a Photos!</string>
     <string name="buttonCapture">Capture</string>
     <string name="textBPM">BPM:</string>
 
+    <!-- Activities in Capture Activity -->
+    <string name="activityStill">Record: You stand still</string>
+    <string name="activityWalking">Record: You are walking</string>
+    <string name="activityVehicle">Record: You driving in a vehicle</string>
+    <string name="activityBicycle">Record: You driving a bicycle</string>
+    <string name="activityRunning">Record: You are Running</string>
+    <string name="activityTilting">Record: You stood up</string>
+
+
+    <string name="activityRecognitionTrackingON">Record is on</string>
+    <string name="somethingWentWrong">Something went Wrong, sorry.</string>
+    <string name="activityRecognitionTrackingOFF">Record is off</string>
+
+    <string name="rational_required_permission">
+        To use the function of this part of the app we need your permission for certain rights.
+        To be able to use it press allow.</string>
+
+    <string name="required_permission_denied_second_time">
+        Sorry, you have not granted the permissions for this feature.
+        However, you can still change this in your settings.
+    </string>
 
 </resources>

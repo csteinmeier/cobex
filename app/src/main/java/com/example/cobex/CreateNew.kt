@@ -20,6 +20,11 @@ class CreateNew : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    companion object{
+        var clickedKeyword = 0
+        var takenPicture = 0
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,9 +58,13 @@ class CreateNew : Fragment() {
             findNavController().navigate(R.id.action_CreateNew_to_InputPicture)
         }
 
+        binding.buttonInputActivity.setOnClickListener {
+            findNavController().navigate(R.id.action_CreateNew_to_captureAction)
+        }
 
-        setCounter(binding.counterKeywordsFeeling, CompositionArtifact.clickedKeywords)
-        setCounter(binding.counterPictures, CompositionArtifact.capturedPicture)
+
+        setCounter(binding.counterKeywordsFeeling, clickedKeyword)
+        setCounter(binding.counterPictures, takenPicture)
 
     }
 
