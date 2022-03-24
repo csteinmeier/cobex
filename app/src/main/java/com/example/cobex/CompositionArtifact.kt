@@ -2,7 +2,11 @@ package com.example.cobex
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.SharedPreferences
+import android.graphics.ImageDecoder
+import android.media.Image
 import android.text.BoringLayout
+import androidx.core.net.toUri
 import java.io.File
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -68,17 +72,20 @@ class CompositionArtifact private constructor(private val context: Context) {
     private fun getPreferencesEditor() =
         getPreferences().edit()
 
-    private fun isSavedInstanceAvailable() =
-        getPreferences().getBoolean(Keywords.INITIALIZED.name, false)
+    private fun isProjectStarted() =
+        !getPreferences().getString(Keywords.INITIALIZED.name, "").isNullOrEmpty()
+
+    private fun markAsProjectStarted() =
+        getPreferencesEditor().putString(Keywords.INITIALIZED.name, getTimeStamp()).apply()
+    
+    private fun getProjectStartTime() = 
+        getPreferences().getString(Keywords.INITIALIZED.name, "")
 
     private fun isSavedInstanceOfCategoryAvailable(identifier: String) =
         getPreferences().getBoolean(identifier, false)
 
     private fun clearSavedInstance() =
         getPreferencesEditor().clear().apply()
-
-    private fun createInstanceOfPreference() =
-        getPreferencesEditor().putBoolean(Keywords.INITIALIZED.name, true).apply()
 
     private fun <T>createInstanceOfPreference(clazz: Class<T>) =
         getPreferencesEditor().putBoolean(clazz.name, true).apply()
@@ -99,7 +106,7 @@ class CompositionArtifact private constructor(private val context: Context) {
         getPreferences().getInt("${Keywords.COUNTER.name} $identifier", 0)
 
     private fun putBoolean(identifier: String, boolean: Boolean) =
-        getPreferencesEditor().putBoolean("${Keywords.BOOLEAN.name} $identifier", boolean)
+        getPreferencesEditor().putBoolean("${Keywords.BOOLEAN.name} $identifier", boolean).apply()
 
     private fun getBoolean(identifier: String) =
         getPreferences().getBoolean("${Keywords.BOOLEAN.name} $identifier", false)
@@ -107,7 +114,8 @@ class CompositionArtifact private constructor(private val context: Context) {
     fun getImageFileDir(): File =
         ContextWrapper(context).getDir("images", Context.MODE_PRIVATE)
 
-    fun getTimeStamp() = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
+    fun getTimeStamp(): String = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
+
 
     /**
      * To write data to the artifact,
@@ -124,11 +132,11 @@ class CompositionArtifact private constructor(private val context: Context) {
      * This can be done with the context alone or with the help of the respective class.
      *
      * * To write concrete data to the references it is enough to use one of the methods:
-     * [putStringSet], [putCounter]
+     * [putStringSet], [putCounter] ...
      * Internally the methods of SharedPreferences are used
      *
      * * To get the concrete data use one of this methods:
-     * [getCounter], [getStringSet]
+     * [getCounter], [getStringSet] ... 
      *
      * * To delete everything saved use [clearSavedInstance]
      */
@@ -145,8 +153,8 @@ class CompositionArtifact private constructor(private val context: Context) {
          * @return true if a saved instance of preferences is available
          *
          * */
-        fun isInstanceOfSavedPreferencesAvailable(context: Context): Boolean =
-            CompositionArtifact.getInstance(context).isSavedInstanceAvailable()
+        fun isInstanceOfSavedPreferencesAvailable(context: Context): Boolean? =
+            CompositionArtifact.getInstance(context).isProjectStarted()
 
         /**
          * @param clazz which stands for a part of the artifact
@@ -156,18 +164,26 @@ class CompositionArtifact private constructor(private val context: Context) {
         fun <T>isInstanceOfSavedPreferencesAvailable(context: Context, clazz: Class<T>)
             = CompositionArtifact.getInstance(context).isSavedInstanceOfCategoryAvailable(clazz.name)
 
+        fun markAsProjectStarted(context: Context){
+            CompositionArtifact.getInstance(context).markAsProjectStarted()
+        }
+
         /**
-         * Stores a truth value which signals that the class has stored a part of the artifact
-         * and a general boolean that a project has started.
+         * Stores a truth value which signals that the class has stored a
+         * part of the artifact
          *
          *  @param clazz which stands for a part of the artifact
          */
         fun <T>markAsSavedIfNotMarkedAsSaved(context: Context, clazz: Class<T>){
-            if(!isInstanceOfSavedPreferencesAvailable(context))
-                CompositionArtifact.getInstance(context).createInstanceOfPreference()
             if(!isInstanceOfSavedPreferencesAvailable(context, clazz))
                 CompositionArtifact.getInstance(context).createInstanceOfPreference(clazz)
         }
+
+        fun isProjectStarted(context: Context) =
+            CompositionArtifact.getInstance(context).isProjectStarted()
+        
+        fun getProjectStartTime(context: Context) = 
+            CompositionArtifact.getInstance(context).getProjectStartTime()
 
         fun <T>getStringSet(context: Context, clazz: Class<T>): Set<String>? =
             CompositionArtifact.getInstance(context).getStringSet(clazz.name)
@@ -187,9 +203,9 @@ class CompositionArtifact private constructor(private val context: Context) {
         fun <T>getBoolean(context: Context, clazz: Class<T>) =
             CompositionArtifact.getInstance(context).getBoolean(clazz.name)
 
-
+        fun getTimeStamp(context: Context): String =
+            CompositionArtifact.getInstance(context).getTimeStamp()
     }
-
 
 }
 

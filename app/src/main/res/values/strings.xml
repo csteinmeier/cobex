@@ -10,6 +10,7 @@
     <string name="textFirstPage">Press START to begin</string>
     <string name="textSecondPage">Menu</string>
     <string name="textCreateNew">Create new Experience</string>
+    <string name="textTimeline">Timeline</string>
 
     <!-- Button Texts -->
     <string name="buttonStart">Start</string>
@@ -74,7 +75,7 @@
     <string name="buttonSunny">Sunny</string>
     <string name="buttonRainy">Rainy</string>
 
-
+    <!-- Labels -->
     <string name="textSoundCapture">Press START to record audio!</string>
     <string name="textSelectSoundCaptureType">Select which type of audio you will record:</string>
     <string name="Environment">Environment Sounds</string>
@@ -84,28 +85,57 @@
     <string name="inputKeyword_label">Choose your Keywords</string>
     <string name="capturePicture_label">Capture some Picture</string>
     <string name="captureAction_label">Record your Activities</string>
-    <!-- TODO: Remove or change this placeholder text -->
 
     <!-- Activities in Capture Activity -->
-    <string name="activityStill">Record: You stand still</string>
-    <string name="activityWalking">Record: You are walking</string>
-    <string name="activityVehicle">Record: You driving in a vehicle</string>
-    <string name="activityBicycle">Record: You driving a bicycle</string>
-    <string name="activityRunning">Record: You are Running</string>
-    <string name="activityTilting">Record: You stood up</string>
+    <string name="activityRecordStringStill">Record: You stand still</string>
+    <string name="activityRecordStringWalking">Record: You are walking</string>
+    <string name="activityRecordStringVehicle">Record: You driving in a vehicle</string>
+    <string name="activityRecordStringBicycle">Record: You driving a bicycle</string>
+    <string name="activityRecordStringRunning">Record: You are Running</string>
+
+    <!-- Activities in Capture Activity -->
+    <string name="activityRecognitionStill">Still</string>
+    <string name="activityRecognitionWalking">Walking</string>
+    <string name="activityRecognitionVehicle">In Vehicle</string>
+    <string name="activityRecognitionBicycle">Driving a bicycle</string>
+    <string name="activityRecognitionRunning">Running</string>
 
 
+    <!-- Activity Recording Messages -->
     <string name="activityRecognitionTrackingON">Record is on</string>
     <string name="somethingWentWrong">Something went Wrong, sorry.</string>
     <string name="activityRecognitionTrackingOFF">Record is off</string>
 
+    <!-- Generic Rational Permission Dialog -->
     <string name="rational_required_permission">
         To use the function of this part of the app we need your permission for certain rights.
         To be able to use it press allow.</string>
 
+    <!-- Toast Second Time Denied -->
     <string name="required_permission_denied_second_time">
         Sorry, you have not granted the permissions for this feature.
         However, you can still change this in your settings.
     </string>
+
+    <!-- Reset Old Project Dialog -->
+    <string name="dialog_delete_old_project_msg">
+        "Do you really want to start a new composition?"
+        "The old one will then be lost"
+    </string>
+
+
+    <!-- TimeLine -->
+    <string name="timelineStart">Project started:</string>
+
+    <!-- TimeLine TimeUnits -->
+    <string name="timelineYears">Year/s ago</string>
+    <string name="timelineMonths">Month/s ago</string>
+    <string name="timelineDays">Day/s ago</string>
+    <string name="timelineHours">Hour/s ago</string>
+    <string name="timelineMinutes">Minute/s ago</string>
+    <string name="timelineRecently">a short while ago</string>
+    
+    <string name="dialog_delete_old_project_title">Delete Old Project?</string>
+
 
 </resources>

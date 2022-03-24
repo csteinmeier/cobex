@@ -62,6 +62,10 @@ class CreateNew : Fragment() {
             findNavController().navigate(R.id.action_CreateNew_to_captureAction)
         }
 
+        binding.buttonNext.setOnClickListener {
+            findNavController().navigate(R.id.action_CreateNew_to_timeLineView)
+        }
+
 
         setCounter(binding.counterKeywordsFeeling, clickedKeyword)
         setCounter(binding.counterPictures, takenPicture)

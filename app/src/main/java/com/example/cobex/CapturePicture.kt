@@ -24,6 +24,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cobex.Extensions.toImage
 import com.example.cobex.databinding.FragmentCapturePictureBinding
 import java.io.File
 import java.io.FileOutputStream
@@ -243,15 +244,10 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
                 fun addImage(filePath : String) {
                     val file = File(filePath)
                     _pictures.value = CapturedPicture(
-                        bitmap  = fileToPicture(file),
+                        bitmap  = filePath.toImage(context),
                         file    = file
                     )
                 }
-
-                private fun fileToPicture(file: File) =
-                    ImageDecoder.decodeBitmap(
-                        ImageDecoder.createSource(context.contentResolver, file.toUri())
-                    )
 
 
                 private fun saveImageInternal(bitmap: Bitmap): File {
@@ -306,6 +302,7 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
                     return AlertDialog.Builder(context)
                         .setTitle("Delete Picture")
                         .setMessage("Do you want to remove this picture? ")
+                        .setNegativeButton(android.R.string.cancel, null)
                         .setPositiveButton(android.R.string.ok) { _, _ -> holder.removeImage() }
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show()
