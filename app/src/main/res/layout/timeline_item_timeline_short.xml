@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pl.hypeapp.materialtimelineview.MaterialTimelineView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp"
+    app:timeline_margin_start="32dp"
+    app:timeline_position="middle"
+    app:timeline_type="line">
+
+</pl.hypeapp.materialtimelineview.MaterialTimelineView>

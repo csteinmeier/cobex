@@ -23,8 +23,8 @@ class SecondFragment : Fragment(), CompositionArtifact.IArtifact {
     private lateinit var artifact: CompositionArtifact
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
 
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
@@ -37,20 +37,26 @@ class SecondFragment : Fragment(), CompositionArtifact.IArtifact {
 
         artifact = CompositionArtifact.getInstance(requireContext())
 
-        val isOldInstanceAvailable = isInstanceOfSavedPreferencesAvailable(requireContext())
-
 
         binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
 
         binding.buttonCreateNew.setOnClickListener {
-            if(isOldInstanceAvailable) alertDeleteOldInstance() else
+            if (isProjectStarted(requireContext())) {
+                alertDeleteOldInstance()
+            } else {
+                markAsProjectStarted(requireContext())
                 findNavController().navigate(R.id.action_SecondFragment_to_CreateNew)
+            }
         }
 
 
-        binding.buttonContinue.visibility = if(isOldInstanceAvailable) View.VISIBLE else View.GONE
+        binding.buttonContinue.visibility =
+            if (isProjectStarted(requireContext()))
+                View.VISIBLE
+            else
+                View.GONE
 
         binding.buttonContinue.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_CreateNew)
@@ -60,13 +66,12 @@ class SecondFragment : Fragment(), CompositionArtifact.IArtifact {
         }
     }
 
-    private fun alertDeleteOldInstance(): AlertDialog{
+    private fun alertDeleteOldInstance(): AlertDialog {
         return AlertDialog.Builder(context)
-            .setTitle("Delete previous input")
-            .setMessage("Do you really want to start a new composition? \n" +
-                    "The old one will then be lost")
-            .setNegativeButton(android.R.string.no, null)
-            .setPositiveButton(android.R.string.yes) { _, _ -> deleteOldInstanceListener() }
+            .setTitle(context?.getString(R.string.dialog_delete_old_project_title))
+            .setMessage(context?.getString(R.string.dialog_delete_old_project_msg))
+            .setNegativeButton(android.R.string.cancel, null)
+            .setPositiveButton(android.R.string.ok) { _, _ -> deleteOldInstanceListener() }
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show()
     }
@@ -75,6 +80,7 @@ class SecondFragment : Fragment(), CompositionArtifact.IArtifact {
         clearSavedInstance(requireContext())
         CreateNew.takenPicture = 0
         CreateNew.clickedKeyword = 0
+        markAsProjectStarted(requireContext())
         findNavController().navigate(R.id.action_SecondFragment_to_CreateNew)
     }
 

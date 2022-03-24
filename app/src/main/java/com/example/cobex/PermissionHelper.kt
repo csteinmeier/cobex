@@ -102,7 +102,7 @@ object PermissionHelper {
         /**
          * use this function in [onRequestPermissionResult]
          *
-         * @param onSuccess a function that will be called if the permission is given
+         * @param hasPermission a function that will be called if the permission is given
          * @param specialDialog a Dialog that will appear if the user denied the permission, if null
          * a simple generic Dialog will appear
          */

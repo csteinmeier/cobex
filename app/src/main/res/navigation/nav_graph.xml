@@ -53,6 +53,9 @@
             android:id="@+id/action_CreateNew_to_captureAction"
             app:destination="@id/captureAction" />
         <action
+            android:id="@+id/action_CreateNew_to_timeLineView"
+            app:destination="@id/timeLineView" />
+        <action
             android:id="@+id/action_CreateNew_to_createRhythm"
             app:destination="@id/createRhythm" />
 
@@ -110,6 +113,17 @@
             android:id="@+id/action_captureAction_to_CreateNew"
             app:destination="@id/CreateNew" />
     </fragment>
+  
+    <fragment
+        android:id="@+id/timeLineView"
+        android:name="com.example.cobex.TimeLineView"
+        android:label="TimeLineView"
+        tools:layout="@layout/fragment_timeline_view" >
+        <action
+            android:id="@+id/action_timeLineView_to_CreateNew"
+            app:destination="@id/CreateNew" />
+     </fragment>
+  
     <fragment
         android:id="@+id/createRhythm"
         android:name="com.example.cobex.CreateRhythm"

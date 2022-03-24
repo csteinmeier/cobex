@@ -15,11 +15,53 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.cobex.databinding.FragmentCaptureActionBinding
 import com.google.android.gms.location.*
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 
 
-class CaptureAction : Fragment(), PermissionHelper.IRequirePermission, CompositionArtifact.IArtifact {
+class CaptureAction : Fragment(), PermissionHelper.IRequirePermission,
+    CompositionArtifact.IArtifact {
+
+    /************************************************************************************/
+    /**                         All Activities to track                                 */
+    /** To exclude or include other Activities it just need to add/remove from this enum*/
+    /************************************************************************************/
+    enum class Activities(
+        val activityRecordDisplayString: Int,
+        val activityRecognitionString: Int,
+        val detectedActivity: Int,
+        val activityIcon: Int
+    ) {
+        STILL(
+            R.string.activityRecordStringStill,
+            R.string.activityRecognitionStill,
+            DetectedActivity.STILL,
+            R.drawable.ic_directions_off_24
+        ),
+        WALKING(
+            R.string.activityRecordStringWalking,
+            R.string.activityRecognitionWalking,
+            DetectedActivity.WALKING,
+            R.drawable.ic_directions_walk_24
+        ),
+        RUNNING(
+            R.string.activityRecordStringRunning,
+            R.string.activityRecognitionRunning,
+            DetectedActivity.RUNNING,
+            R.drawable.ic_directions_run_24
+        ),
+        VEHICLE(
+            R.string.activityRecordStringVehicle,
+            R.string.activityRecognitionVehicle,
+            DetectedActivity.IN_VEHICLE,
+            R.drawable.ic_directions_vehicle_24
+        ),
+        BICYCLE(
+            R.string.activityRecordStringBicycle,
+            R.string.activityRecognitionBicycle,
+            DetectedActivity.ON_BICYCLE,
+            R.drawable.ic_directions_bike_24
+        ),
+    }
+
 
     private var _binding: FragmentCaptureActionBinding? = null
     private val binding get() = _binding!!
@@ -42,13 +84,14 @@ class CaptureAction : Fragment(), PermissionHelper.IRequirePermission, Compositi
         initSwitchButton(binding.switchTrackYourActivities)
 
         binding.switchTrackYourActivities.setOnCheckedChangeListener { b, isChecked ->
-            hasPermission { setSwitchButtonText(b, isChecked) }
+            hasPermission { switchButtonState(b, isChecked) }
         }
-
     }
 
-    private fun initSwitchButton(switch: CompoundButton){
-        switch.isChecked = getBoolean(requireContext(), this.javaClass)
+    private fun initSwitchButton(switch: CompoundButton) {
+        val isOn = getBoolean(requireContext(), this.javaClass)
+        switch.isChecked = isOn
+        switch.text = setSwitchButtonText(isOn)
     }
 
 
@@ -63,14 +106,13 @@ class CaptureAction : Fragment(), PermissionHelper.IRequirePermission, Compositi
             requestCode = requestCode,
             permission = permissions,
             grantResults = grantResults,
-            hasPermission = { setSwitchButtonText(binding.switchTrackYourActivities, true) },
+            hasPermission = { switchButtonState(binding.switchTrackYourActivities, true) },
             null
         )
 
     }
 
     private fun requestForUpdates() {
-        Log.i("Recognition", getActivitiesToTrack().toString())
         client
             .requestActivityTransitionUpdates(
                 ActivityTransitionRequest(getActivitiesToTrack()),
@@ -104,58 +146,50 @@ class CaptureAction : Fragment(), PermissionHelper.IRequirePermission, Compositi
 
         override fun onReceive(context: Context, intent: Intent) {
             if (ActivityTransitionResult.hasResult(intent)) {
-
                 val result = ActivityTransitionResult.extractResult(intent)
 
                 result?.let {
                     result.transitionEvents.forEach { event ->
 
+                        Log.i("ActivityTransitionEvent", event.toString())
+
                         markAsSavedIfNotMarkedAsSaved(context, this.javaClass)
 
-                        val timeStamp = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
-                        val trackedActivities = getStringSet(context, this.javaClass)
-                        val newActivity = "Detected Activity $timeStamp :${activityToString(event)}"
-                        val newSet: MutableSet<String> = mutableSetOf()
-                        trackedActivities?.forEach { savedActivity -> newSet.add(savedActivity) }
-                        newSet.add(newActivity)
-                        putStringSet(context, this.javaClass, newSet)
+                        val detectedActivity = Activities.values()
+                            .find { it.detectedActivity == event.activityType }
 
                         NotificationHelper.setNotification(
                             context = context,
                             channel = NotificationHelper.CHANNEL.ACTIVITY_RECOGNITION,
                             icon = null,
                             title = null,
-                            text = activityToUserString(context, event)
+                            text = detectedActivity?.let { it1 ->
+                                context.getString(it1.activityRecordDisplayString)
+                            }
                         )
+
+                        val savedDetectedActivities =
+                            getStringSet(context, this::class.java)?.sorted()?.toList()
+                                ?: listOf()
+
+                        if (shouldSave(savedDetectedActivities, detectedActivity.toString()))
+                            saveActivity(context, detectedActivity.toString())
                     }
                 }
             }
         }
 
-        private fun activityToString(
-            activityTransitionEvent: ActivityTransitionEvent
-        ) = when (activityTransitionEvent.activityType) {
-            DetectedActivity.STILL -> "STILL"
-            DetectedActivity.WALKING -> "WALKING"
-            DetectedActivity.IN_VEHICLE -> "IN_VEHICLE"
-            DetectedActivity.ON_BICYCLE -> "ON_BICYCLE"
-            DetectedActivity.RUNNING -> "RUNNING"
-            DetectedActivity.TILTING -> "TILTING"
-            else -> "UKNOWN"
+        private fun shouldSave(savedActivities: List<String>, detectedActivity: String): Boolean =
+            savedActivities.isEmpty() ||
+                    savedActivities.last().substringAfterLast(":") != detectedActivity
+
+
+        private fun saveActivity(context: Context, activity: String) {
+            val set = getStringSet(context, javaClass)?.toMutableSet() ?: mutableSetOf()
+            set.add("${getTimeStamp(context)}:$activity")
+            putStringSet(context, this.javaClass, set)
         }
 
-        private fun activityToUserString(
-            context: Context,
-            activityTransitionEvent: ActivityTransitionEvent
-        ) = when (activityTransitionEvent.activityType) {
-            DetectedActivity.STILL -> context.getString(R.string.activityStill)
-            DetectedActivity.WALKING -> context.getString(R.string.activityWalking)
-            DetectedActivity.IN_VEHICLE -> context.getString(R.string.activityVehicle)
-            DetectedActivity.ON_BICYCLE -> context.getString(R.string.activityBicycle)
-            DetectedActivity.RUNNING -> context.getString(R.string.activityRunning)
-            DetectedActivity.TILTING -> context.getString(R.string.activityTilting)
-            else -> "UKNOWN"
-        }
 
     }
 
@@ -167,28 +201,8 @@ class CaptureAction : Fragment(), PermissionHelper.IRequirePermission, Compositi
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-
-    /*****************************************************************************/
-    /**                         All Activities to track                         **/
-    /*****************************************************************************/
-
-    private fun getActivitiesToTrack(): List<ActivityTransition> {
-        val list = mutableListOf<ActivityTransition>().apply {
-
-            addAll(getEnterExitActivity(DetectedActivity.STILL))
-
-            addAll(getEnterExitActivity(DetectedActivity.WALKING))
-
-            addAll(getEnterExitActivity(DetectedActivity.IN_VEHICLE))
-
-            addAll(getEnterExitActivity(DetectedActivity.ON_BICYCLE))
-
-            addAll(getEnterExitActivity(DetectedActivity.RUNNING))
-
-
-        }
-        return list
-    }
+    private fun getActivitiesToTrack(): List<ActivityTransition> =
+        Activities.values().flatMap { getEnterExitActivity(it.detectedActivity) }
 
 
     private fun getEnterExitActivity(detectedActivity: Int): List<ActivityTransition> =
@@ -206,19 +220,24 @@ class CaptureAction : Fragment(), PermissionHelper.IRequirePermission, Compositi
             .setActivityTransition(activityTransition)
             .build()
 
-    private fun setSwitchButtonText(switch: CompoundButton, isChecked: Boolean) {
-        switch.text =
-            if (isChecked) {
-                requestForUpdates()
-                markAsSavedIfNotMarkedAsSaved(requireContext(), this.javaClass)
-                putBoolean(requireContext(), this.javaClass, true)
-                requireActivity().getText(R.string.button_Switch_ON)
-            } else {
-                getBoolean(requireContext(), this.javaClass)
-                removeUpdates()
-                requireActivity().getText(R.string.button_Switch_OFF)
-            }
+    private fun switchButtonState(switch: CompoundButton, isChecked: Boolean) {
+        switch.text = setSwitchButtonText(isChecked)
+        if (isChecked) {
+            requestForUpdates()
+            markAsSavedIfNotMarkedAsSaved(requireContext(), this.javaClass)
+            putBoolean(requireContext(), this.javaClass, true)
+        } else {
+            removeUpdates()
+            putBoolean(requireContext(), this.javaClass, false)
+        }
     }
+
+    private fun setSwitchButtonText(isChecked: Boolean): CharSequence {
+        return if (isChecked) requireActivity().getText(R.string.button_Switch_ON) else requireActivity().getText(
+            R.string.button_Switch_OFF
+        )
+    }
+
 
     override fun onDestroy() {
         _binding = null
