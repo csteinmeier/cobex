@@ -52,22 +52,15 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        binding.buttonNext.setOnClickListener {
-            findNavController().navigate(R.id.action_inputKeyword_to_inputMelody)
-        }
-
         binding.buttonBackCreate.setOnClickListener {
             findNavController().navigate(R.id.action_inputKeyword_to_CreateNew)
         }
-
 
         counterList = listOf(
             KeywordCounter(binding.counterKeywordsFeeling, KeywordType.FEELING),
             KeywordCounter(binding.counterKeywordsEnvironment, KeywordType.ENVIRONMENT)
             /**New Keyword Counter should be initialized here*/
         )
-
 
         listButtonGenericKeyword = listOf(
             ButtonGenericKeyword(binding.buttonFeelings, this, binding.tableFeelings, KeywordType.FEELING),

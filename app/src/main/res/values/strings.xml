@@ -35,7 +35,6 @@
 
     <!-- CapturePicture -->
     <string name="buttonTakePicture">Press Capture to take a Photos!</string>
-    <string name="buttonCapture">Capture</string>
     <string name="titleOfFragmentCapturePicture">Capture \n Your Pictures</string>
 
 

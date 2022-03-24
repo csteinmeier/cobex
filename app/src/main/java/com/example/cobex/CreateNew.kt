@@ -62,6 +62,10 @@ class CreateNew : Fragment() {
             findNavController().navigate(R.id.action_CreateNew_to_captureAction)
         }
 
+        binding.buttonInputRhythm.setOnClickListener {
+            findNavController().navigate(R.id.action_CreateNew_to_createRhythm)
+        }
+
 
         setCounter(binding.counterKeywordsFeeling, clickedKeyword)
         setCounter(binding.counterPictures, takenPicture)

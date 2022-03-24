@@ -22,33 +22,6 @@ tools:context=".CreateRhythm">
         app:layout_constraintVertical_bias="0.955"
         app:strokeColor="#0B0A0A" />
 
-    <TextView
-        android:id="@+id/texthihat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
-        android:text="hi-hat"
-        android:textColor="#FAFAFA"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/table_beats"
-        app:layout_constraintHorizontal_bias="0.538"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textsnare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
-        android:text="snare"
-        android:textColor="#FAFAFA"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/table_beats"
-        app:layout_constraintHorizontal_bias="0.576"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.38" />
-
     <Button
         android:id="@+id/buttonPlus"
         android:layout_width="48dp"
@@ -58,7 +31,7 @@ tools:context=".CreateRhythm">
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.102"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName"
+        app:layout_constraintStart_toEndOf="@+id/textEditBPM"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.955"
         app:strokeColor="#0B0A0A" />
@@ -71,7 +44,7 @@ tools:context=".CreateRhythm">
         android:backgroundTint="#2B2929"
         android:text="-"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTextPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/textEditBPM"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -79,22 +52,22 @@ tools:context=".CreateRhythm">
         app:strokeColor="#0B0A0A" />
 
     <TextView
-        android:id="@+id/textview_first3"
+        android:id="@+id/labelBPM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
         android:text="@string/textBPM"
         android:textColor="#FAFAFA"
-        app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/textEditBPM"
         app:layout_constraintEnd_toStartOf="@+id/buttonPlus"
         app:layout_constraintStart_toEndOf="@+id/buttonMinus" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/textEditBPM"
         android:layout_width="80dp"
         android:layout_height="45dp"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="number"
         android:text="120"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -145,62 +118,116 @@ tools:context=".CreateRhythm">
         app:layout_constraintVertical_bias="0.955"
         app:strokeColor="#0B0A0A" />
 
-    <TextView
-        android:id="@+id/textkick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
-        android:text="kick"
-        android:textColor="#FAFAFA"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/table_beats"
-        app:layout_constraintHorizontal_bias="0.694"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.119" />
-
-
-    <TextView
-        android:id="@+id/texttom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
-        android:text="tom"
-        android:textColor="#FAFAFA"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/table_beats"
-        app:layout_constraintHorizontal_bias="0.694"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.244" />
-
-    <TextView
-        android:id="@+id/textcrash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
-        android:text="crash"
-        android:textColor="#FAFAFA"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/table_beats"
-        app:layout_constraintHorizontal_bias="0.555"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.627" />
-
     <TableLayout
         android:id="@+id/table_beats"
-        android:layout_width="654dp"
-        android:layout_height="250dp"
+        android:layout_width="710dp"
+        android:layout_height="280dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.2"
-        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintHorizontal_bias="0.4"
         >
 
-        <TableRow android:id="@+id/row1">
+        <TableRow android:id="@+id/rowHeader">
+
+            <TextView/>  <!-- placeholer for first column in header row-->
+
+            <ImageView android:id="@+id/tick1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+            <ImageView android:id="@+id/tick2"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+            <ImageView android:id="@+id/tick3"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+            <ImageView android:id="@+id/tick4"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+            <ImageView android:id="@+id/tick5"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+            <ImageView android:id="@+id/tick6"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+            <ImageView android:id="@+id/tick7"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+            <ImageView android:id="@+id/tick8"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+            <ImageView android:id="@+id/tick9"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+            <ImageView android:id="@+id/tick10"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+            <ImageView android:id="@+id/tick11"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+            <ImageView android:id="@+id/tick12"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                tools:layout_editor_absoluteX="75dp"
+                tools:layout_editor_absoluteY="12dp"
+                tools:srcCompat="@drawable/circle" />
+
+        </TableRow>
+
+        <TableRow android:id="@+id/rowKick">
+            <TextView
+                android:id="@+id/textkick"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="kick"
+                android:textColor="#FAFAFA"/>
 
             <Button
                 android:id="@+id/buttonR1C1"
@@ -288,10 +315,15 @@ tools:context=".CreateRhythm">
 
         </TableRow>
 
-        <TableRow
-            android:id="@+id/row2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TableRow android:id="@+id/rowTom">
+
+            <TextView
+                android:id="@+id/texttom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="tom"
+                android:textColor="#FAFAFA" />
 
             <Button
                 android:id="@+id/buttonR2C1"
@@ -380,10 +412,15 @@ tools:context=".CreateRhythm">
 
         </TableRow>
 
-        <TableRow
-            android:id="@+id/row3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TableRow android:id="@+id/rowSnare">
+
+            <TextView
+                android:id="@+id/textsnare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="snare"
+                android:textColor="#FAFAFA" />
 
             <Button
                 android:id="@+id/buttonR3C1"
@@ -470,10 +507,15 @@ tools:context=".CreateRhythm">
                 android:layout_marginRight="2dp" />
         </TableRow>
 
-        <TableRow
-            android:id="@+id/row4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TableRow android:id="@+id/rowHiHat">
+
+            <TextView
+                android:id="@+id/texthihat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="hi-hat"
+                android:textColor="#FAFAFA" />
 
             <Button
                 android:id="@+id/buttonR4C1"
@@ -560,10 +602,15 @@ tools:context=".CreateRhythm">
                 android:layout_marginRight="2dp" />
         </TableRow>
 
-        <TableRow
-            android:id="@+id/row5"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TableRow android:id="@+id/rowCrash">
+
+            <TextView
+                android:id="@+id/textcrash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="crash"
+                android:textColor="#FAFAFA"/>
 
             <Button
                 android:id="@+id/buttonR5C1"
