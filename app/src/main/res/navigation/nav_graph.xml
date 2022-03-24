@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_CreateNew_to_timeLineView"
             app:destination="@id/timeLineView" />
+        <action
+            android:id="@+id/action_CreateNew_to_createRhythm"
+            app:destination="@id/createRhythm" />
 
     </fragment>
 
@@ -62,24 +65,33 @@
         android:id="@+id/captureSound"
         android:name="com.example.cobex.CaptureSound"
         android:label="@string/captureSound_label"
-        tools:layout="@layout/fragment_capture_sound" />
+        tools:layout="@layout/fragment_capture_sound" >
+        <action
+            android:id="@+id/action_captureSound_to_CreateNew"
+            app:destination="@id/CreateNew" />
+    </fragment>
     <fragment
         android:id="@+id/inputMelody"
         android:name="com.example.cobex.InputMelody"
         android:label="@string/inputMelody_label"
-        tools:layout="@layout/fragment_input_melody" />
+        tools:layout="@layout/fragment_input_melody" >
+        <action
+            android:id="@+id/action_inputMelody_to_CreateNew"
+            app:destination="@id/CreateNew" />
+    </fragment>
     <fragment
         android:id="@+id/inputKeyword"
         android:name="com.example.cobex.InputKeyword"
         android:label="@string/inputKeyword_label"
-        tools:layout="@layout/fragment_input_keyword" />
+        tools:layout="@layout/fragment_input_keyword" >
+        <action
+            android:id="@+id/action_inputKeyword_to_CreateNew2"
+            app:destination="@id/CreateNew" />
+    </fragment>
 
         <action
             android:id="@+id/action_inputKeyword_to_CreateNew"
             app:destination="@+id/CreateNew" />
-        <action
-            android:id="@+id/action_inputKeyword_to_inputMelody"
-            app:destination="@+id/inputMelody"/>
 
     <fragment
         android:id="@+id/capturePicture"
@@ -101,6 +113,7 @@
             android:id="@+id/action_captureAction_to_CreateNew"
             app:destination="@id/CreateNew" />
     </fragment>
+  
     <fragment
         android:id="@+id/timeLineView"
         android:name="com.example.cobex.TimeLineView"
@@ -108,6 +121,16 @@
         tools:layout="@layout/fragment_timeline_view" >
         <action
             android:id="@+id/action_timeLineView_to_CreateNew"
+            app:destination="@id/CreateNew" />
+     </fragment>
+  
+    <fragment
+        android:id="@+id/createRhythm"
+        android:name="com.example.cobex.CreateRhythm"
+        android:label="fragment_create_rhythm"
+        tools:layout="@layout/fragment_create_rhythm" >
+        <action
+            android:id="@+id/action_createRhythm_to_CreateNew"
             app:destination="@id/CreateNew" />
     </fragment>
 

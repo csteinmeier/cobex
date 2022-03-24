@@ -36,7 +36,6 @@
 
     <!-- CapturePicture -->
     <string name="buttonTakePicture">Press Capture to take a Photos!</string>
-    <string name="buttonCapture">Capture</string>
     <string name="titleOfFragmentCapturePicture">Capture \n Your Pictures</string>
 
 
@@ -85,6 +84,12 @@
     <string name="inputKeyword_label">Choose your Keywords</string>
     <string name="capturePicture_label">Capture some Picture</string>
     <string name="captureAction_label">Record your Activities</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textPictureCapture">Press Capture to take a Photos!</string>
+    <string name="buttonCapture">Capture</string>
+    <string name="textBPM">BPM:</string>
+
 
     <!-- Activities in Capture Activity -->
     <string name="activityRecordStringStill">Record: You stand still</string>
