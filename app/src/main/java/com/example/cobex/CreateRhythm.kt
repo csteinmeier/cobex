@@ -1,15 +1,20 @@
 package com.example.cobex
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.media.MediaRecorder
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.SoundEffectConstants
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -23,6 +28,8 @@ class CreateRhythm : Fragment() {
     private lateinit var event: ByteArray
     private var midihelper: MidiHelper = MidiHelper()
     private var mRecorder: MediaRecorder? = null
+
+    private var rhythmNodes: MutableMap<Int, RhythmNode>? = null
 
     // we can record up to 5 rhythms for each experience
     var mFileName1: String? = null
@@ -75,6 +82,214 @@ class CreateRhythm : Fragment() {
         binding.buttonPlay.setOnClickListener {
             togglePlay()
         }
+
+        // row 1: kick drum
+        binding.buttonR1C1.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C1)
+        }
+        binding.buttonR1C2.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C2)
+        }
+        binding.buttonR1C3.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C3)
+        }
+        binding.buttonR1C4.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C4)
+        }
+        binding.buttonR1C5.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C5)
+        }
+        binding.buttonR1C6.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C6)
+        }
+        binding.buttonR1C7.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C7)
+        }
+        binding.buttonR1C8.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C8)
+        }
+        binding.buttonR1C9.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C9)
+        }
+        binding.buttonR1C10.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C10)
+        }
+        binding.buttonR1C11.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C11)
+        }
+        binding.buttonR1C12.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR1C12)
+        }
+
+        // row 2: tom
+        binding.buttonR2C1.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C1)
+        }
+        binding.buttonR2C2.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C2)
+        }
+        binding.buttonR2C3.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C3)
+        }
+        binding.buttonR2C4.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C4)
+        }
+        binding.buttonR2C5.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C5)
+        }
+        binding.buttonR2C6.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C6)
+        }
+        binding.buttonR2C7.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C7)
+        }
+        binding.buttonR2C8.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C8)
+        }
+        binding.buttonR2C9.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C9)
+        }
+        binding.buttonR2C10.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C10)
+        }
+        binding.buttonR2C11.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C11)
+        }
+        binding.buttonR2C12.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR2C12)
+        }
+
+        // row 3: snare
+
+        binding.buttonR3C1.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C1)
+        }
+        binding.buttonR3C2.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C2)
+        }
+        binding.buttonR3C3.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C3)
+        }
+        binding.buttonR3C4.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C4)
+        }
+        binding.buttonR3C5.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C5)
+        }
+        binding.buttonR3C6.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C6)
+        }
+        binding.buttonR3C7.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C7)
+        }
+        binding.buttonR3C8.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C8)
+        }
+        binding.buttonR3C9.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C9)
+        }
+        binding.buttonR3C10.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C10)
+        }
+        binding.buttonR3C11.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C11)
+        }
+        binding.buttonR3C12.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR3C12)
+        }
+
+        // row 4: hi hat
+        binding.buttonR4C1.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C1)
+        }
+        binding.buttonR4C2.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C2)
+        }
+        binding.buttonR4C3.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C3)
+        }
+        binding.buttonR4C4.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C4)
+        }
+        binding.buttonR4C5.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C5)
+        }
+        binding.buttonR4C6.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C6)
+        }
+        binding.buttonR4C7.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C7)
+        }
+        binding.buttonR4C8.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C8)
+        }
+        binding.buttonR4C9.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C9)
+        }
+        binding.buttonR4C10.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C10)
+        }
+        binding.buttonR4C11.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C11)
+        }
+        binding.buttonR4C12.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR4C12)
+        }
+
+        // row 5: crash
+        binding.buttonR5C1.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C1)
+        }
+        binding.buttonR5C2.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C2)
+        }
+        binding.buttonR5C3.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C3)
+        }
+        binding.buttonR5C4.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C4)
+        }
+        binding.buttonR5C5.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C5)
+        }
+        binding.buttonR5C6.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C6)
+        }
+        binding.buttonR5C7.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C7)
+        }
+        binding.buttonR5C8.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C8)
+        }
+        binding.buttonR5C9.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C9)
+        }
+        binding.buttonR5C10.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C10)
+        }
+        binding.buttonR5C11.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C11)
+        }
+        binding.buttonR5C12.setOnClickListener{
+            rhythmButtonClicked(binding.buttonR5C12)
+        }
+
+        hideAllTickButtons()
+        initRhythmNodes()
+        showTickButton(1)
+    }
+
+    private fun rhythmButtonClicked(sender: Button) {
+        if(sender.text=="X")
+        {
+            sender.setBackgroundColor(resources.getColor(R.color.purple_500))
+            sender.text = ""
+        }
+        else
+        {
+            sender.setBackgroundColor(Color.MAGENTA)
+            sender.text = "X"
+        }
     }
 
     private fun togglePlay() {
@@ -91,13 +306,36 @@ class CreateRhythm : Fragment() {
         }
     }
 
+    private fun hideAllTickButtons()
+    {
+        binding.tick1.visibility= INVISIBLE
+        binding.tick2.visibility= INVISIBLE
+        binding.tick3.visibility= INVISIBLE
+        binding.tick4.visibility= INVISIBLE
+        binding.tick5.visibility= INVISIBLE
+        binding.tick6.visibility= INVISIBLE
+        binding.tick7.visibility= INVISIBLE
+        binding.tick8.visibility= INVISIBLE
+        binding.tick9.visibility= INVISIBLE
+        binding.tick10.visibility= INVISIBLE
+        binding.tick11.visibility= INVISIBLE
+        binding.tick12.visibility= INVISIBLE
+    }
+
+    private fun showTickButton(count: Int)
+    {
+        rhythmNodes?.get(count)?.tickDisplay?.visibility= VISIBLE
+        //Log.d("Tickbutton", "nr $count")
+    }
+
     private fun startPlaying() {
         playback = object : Runnable {
             var count = 1
             override fun run() {
                 while (playing) {
                     //Log.d("RHYTHM","ticked")
-                    playTickSound()
+
+                    playTickSound(count)
                     count = (count + 1)
 
                     if (count == 13)
@@ -118,17 +356,36 @@ class CreateRhythm : Fragment() {
         thandler.start()
     }
 
-    private fun playTickSound()
+
+
+    private fun playTickSound(count:Int)
     {
         requireActivity().runOnUiThread()
         {
+            hideAllTickButtons()
+            showTickButton(count)
             view?.playSoundEffect(android.view.SoundEffectConstants.CLICK)
-            Log.d("RHYTHM","ticked")
+            //Log.d("RHYTHM","ticked")
         }
 
     }
 
-
+    private fun initRhythmNodes()
+    {
+        rhythmNodes = mutableMapOf<Int, RhythmNode>()
+        rhythmNodes!![1] = RhythmNode(1,binding.tick1)
+        rhythmNodes!![2] = RhythmNode(2,binding.tick2)
+        rhythmNodes!![3] = RhythmNode(3,binding.tick3)
+        rhythmNodes!![4] = RhythmNode(4,binding.tick4)
+        rhythmNodes!![5] = RhythmNode(5,binding.tick5)
+        rhythmNodes!![6] = RhythmNode(6,binding.tick6)
+        rhythmNodes!![7] = RhythmNode(7,binding.tick7)
+        rhythmNodes!![8] = RhythmNode(8,binding.tick8)
+        rhythmNodes!![9] = RhythmNode(9,binding.tick9)
+        rhythmNodes!![10] = RhythmNode(10,binding.tick10)
+        rhythmNodes!![11] = RhythmNode(11,binding.tick11)
+        rhythmNodes!![12] = RhythmNode(12,binding.tick12)
+    }
 
 
     fun getPermissionToRecordAudio() {
@@ -154,4 +411,50 @@ class CreateRhythm : Fragment() {
         midihelper.start()
 
     }
+}
+
+class RhythmNode
+{
+    constructor(i: Int, dot:ImageView) {
+        number = i
+        tickDisplay = dot
+    }
+
+    var kickActivated: Boolean? = false
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    var tomActivated: Boolean? = false
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    var snareActivated: Boolean? = false
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    var hihatActivated: Boolean? = false
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    var crashActivated: Boolean? = false
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    var number: Int
+
+    var tickDisplay : ImageView
+        get() = field
+        set(value) {
+            field =value
+        }
 }
