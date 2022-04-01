@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <pl.hypeapp.materialtimelineview.MaterialTimelineView
-            android:id="@+id/timeline_martial_view"
+            android:id="@+id/timeline_martial_view_picture_big"
             android:layout_width="match_parent"
             android:layout_height="220dp"
             android:background="@android:color/holo_orange_light"
@@ -30,7 +30,7 @@
             app:timeline_type="item">
 
             <ImageView
-                android:id="@+id/timeline_picture_imageView"
+                android:id="@+id/timeline_picture_big_image"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 app:layout_constraintBottom_toBottomOf="parent"
