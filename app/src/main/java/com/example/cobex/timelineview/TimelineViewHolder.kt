@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cobex.CaptureAction
 import com.example.cobex.Extensions.toLayout
+import com.example.cobex.R
 import com.example.cobex.ViewHelper
 
 import kotlinx.android.synthetic.main.timeline_item_picture_big.view.*
@@ -32,7 +33,7 @@ abstract class TimelineViewHolder(
     type: TimelineObject.Type,
     parent: ViewGroup,
     private val touchHelper: ItemTouchHelper,
-    protected val manager: TimelineManager
+    protected val viewModel: TimelineViewModel
 ) :
     RecyclerView.ViewHolder(type.layout.toLayout(parent)),
     View.OnTouchListener,
@@ -73,17 +74,22 @@ abstract class TimelineViewHolder(
     abstract fun bind(item: TimelineObject)
 
     /**
-     * ViewHolder of the Adapter [TimelineDelegate.ImageAdapter]
+     * Adapter: [TimelineDelegate.ImageAdapter]
+     *
+     * Layout: [R.layout.timeline_item_picture_small]
+     *
+     * TimelineObject: [TimelineObject.ImageItem]
+     *
      */
     private class ImageHolder(
         parent: ViewGroup,
         onTouchHelper: ItemTouchHelper,
-        manager: TimelineManager
+        viewModel: TimelineViewModel
     ) : TimelineViewHolder(
         TimelineObject.Type.IMAGE_ITEM,
         parent,
         onTouchHelper,
-        manager
+        viewModel
     ) {
 
         override fun bind(item: TimelineObject): Unit = with(itemView) {
@@ -96,23 +102,29 @@ abstract class TimelineViewHolder(
         }
 
         override fun onSingleTapUp(p0: MotionEvent?): Boolean {
-            manager.adapter.extendImage(adapterPosition)
+            viewModel.adapter.extendImage(adapterPosition)
             return true
         }
     }
 
     /**
-     * ViewHolder of the Adapter [TimelineDelegate.RecordAdapter]
+     * Adapter: [TimelineDelegate.RecordAdapter]
+     *
+     * Layout: [R.layout.timeline_item_recorded_activity]
+     *
+     * TimelineObject: [TimelineObject.RecordItem]
+     *
+     *
      */
     private class RecordedActivityHolder(
         parent: ViewGroup,
         onTouchHelper: ItemTouchHelper,
-        manager: TimelineManager
+        viewModel: TimelineViewModel
     ) : TimelineViewHolder(
         TimelineObject.Type.RECORD_ITEM,
         parent,
         onTouchHelper,
-        manager
+        viewModel
     ) {
 
         override fun bind(item: TimelineObject): Unit = with(itemView) {
@@ -135,18 +147,25 @@ abstract class TimelineViewHolder(
         }
     }
 
+    /**
+     * Adapter: [TimelineDelegate.BigImageAdapter]
+     *
+     * Layout: [R.layout.timeline_item_picture_big]
+     *
+     * TimelineObject: [TimelineObject.BigImageItem]
+     */
     private class BigImageHolder(
         parent: ViewGroup,
         onTouchHelper: ItemTouchHelper,
-        manager: TimelineManager
+        viewModel: TimelineViewModel
     ) : TimelineViewHolder(
         TimelineObject.Type.BIG_IMAGE_ITEM,
         parent,
         onTouchHelper,
-        manager
+        viewModel
     ) {
         override fun bind(item: TimelineObject): Unit = with(itemView) {
-            item as TimelineObject.BigImage
+            item as TimelineObject.BigImageItem
 
             ViewHelper.ImageViewBitmap(
                 itemView.timeline_picture_big_image, item.imgSrc, context
@@ -154,7 +173,7 @@ abstract class TimelineViewHolder(
         }
 
         override fun onSingleTapUp(p0: MotionEvent?): Boolean {
-            manager.adapter.shrinkImage(adapterPosition)
+            viewModel.adapter.shrinkImage(adapterPosition)
             return true
         }
     }
@@ -163,19 +182,17 @@ abstract class TimelineViewHolder(
         /**
          * @return a Holder matching the [TimelineObject.type]
          *
-         * @sample getHolder)
+         * @sample getHolder
          */
         fun getHolder(
             type: TimelineObject.Type,
             parent: ViewGroup,
             onTouchHelper: ItemTouchHelper,
-            manager: TimelineManager
+            viewModel: TimelineViewModel
         ) = when (type) {
-            TimelineObject.Type.IMAGE_ITEM -> ImageHolder(parent, onTouchHelper, manager)
-            TimelineObject.Type.RECORD_ITEM ->
-                RecordedActivityHolder( parent, onTouchHelper, manager)
-            TimelineObject.Type.BIG_IMAGE_ITEM ->
-                BigImageHolder(parent, onTouchHelper, manager)
+            TimelineObject.Type.IMAGE_ITEM      -> ImageHolder(parent, onTouchHelper, viewModel)
+            TimelineObject.Type.RECORD_ITEM     -> RecordedActivityHolder( parent, onTouchHelper, viewModel)
+            TimelineObject.Type.BIG_IMAGE_ITEM  -> BigImageHolder(parent, onTouchHelper, viewModel)
         }
     }
 }

@@ -11,14 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * [ItemTouchHelper.Callback] Class
  *
- * Used for some Interactions with RecyclerView Items
+ * Used for some Interactions with [TimelineViewHolder]
  */
 class TimelineItemHelper(
     val context: Context,
     private val helperAdapterTimeline: TimelineItemHelperAdapter
 ) : ItemTouchHelper.Callback() {
-
-    private fun activeCard(item: View?) = TimelineCards.getActiveCard(item)
 
     override fun isLongPressDragEnabled() = false
     override fun isItemViewSwipeEnabled() = true
@@ -31,21 +29,21 @@ class TimelineItemHelper(
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
         super.onSelectedChanged(viewHolder, actionState)
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-            setGreyMartialView(viewHolder?.itemView!!)
+            setTimelineCards(viewHolder?.itemView!!)
         }
     }
 
     private fun resetColorMartialView(item: View) {
-        val touchedCard = activeCard(item)
+        val touchedCard = TimelineCards.getActiveCard(item)
         val oldColor = touchedCard?.color?.let { ContextCompat.getColor(context, it) }
         if (oldColor != null) {
             setColour(touchedCard.card.getConcreteMartialCard(item)!!, oldColor)
         }
     }
 
-    private fun setGreyMartialView(item: View) {
-        val touchedCard = activeCard(item)!!
-        setColour(touchedCard.card.getConcreteMartialCard(item)!!, Color.LTGRAY)
+    private fun setTimelineCards(item: View) {
+        val touchedCard = TimelineCards.getActiveCard(item)
+        setColour(touchedCard?.card?.getConcreteMartialCard(item)!!, Color.LTGRAY)
     }
 
     private fun setColour(view: View, color: Int) {

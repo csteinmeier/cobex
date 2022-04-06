@@ -12,13 +12,16 @@ import com.example.cobex.R
 import com.example.cobex.TimeHelper
 import com.example.cobex.databinding.FragmentTimelineViewBinding
 
+/**
+ * Concrete Fragment of [R.layout.fragment_timeline_view]
+ */
 class TimelineViewFragment : Fragment(), CompositionArtifact.IArtifact {
 
     private var _binding: FragmentTimelineViewBinding? = null
     private val binding get() = _binding!!
 
 
-    private lateinit var manager: TimelineManager
+    private lateinit var viewModel: TimelineViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,12 +38,11 @@ class TimelineViewFragment : Fragment(), CompositionArtifact.IArtifact {
 
             setTitle(timelineLineStartTitle, requireContext())
 
-            manager = TimelineManager(requireContext(), recyclerTimeline)
+            viewModel = TimelineViewModel(requireContext(), recyclerTimeline)
 
             timelineButtonChangeState.setOnClickListener {
-
+                viewModel.updateStateChange()
                 setTitle(timelineLineStartTitle, requireContext())
-                manager.updateStateChange()
             }
 
         }
@@ -55,9 +57,7 @@ class TimelineViewFragment : Fragment(), CompositionArtifact.IArtifact {
     private fun setTitle(textView: TextView, context: Context) =
         run { textView.text = getTimelineTitle(context) }
 
-    /**
-     * Text for not move able top Textview
-     */
+
     private fun getTimelineTitle(context: Context): String = with(context) {
         when (TimelineStateType.actualTimelineState) {
             TimelineStateType.CompositionArtifacts ->
@@ -76,7 +76,7 @@ class TimelineViewFragment : Fragment(), CompositionArtifact.IArtifact {
     override fun onDestroy() {
         super.onDestroy()
         if (TimelineStateType.actualTimelineState == TimelineStateType.CompositionArtifacts)
-            manager.saveOrderedItems()
+            viewModel.saveOrderedItems()
         markAsSavedIfNotMarkedAsSaved(requireContext(), this::class.java)
         _binding = null
     }

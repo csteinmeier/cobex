@@ -8,8 +8,9 @@ import kotlinx.android.synthetic.main.timeline_item_recorded_activity.view.*
 /**
  * Simple Wrapper Class for the MartialCards in Layouts
  * Is used to determine which Card is touched
+ *
  */
-sealed class TimelineCards() {
+sealed class TimelineCards {
 
     private fun isCardActive(item: View?) = getConcreteMartialCard(item) != null
 
@@ -39,6 +40,18 @@ sealed class TimelineCards() {
     }
 
     companion object {
+        /**
+         * @param item the current View
+         *
+         * @return Concrete TimelineCard like
+         * [timeline_martial_view_picture_big]
+         * [timeline_martial_view_record_activity]
+         *
+         * Used to identify the right type of card.
+         *
+         * @sample TimelineItemHelper.resetColorMartialView
+         *
+         */
         fun getActiveCard(item: View?) = Types.values().find { it.card.isCardActive(item) }
     }
 }

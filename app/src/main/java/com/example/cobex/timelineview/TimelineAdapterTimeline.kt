@@ -22,27 +22,26 @@ import com.example.cobex.timelineview.TimelineDelegate.Companion.getAdapter
  *
  * ## [TimelineObject] -> Sealed class of concrete data of the Items
  *
- *
  */
 class TimelineAdapterTimeline(
     var timelineItems: MutableList<TimelineObject>,
-    private val manager: TimelineManager
+    private val viewModel: TimelineViewModel
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     CompositionArtifact.IArtifact,
     TimelineItemHelperAdapter {
 
     var itemTouchHelper: ItemTouchHelper? = null
+
     private val timelineObjects = TimelineObject.Type.values()
 
     private var adapter: TimelineDelegate? = null
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
             : RecyclerView.ViewHolder {
         val timelineObject = timelineObjects[viewType]
         adapter = getAdapter(timelineObject)
-        return adapter!!.onCreateViewHolder(parent, itemTouchHelper!!, manager)
+        return adapter!!.onCreateViewHolder(parent, itemTouchHelper!!, viewModel)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -60,21 +59,36 @@ class TimelineAdapterTimeline(
         notifyItemMoved(initialPosition, endPosition)
     }
 
+    /**
+     * Will place the item to the other list
+     */
     override fun onItemSwiped(position: Int) {
         exchangeList(timelineItems[position])
         timelineItems.removeAt(position)
         notifyItemRemoved(position)
     }
 
+    /**
+     * Simple function to "extend" an image.
+     * Will replace a [TimelineObject.ImageItem] with a [TimelineObject.BigImageItem]
+     *
+     * TODO (BUG if a User double click by animation)
+     */
     fun extendImage(position: Int) {
         val image = timelineItems[position] as TimelineObject.ImageItem
         val biggerImage =
-            TimelineObject.BigImage(image.id, image.createdTimeAsString, image.imgSrc)
+            TimelineObject.BigImageItem(image.id, image.createdTimeAsString, image.imgSrc)
         replaceItems(position, biggerImage)
     }
 
+    /**
+     * Simple function to "extend" an image.
+     * Will replace a [TimelineObject.BigImageItem] with a [TimelineObject.ImageItem]
+     *
+     * TODO (BUG if a User double click by animation)
+     */
     fun shrinkImage(position: Int) {
-        val image = timelineItems[position] as TimelineObject.BigImage
+        val image = timelineItems[position] as TimelineObject.BigImageItem
         val smallerImage =
             TimelineObject.ImageItem(image.id, image.createdTimeAsString, image.imgSrc)
         replaceItems(position, smallerImage)
@@ -87,7 +101,7 @@ class TimelineAdapterTimeline(
     }
 
     private fun exchangeList(item: TimelineObject) {
-        manager.exchangeItem(item)
+        viewModel.exchangeItem(item)
     }
 
 }

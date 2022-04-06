@@ -3,7 +3,9 @@ package com.example.cobex.timelineview
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cobex.timelineview.TimelineDelegate.Companion.getAdapter
 import com.example.cobex.timelineview.TimelineViewHolder.Companion.getHolder
+import com.example.cobex.R
 
 /**
  *
@@ -13,25 +15,29 @@ import com.example.cobex.timelineview.TimelineViewHolder.Companion.getHolder
  * ### These Adapters should be and are linked to each other via their matching [TimelineObject].
  *
  *+ This class provides the static method [getAdapter].
- *This function returns the correct holder based on the [TimelineObject.type].<br />
- * *Like the function in [ViewHolderOnTouchListener.getHolder]*
+ * This function returns the correct adapter based on the [TimelineObject.type].
+ *
+ * *Like the function in [TimelineViewHolder.getHolder]*
  *
  *
- * @sample getHolder
+ * @sample getAdapter
  */
-abstract class TimelineDelegate {
+sealed class TimelineDelegate {
 
     fun onCreateViewHolder(
         parent: ViewGroup,
         onTouchHelper: ItemTouchHelper,
-        manager: TimelineManager
-    ): RecyclerView.ViewHolder = getHolder(getType(), parent, onTouchHelper, manager)
+        viewModel: TimelineViewModel
+    ): RecyclerView.ViewHolder = getHolder(getType(), parent, onTouchHelper, viewModel)
 
     fun onBindViewHolder(holder: RecyclerView.ViewHolder, item: TimelineObject) {
         holder as TimelineViewHolder
         holder.bind(item)
     }
 
+    /**
+     * @return [TimelineObject.Type]
+     */
     abstract fun getType(): TimelineObject.Type
 
 
@@ -39,21 +45,39 @@ abstract class TimelineDelegate {
 
 
     /**
-     * Adapter of [ImageAdapter]
+     *
+     *  TimelineObject: [TimelineObject.Type.IMAGE_ITEM]
+     *
+     *  Adapter of Layout [R.layout.timeline_item_picture_small]
+     *
+     *  ViewHolder: [TimelineViewHolder.ImageHolder]
+     *
      */
     private object ImageAdapter : TimelineDelegate() {
         override fun getType() = TimelineObject.Type.IMAGE_ITEM
     }
 
     /**
-     *  Adapter of [RecordAdapter]
+     *
+     *  TimelineObject: [TimelineObject.Type.RECORD_ITEM]
+     *
+     *  Adapter of Layout [R.layout.timeline_item_recorded_activity]
+     *
+     *  ViewHolder: [TimelineViewHolder.RecordedActivityHolder]
+     *
      */
     private object RecordAdapter : TimelineDelegate() {
         override fun getType() = TimelineObject.Type.RECORD_ITEM
     }
 
     /**
-     *  Adapter of [BigImageAdapter]
+     *
+     *  TimelineObject: [TimelineObject.Type.BIG_IMAGE_ITEM]
+     *
+     *  Adapter of Layout [R.layout.timeline_item_picture_big]
+     *
+     *  ViewHolder: [TimelineViewHolder.BigImageHolder]
+     *
      */
     private object BigImageAdapter : TimelineDelegate() {
         override fun getType() = TimelineObject.Type.BIG_IMAGE_ITEM
