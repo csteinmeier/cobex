@@ -143,6 +143,7 @@
     <string name="dialog_delete_old_project_title">Delete Old Project?</string>
     <string name="timelineProject">Actual Project</string>
     <string name="timelineStored">Stored Items</string>
+    <string name="buttonSave">Save</string>
 
 
 </resources>

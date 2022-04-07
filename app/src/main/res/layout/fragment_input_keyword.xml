@@ -428,12 +428,12 @@
                 android:layout_height="0dp" />
 
             <Button
-                android:id="@+id/buttonNext"
+                android:id="@+id/buttonSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="36dp"
                 android:backgroundTint="#2B2929"
-                android:text="@string/buttonNext"
+                android:text="@string/buttonSave"
                 app:strokeColor="#0B0A0A" />
 
         </LinearLayout>

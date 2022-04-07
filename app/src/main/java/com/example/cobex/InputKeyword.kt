@@ -7,10 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.navigation.fragment.findNavController
@@ -54,6 +51,12 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
 
         binding.buttonBackCreate.setOnClickListener {
             findNavController().navigate(R.id.action_inputKeyword_to_CreateNew)
+        }
+        binding.buttonSave.setOnClickListener {
+            // todo: save set of keywords with timestamp
+            val recordingmsg= Toast.makeText(activity?.baseContext,"Keyword Set Saved", Toast.LENGTH_LONG) //maybe add index of set
+            recordingmsg.show()
+            // todo: clear selection
         }
 
         counterList = listOf(
