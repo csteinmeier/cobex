@@ -1,9 +1,7 @@
 package com.example.cobex.timelineview
 
 import android.content.Context
-import com.example.cobex.CaptureAction
-import com.example.cobex.CapturePicture
-import com.example.cobex.CompositionArtifact
+import com.example.cobex.*
 
 /**
  * Class which is used to obtain the correct artifacts.
@@ -40,6 +38,14 @@ sealed class TimelineStateType : CompositionArtifact.IArtifact {
      */
     abstract fun putRecordedActivitiesStringSet(context: Context, set: Set<String>)
 
+    abstract fun getInputMelodiesStringSet(context: Context) : Set<String>?
+
+    abstract fun putInputMelodiesStringSet(context: Context, set: Set<String>)
+
+    abstract fun getCaptureSoundStringSet(context: Context) : Set<String>?
+
+    abstract fun putCaptureSoundStringSet(context: Context, set: Set<String>)
+
     object CompositionArtifacts : TimelineStateType() {
 
         override fun getCapturedImagesStringSet(context: Context): Set<String>? =
@@ -55,6 +61,24 @@ sealed class TimelineStateType : CompositionArtifact.IArtifact {
         override fun putRecordedActivitiesStringSet(context: Context, set: Set<String>) {
             putStringSet(context, CaptureAction.ActivityTransitionReceiver::class.java, set)
         }
+
+        override fun getInputMelodiesStringSet(context: Context) =
+            getStringSet(context, InputMelody::class.java)
+
+
+        override fun putInputMelodiesStringSet(context: Context, set: Set<String>) {
+            putStringSet(context, InputMelody::class.java, set)
+        }
+
+        override fun getCaptureSoundStringSet(context: Context) =
+            getStringSet(context, CaptureSound::class.java)
+
+
+        override fun putCaptureSoundStringSet(context: Context, set: Set<String>) {
+            putStringSet(context, CaptureSound::class.java, set)
+        }
+
+
     }
 
     object StoredArtifacts : TimelineStateType() {
@@ -71,6 +95,22 @@ sealed class TimelineStateType : CompositionArtifact.IArtifact {
 
         override fun putRecordedActivitiesStringSet(context: Context, set: Set<String>) {
             putStringSet(context, TimelineObject.RecordItem::class.java, set)
+        }
+
+        override fun getInputMelodiesStringSet(context: Context) =
+            getStringSet(context, TimelineObject.InputMelodyItem::class.java)
+
+
+        override fun putInputMelodiesStringSet(context: Context, set: Set<String>) {
+            putStringSet(context, TimelineObject.InputMelodyItem::class.java, set)
+        }
+
+        override fun getCaptureSoundStringSet(context: Context) =
+            getStringSet(context, TimelineObject.CaptureSoundItem::class.java)
+
+
+        override fun putCaptureSoundStringSet(context: Context, set: Set<String>) {
+            putStringSet(context, TimelineObject.CaptureSoundItem::class.java, set)
         }
     }
 

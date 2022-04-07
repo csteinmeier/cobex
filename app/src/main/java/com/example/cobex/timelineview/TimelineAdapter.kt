@@ -23,7 +23,7 @@ import com.example.cobex.timelineview.TimelineDelegate.Companion.getAdapter
  * ## [TimelineObject] -> Sealed class of concrete data of the Items
  *
  */
-class TimelineAdapterTimeline(
+class TimelineAdapter(
     var timelineItems: MutableList<TimelineObject>,
     private val viewModel: TimelineViewModel
 ) :

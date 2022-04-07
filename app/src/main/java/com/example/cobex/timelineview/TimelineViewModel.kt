@@ -16,8 +16,8 @@ class TimelineViewModel(
 ) : CompositionArtifact.IArtifact {
 
 
-    var adapter: TimelineAdapterTimeline =
-        TimelineAdapterTimeline(
+    var adapter: TimelineAdapter =
+        TimelineAdapter(
             StoredToItemHelper.getList(
                 TimelineStateType.actualTimelineState, context).toMutableList(), this)
 
@@ -109,6 +109,12 @@ class TimelineViewModel(
 
         TimelineObject.Type.BIG_IMAGE_ITEM ->
             timelineStateType.getCapturedImagesStringSet(context)?.toMutableList()
+
+        TimelineObject.Type.CAPTURE_SOUND ->
+            timelineStateType.getCaptureSoundStringSet(context)?.toMutableList()
+
+        TimelineObject.Type.INPUT_MELODY ->
+            timelineStateType.getInputMelodiesStringSet(context)?.toMutableList()
     }
 
     /**
@@ -128,6 +134,12 @@ class TimelineViewModel(
 
         TimelineObject.Type.BIG_IMAGE_ITEM ->
             timelineStateType.putCapturedImageStringSet(context, set)
+
+        TimelineObject.Type.INPUT_MELODY ->
+            timelineStateType.putInputMelodiesStringSet(context, set)
+
+        TimelineObject.Type.CAPTURE_SOUND ->
+            timelineStateType.putCaptureSoundStringSet(context, set)
     }
 
     /**
@@ -215,6 +227,52 @@ class TimelineViewModel(
                 storedSet.map { storedToItem(it) }
         }
 
+        private object CaptureSound : StoredToItemHelper() {
+
+            override fun getList(
+                timelineStateType: TimelineStateType,
+                context: Context
+            ): List<TimelineObject>? =
+                timelineStateType.getCaptureSoundStringSet(context)
+                    ?.let { storedSetToItemList(it) }
+
+
+            override fun storedToItem(savedString: String, position: Int?)=
+                TimelineObject.CaptureSoundItem(
+                    id = savedString,
+                    createdTimeAsString = savedString.substringAfter("TIME:"),
+                    mRecord = savedString.substringBefore("TIME:"),
+                    pos = position
+                )
+
+            override fun storedSetToItemList(storedSet: Set<String>): List<TimelineObject> =
+                storedSet.map { storedToItem(it) }
+
+        }
+
+        private object InputMelody : StoredToItemHelper() {
+
+            override fun getList(
+                timelineStateType: TimelineStateType,
+                context: Context
+            ): List<TimelineObject>? =
+                timelineStateType.getInputMelodiesStringSet(context)
+                    ?.let { storedSetToItemList(it) }
+
+            override fun storedToItem(savedString: String, position: Int?)=
+                TimelineObject.InputMelodyItem(
+                    id = savedString,
+                    createdTimeAsString = savedString.substringAfter("TIME:"),
+                    mRecord = savedString.substringBefore("TIME:"),
+                    pos = position
+                )
+
+
+            override fun storedSetToItemList(storedSet: Set<String>): List<TimelineObject> =
+                storedSet.map { storedToItem(it) }
+
+        }
+
         /**
          * Special class for the [TimelineObject]
          * which have already been put into a certain order by the user.
@@ -231,21 +289,21 @@ class TimelineViewModel(
              */
             private fun stringFromSavedValue(savedString: String) =
                 savedString
-                    .substringAfter('!')
-                    .substringBeforeLast('!')
+                    .substringAfter("!")
+                    .substringBeforeLast("!")
 
             /**
              * @sample saveOrderedItems
              */
             private fun positionFromSavedValue(savedString: String) =
-                savedString.substringAfterLast('!').toInt()
+                savedString.substringAfterLast("!").toInt()
 
             /**
              * @sample saveOrderedItems
              */
             private fun typeFromSavedValue(savedString: String) =
                 TimelineObject.Type.values()
-                    .find { it.name == savedString.substringBefore('!') }
+                    .find { it.name == savedString.substringBefore("!") }
 
 
             /**
@@ -254,9 +312,10 @@ class TimelineViewModel(
              */
             private fun storedToItem(savedString: String): TimelineObject {
                 val stringValue = stringFromSavedValue(savedString)
-                val position = positionFromSavedValue(stringValue)
+                val position = positionFromSavedValue(savedString)
+                Log.e("sdasd", stringValue.substringBefore("!"))
 
-                return when (typeFromSavedValue(stringValue)!!) {
+                return when (typeFromSavedValue(savedString)!!) {
 
                     TimelineObject.Type.IMAGE_ITEM -> Image.storedToItem(stringValue, position)
 
@@ -264,6 +323,12 @@ class TimelineViewModel(
 
                     TimelineObject.Type.RECORD_ITEM ->
                         RecordActivity.storedToItem(stringValue, position)
+
+                    TimelineObject.Type.CAPTURE_SOUND ->
+                        CaptureSound.storedToItem(stringValue, position)
+
+                    TimelineObject.Type.INPUT_MELODY ->
+                        InputMelody.storedToItem(stringValue, position)
                 }
             }
 
@@ -276,7 +341,8 @@ class TimelineViewModel(
 
 
         companion object {
-            private fun getAllDefaultHelpers() = listOf(RecordActivity, Image)
+            private fun getAllDefaultHelpers() =
+                listOf(RecordActivity, Image, CaptureSound, InputMelody)
 
             /**
              *

@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cobex.CaptureAction
+import com.example.cobex.CaptureSound
 import com.example.cobex.Extensions.toLayout
 import com.example.cobex.R
 import com.example.cobex.ViewHelper
+import kotlinx.android.synthetic.main.timeline_item_capture_sound.view.*
+import kotlinx.android.synthetic.main.timeline_item_input_melody.view.*
 
 import kotlinx.android.synthetic.main.timeline_item_picture_big.view.*
 import kotlinx.android.synthetic.main.timeline_item_picture_small.view.*
@@ -29,7 +32,7 @@ import kotlinx.android.synthetic.main.timeline_item_recorded_activity.view.*
  *
  * @sample getHolder
  */
-abstract class TimelineViewHolder(
+sealed class TimelineViewHolder(
     type: TimelineObject.Type,
     parent: ViewGroup,
     private val touchHelper: ItemTouchHelper,
@@ -96,9 +99,9 @@ abstract class TimelineViewHolder(
             item as TimelineObject.ImageItem
 
             ViewHelper.TextFieldSimpleTime(
-                timeline_picture_small_time, item.createdTimeAsString, context
+                timeline_time_picture_small, item.createdTimeAsString, context
             )
-            ViewHelper.ImageViewBitmap(timeline_picture_small_imageView, item.imgSrc, context)
+            ViewHelper.ImageViewBitmap(timeline_image_view_picture_small, item.imgSrc, context)
         }
 
         override fun onSingleTapUp(p0: MotionEvent?): Boolean {
@@ -133,15 +136,15 @@ abstract class TimelineViewHolder(
                 .find { it.name == item.detectedActivity }
 
             ViewHelper.TextFieldSimpleTime(
-                timeline_recorded_activity_time, item.createdTimeAsString, context
+                timeline_text_view_recorded_activity_time, item.createdTimeAsString, context
             )
 
             ViewHelper.ImageViewDrawable(
-                timeline_recorded_activity_icon, detectedActivity!!.activityIcon, context
+                timeline_icon_recorded_activity, detectedActivity!!.activityIcon, context
             )
 
             ViewHelper.TextFieldResourceString(
-                timeline_recorded_activity_as_string,
+                timeline_text_view_recorded_activity_as_string,
                 detectedActivity.activityRecognitionString, context
             )
         }
@@ -168,13 +171,60 @@ abstract class TimelineViewHolder(
             item as TimelineObject.BigImageItem
 
             ViewHelper.ImageViewBitmap(
-                itemView.timeline_picture_big_image, item.imgSrc, context
+                itemView.timeline_imageView_picture_big, item.imgSrc, context
             )
         }
 
         override fun onSingleTapUp(p0: MotionEvent?): Boolean {
             viewModel.adapter.shrinkImage(adapterPosition)
             return true
+        }
+    }
+
+
+    private class CaptureSoundHolder(
+        parent: ViewGroup,
+        onTouchHelper: ItemTouchHelper,
+        viewModel: TimelineViewModel
+    ) : TimelineViewHolder(
+        TimelineObject.Type.CAPTURE_SOUND,
+        parent,
+        onTouchHelper,
+        viewModel
+    ) {
+        override fun bind(item: TimelineObject) : Unit = with(itemView) {
+            item as TimelineObject.CaptureSoundItem
+
+            ViewHelper.TextFieldSimpleTime(
+                itemView.timeline_time_capture_sound, item.createdTimeAsString, context
+            )
+            ViewHelper.SoundButton(
+                itemView.timeline_imageView_capture_sound, item.mRecord, context
+            )
+        }
+    }
+
+
+    private class InputMelodyHolder(
+        parent: ViewGroup,
+        onTouchHelper: ItemTouchHelper,
+        viewModel: TimelineViewModel
+    ) : TimelineViewHolder(
+        TimelineObject.Type.INPUT_MELODY,
+        parent,
+        onTouchHelper,
+        viewModel
+    ) {
+        override fun bind(item: TimelineObject) : Unit = with(itemView) {
+            item as TimelineObject.InputMelodyItem
+
+            ViewHelper.TextFieldSimpleTime(
+                itemView.timeline_time_input_melody, item.createdTimeAsString, context
+            )
+
+            ViewHelper.SoundButton(
+                itemView.timeline_image_view_input_melody, item.mRecord, context
+            )
         }
     }
 
@@ -190,9 +240,11 @@ abstract class TimelineViewHolder(
             onTouchHelper: ItemTouchHelper,
             viewModel: TimelineViewModel
         ) = when (type) {
-            TimelineObject.Type.IMAGE_ITEM      -> ImageHolder(parent, onTouchHelper, viewModel)
-            TimelineObject.Type.RECORD_ITEM     -> RecordedActivityHolder( parent, onTouchHelper, viewModel)
+            TimelineObject.Type.IMAGE_ITEM -> ImageHolder(parent, onTouchHelper, viewModel)
+            TimelineObject.Type.RECORD_ITEM -> RecordedActivityHolder( parent, onTouchHelper, viewModel)
             TimelineObject.Type.BIG_IMAGE_ITEM  -> BigImageHolder(parent, onTouchHelper, viewModel)
+            TimelineObject.Type.INPUT_MELODY -> InputMelodyHolder(parent, onTouchHelper, viewModel)
+            TimelineObject.Type.CAPTURE_SOUND -> CaptureSoundHolder(parent, onTouchHelper, viewModel)
         }
     }
 }

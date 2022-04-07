@@ -2,6 +2,7 @@ package com.example.cobex
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.MediaRecorder
@@ -16,7 +17,7 @@ import com.example.cobex.databinding.FragmentCaptureSoundBinding
 /**
  * A simple [Fragment] subclass.
  */
-class CaptureSound : Fragment() {
+class CaptureSound : Fragment(), CompositionArtifact.IArtifact {
 
     private var recNo: Int = 1
     private var mRecorder: MediaRecorder? = null
@@ -82,6 +83,8 @@ class CaptureSound : Fragment() {
         mRecorder?.stop()
         mRecorder?.release()
 
+        saveInCompositionArtifact(activity?.filesDir?.absolutePath + "/recording"+ recNo + ".mp3")
+
         if (recNo==5)
         {
             recNo = 1
@@ -90,6 +93,7 @@ class CaptureSound : Fragment() {
         {
             recNo++
         }
+
     }
 
 
@@ -107,6 +111,17 @@ class CaptureSound : Fragment() {
 
         mRecorder?.prepare()
         mRecorder?.start()
+    }
+
+    private fun saveInCompositionArtifact(stringToSave: String){
+        markAsSavedIfNotMarkedAsSaved(requireContext(), this::class.java)
+
+        val previousSet = getStringSet(requireContext(), this::class.java)
+            ?.toMutableList()?: mutableListOf()
+
+        previousSet.add(stringToSave +"TIME:"+getTimeStamp(requireContext()))
+
+        putStringSet(requireContext(), this.javaClass, previousSet.toSet())
     }
 
     private fun getPermissions() {

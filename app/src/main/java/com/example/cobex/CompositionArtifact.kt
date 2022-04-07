@@ -111,6 +111,12 @@ class CompositionArtifact private constructor(private val context: Context) {
     private fun getBoolean(identifier: String) =
         getPreferences().getBoolean("${Keywords.BOOLEAN.name} $identifier", false)
 
+    private fun putString(identifier: String, string: String) =
+        getPreferencesEditor().putString(identifier, string)
+
+    private fun getString(identifier: String) =
+        getPreferences().getString(identifier, "")
+
     fun getImageFileDir(): File =
         ContextWrapper(context).getDir("images", Context.MODE_PRIVATE)
 
@@ -147,6 +153,7 @@ class CompositionArtifact private constructor(private val context: Context) {
 
             if(getStringSet(context, CapturePicture::class.java)!!.isNotEmpty())
                 CompositionArtifact.getInstance(context).deleteTakenPictures()
+
         }
 
         /**
@@ -205,6 +212,13 @@ class CompositionArtifact private constructor(private val context: Context) {
 
         fun getTimeStamp(context: Context): String =
             CompositionArtifact.getInstance(context).getTimeStamp()
+
+        fun <T>putString(context: Context, clazz: Class<T>, string: String) =
+            CompositionArtifact.getInstance(context).putString(clazz.name, string)
+
+        fun <T>getString(context: Context, clazz: Class<T>) =
+            CompositionArtifact.getInstance(context).getString(clazz.name)
+
     }
 
 }

@@ -1,12 +1,12 @@
 package com.example.cobex.timelineview
 
 /**
- * * Interface implemented by [TimelineAdapterTimeline] and [TimelineItemHelper].
+ * * Interface implemented by [TimelineAdapter] and [TimelineItemHelper].
  *
- * * DRAG AND DROP:  [TimelineItemHelper.onMove] in [TimelineAdapterTimeline.onItemMove]
+ * * DRAG AND DROP:  [TimelineItemHelper.onMove] in [TimelineAdapter.onItemMove]
  *   about drag and drop actions
  *
- * * SWIPE: [TimelineItemHelper.onSwiped] in[TimelineAdapterTimeline.onItemSwiped]
+ * * SWIPE: [TimelineItemHelper.onSwiped] in[TimelineAdapter.onItemSwiped]
  *
  */
 interface TimelineItemHelperAdapter {

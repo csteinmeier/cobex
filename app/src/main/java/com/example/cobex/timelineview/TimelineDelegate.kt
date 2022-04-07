@@ -84,6 +84,16 @@ sealed class TimelineDelegate {
 
     }
 
+    private object CaptureSoundAdapter : TimelineDelegate() {
+        override fun getType() = TimelineObject.Type.CAPTURE_SOUND
+
+    }
+
+    private object InputMelodyAdapter : TimelineDelegate() {
+        override fun getType() = TimelineObject.Type.INPUT_MELODY
+
+    }
+
     companion object {
 
         /**
@@ -96,6 +106,8 @@ sealed class TimelineDelegate {
                 TimelineObject.Type.IMAGE_ITEM -> ImageAdapter
                 TimelineObject.Type.RECORD_ITEM -> RecordAdapter
                 TimelineObject.Type.BIG_IMAGE_ITEM -> BigImageAdapter
+                TimelineObject.Type.CAPTURE_SOUND -> CaptureSoundAdapter
+                TimelineObject.Type.INPUT_MELODY -> InputMelodyAdapter
             }
     }
 }

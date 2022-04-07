@@ -76,6 +76,23 @@ sealed class TimelineObject(
     ) :
         TimelineObject(id, Type.BIG_IMAGE_ITEM, createdTimeAsString, pos)
 
+
+    class CaptureSoundItem(
+        id: String,
+        createdTimeAsString: String,
+        val mRecord: String,
+        pos: Int? = -1
+    ) :
+    TimelineObject(id, Type.CAPTURE_SOUND, createdTimeAsString, pos)
+
+    class InputMelodyItem(
+        id: String,
+        createdTimeAsString: String,
+        val mRecord: String,
+        pos: Int? = -1
+    ) :
+        TimelineObject(id, Type.INPUT_MELODY, createdTimeAsString, pos)
+
     /**
      * Used for linking between the individual components of the TimelineViews
      */
@@ -94,7 +111,17 @@ sealed class TimelineObject(
         /**
          * @see [BigImageItem]
          */
-        BIG_IMAGE_ITEM(R.layout.timeline_item_picture_big)
+        BIG_IMAGE_ITEM(R.layout.timeline_item_picture_big),
+
+        /**
+         * @see [CaptureSoundItem]
+         */
+        CAPTURE_SOUND(R.layout.timeline_item_capture_sound),
+
+        /**
+         * @see [CaptureSoundItem]
+         */
+        INPUT_MELODY(R.layout.timeline_item_input_melody),
     }
 
 
