@@ -8,7 +8,7 @@
     tools:context="com.example.cobex.CaptureSound">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/timeline_item_picture_cardView"
+        android:id="@+id/timeline_card_view_big_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="20dp"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <pl.hypeapp.materialtimelineview.MaterialTimelineView
-            android:id="@+id/timeline_martial_view"
+            android:id="@+id/timeline_martial_view_picture_big"
             android:layout_width="match_parent"
             android:layout_height="220dp"
             android:background="@android:color/holo_orange_light"
@@ -30,7 +30,7 @@
             app:timeline_type="item">
 
             <ImageView
-                android:id="@+id/timeline_picture_imageView"
+                android:id="@+id/timeline_imageView_picture_big"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -47,8 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        app:layout_constraintStart_toStartOf="@+id/timeline_item_picture_cardView"
-        app:layout_constraintTop_toBottomOf="@+id/timeline_item_picture_cardView"
+        app:layout_constraintStart_toStartOf="@+id/timeline_card_view_big_picture"
+        app:layout_constraintTop_toBottomOf="@+id/timeline_card_view_big_picture"
         app:timeline_margin_start="32dp"
         app:timeline_position="middle"
         app:timeline_type="line">

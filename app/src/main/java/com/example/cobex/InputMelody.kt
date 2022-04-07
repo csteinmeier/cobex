@@ -26,7 +26,7 @@ import com.example.cobex.databinding.FragmentInputMelodyBinding
  * Use the [InputMelody.newInstance] factory method to
  * create an instance of this fragment.
  */
-class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelectedListener {
+class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelectedListener, CompositionArtifact.IArtifact {
 
     private var _binding: FragmentInputMelodyBinding? = null
     private lateinit var event: ByteArray
@@ -193,6 +193,7 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
             } else {
                 val temprecordingno = recordingno - 1
                 val recordingmsg = Toast.makeText(activity?.baseContext,"Song $temprecordingno Saved", Toast.LENGTH_LONG)
+                saveInCompositionArtifact("${activity?.filesDir?.absolutePath}/audiorec$temprecordingno.3gp")
                 recordingmsg.show()
             }
         }
@@ -202,6 +203,17 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         mRecorder?.stop()
         mRecorder?.release()
         mRecorder = null
+    }
+
+    private fun saveInCompositionArtifact(stringToSave: String){
+        markAsSavedIfNotMarkedAsSaved(requireContext(), this::class.java)
+
+        val previousSet = getStringSet(requireContext(), this::class.java)
+            ?.toMutableList()?: mutableListOf()
+
+        previousSet.add(stringToSave+"TIME:"+getTimeStamp(requireContext()))
+
+        putStringSet(requireContext(), this.javaClass, previousSet.toSet())
     }
 
     fun getPermissionToRecordAudio() {
@@ -256,6 +268,7 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         mRecorder?.prepare()
         mRecorder?.start()
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

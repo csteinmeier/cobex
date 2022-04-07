@@ -6,60 +6,74 @@
     android:layout_height="match_parent"
     android:background="#1A7E74">
 
-    <TextView
-        android:id="@+id/textview_first2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-black"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        android:text="@string/textTimeline"
-        android:textColor="#FAFAFA"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="30dp" />
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="364dp"
-        android:layout_height="515dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonBackCreate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_first2">
+        app:layout_constraintTop_toTopOf="parent">
 
         <pl.hypeapp.materialtimelineview.MaterialTimelineView
             android:id="@+id/materialTimelineStart"
-            android:layout_width="360dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="24dp"
+            android:paddingStart="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.509"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:timeline_margin_start="32dp"
+            app:timeline_margin_start="60dp"
             app:timeline_position="middle"
             app:timeline_type="line">
 
-            <TextView
-                android:id="@+id/timeline_line_start_text"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="84dp"
-                android:text="PlaceHolder"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/timelineLine_start_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="44dp"
+                    android:text="PlaceHolder"
+                    android:layout_gravity="center"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
+
+                <ImageView
+                    android:id="@+id/timelineButtonChangeState"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginEnd="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    app:srcCompat="@drawable/logo"
+                    tools:layout_editor_absoluteX="274dp"
+                    tools:layout_editor_absoluteY="-6dp" />
+
+            </LinearLayout>
+
+
 
 
         </pl.hypeapp.materialtimelineview.MaterialTimelineView>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerTimelineViewLeft"
-            android:layout_width="360dp"
-            android:layout_height="444dp"
+            android:id="@+id/recycler_timeline"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:paddingRight="30dp"
+            android:paddingLeft="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.666"

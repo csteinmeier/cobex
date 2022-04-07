@@ -116,7 +116,7 @@
   
     <fragment
         android:id="@+id/timeLineView"
-        android:name="com.example.cobex.TimeLineView"
+        android:name="com.example.cobex.timelineview.TimelineViewFragment"
         android:label="TimeLineView"
         tools:layout="@layout/fragment_timeline_view" >
         <action
