@@ -2,6 +2,9 @@ package com.example.cobex.timelineview
 
 import android.content.Context
 import com.example.cobex.*
+import com.example.cobex.timelineview.TimelineStateType.Companion.actualTimelineState
+import com.example.cobex.timelineview.TimelineStateType.Companion.changeState
+import com.example.cobex.timelineview.TimelineStateType.Companion.getOppositeArtefactStateType
 
 /**
  * Class which is used to obtain the correct artifacts.
@@ -11,114 +14,60 @@ import com.example.cobex.*
  *
  * * [actualTimelineState] simply shows which artifact is shown in the TimelineView
  *
- * * [getOppositeArtefactType] Opposite of the [actualTimelineState]
+ * * [getOppositeArtefactStateType] Opposite of the [actualTimelineState]
  *
  * * [changeState] will set the [actualTimelineState] to the opposite
  *
  */
 sealed class TimelineStateType : CompositionArtifact.IArtifact {
 
-    abstract fun getCapturedImagesStringSet(context: Context): Set<String>?
+    abstract fun getStringSet(context: Context, type: TimelineItemType): Set<String>?
 
-    abstract fun putCapturedImageStringSet(context: Context, set: Set<String>)
+    abstract fun putStringSet(context: Context, type: TimelineItemType, set: Set<String>)
 
-    abstract fun getRecordedActivitiesStringSet(context: Context): Set<String>?
-
-    abstract fun putRecordedActivitiesStringSet(context: Context, set: Set<String>)
-
-    abstract fun getInputMelodiesStringSet(context: Context) : Set<String>?
-
-    abstract fun putInputMelodiesStringSet(context: Context, set: Set<String>)
-
-    abstract fun getCaptureSoundStringSet(context: Context) : Set<String>?
-
-    abstract fun putCaptureSoundStringSet(context: Context, set: Set<String>)
-
-    abstract fun getClickedKeywordStringSet(context: Context) : Set<String>?
-
-    abstract fun putClickedKeywordStringSet(context: Context, set: Set<String>)
 
     object CompositionArtifacts : TimelineStateType() {
+        override fun getStringSet(context: Context, type: TimelineItemType): Set<String>? =
+            when (type) {
+                TimelineItemType.KEYWORD -> getStringSet(context, InputKeyword::class.java)
+                TimelineItemType.CAPTURE_SOUND -> getStringSet(context, CaptureSound::class.java)
+                TimelineItemType.BIG_IMAGE_ITEM -> getStringSet(context, CapturePicture::class.java)
+                TimelineItemType.IMAGE_ITEM -> getStringSet(context, CapturePicture::class.java)
+                TimelineItemType.RECORD_ITEM -> getStringSet(context, CaptureAction::class.java)
+                TimelineItemType.INPUT_MELODY -> getStringSet(context, InputMelody::class.java)
+            }
 
-        override fun getCapturedImagesStringSet(context: Context): Set<String>? =
-            getStringSet(context, CapturePicture::class.java)
-
-        override fun putCapturedImageStringSet(context: Context, set: Set<String>) {
-            putStringSet(context, CapturePicture::class.java, set)
-        }
-
-        override fun getRecordedActivitiesStringSet(context: Context): Set<String>? =
-            getStringSet(context, CaptureAction.ActivityTransitionReceiver::class.java)
-
-        override fun putRecordedActivitiesStringSet(context: Context, set: Set<String>) {
-            putStringSet(context, CaptureAction.ActivityTransitionReceiver::class.java, set)
-        }
-
-        override fun getInputMelodiesStringSet(context: Context) =
-            getStringSet(context, InputMelody::class.java)
-
-
-        override fun putInputMelodiesStringSet(context: Context, set: Set<String>) {
-            putStringSet(context, InputMelody::class.java, set)
-        }
-
-        override fun getCaptureSoundStringSet(context: Context) =
-            getStringSet(context, CaptureSound::class.java)
-
-
-        override fun putCaptureSoundStringSet(context: Context, set: Set<String>) {
-            putStringSet(context, CaptureSound::class.java, set)
-        }
-
-        override fun getClickedKeywordStringSet(context: Context): Set<String>? =
-            getStringSet(context, InputKeyword::class.java)
-
-
-        override fun putClickedKeywordStringSet(context: Context, set: Set<String>) {
-            putStringSet(context, InputKeyword::class.java, set)
-        }
-
+        override fun putStringSet(context: Context, type: TimelineItemType, set: Set<String>) =
+            when(type){
+                TimelineItemType.KEYWORD -> putStringSet(context, InputKeyword::class.java, set)
+                TimelineItemType.CAPTURE_SOUND -> putStringSet(context, CaptureSound::class.java, set)
+                TimelineItemType.BIG_IMAGE_ITEM -> putStringSet(context, CapturePicture::class.java, set)
+                TimelineItemType.IMAGE_ITEM -> putStringSet(context, CapturePicture::class.java, set)
+                TimelineItemType.RECORD_ITEM -> putStringSet(context, CaptureAction::class.java, set)
+                TimelineItemType.INPUT_MELODY -> putStringSet(context, InputMelody::class.java, set)
+            }
     }
 
     object StoredArtifacts : TimelineStateType() {
+        override fun getStringSet(context: Context, type: TimelineObject.Type): Set<String>? =
+            when (type) {
+                TimelineItemType.KEYWORD -> getStringSet(context, TimelineObject.KeywordItem::class.java)
+                TimelineItemType.CAPTURE_SOUND -> getStringSet(context, TimelineObject.CaptureSoundItem::class.java)
+                TimelineItemType.BIG_IMAGE_ITEM -> getStringSet(context, TimelineObject.BigImageItem::class.java)
+                TimelineItemType.IMAGE_ITEM -> getStringSet(context, TimelineObject.ImageItem::class.java)
+                TimelineItemType.RECORD_ITEM -> getStringSet(context, TimelineObject.RecordItem::class.java)
+                TimelineItemType.INPUT_MELODY -> getStringSet(context, TimelineObject.InputMelodyItem::class.java)
+            }
 
-        override fun getCapturedImagesStringSet(context: Context): Set<String>? =
-            getStringSet(context, TimelineObject.ImageItem::class.java)
-
-        override fun putCapturedImageStringSet(context: Context, set: Set<String>) {
-            putStringSet(context, TimelineObject.ImageItem::class.java, set)
-        }
-
-        override fun getRecordedActivitiesStringSet(context: Context): Set<String>? =
-            getStringSet(context, TimelineObject.RecordItem::class.java)
-
-        override fun putRecordedActivitiesStringSet(context: Context, set: Set<String>) {
-            putStringSet(context, TimelineObject.RecordItem::class.java, set)
-        }
-
-        override fun getInputMelodiesStringSet(context: Context) =
-            getStringSet(context, TimelineObject.InputMelodyItem::class.java)
-
-
-        override fun putInputMelodiesStringSet(context: Context, set: Set<String>) {
-            putStringSet(context, TimelineObject.InputMelodyItem::class.java, set)
-        }
-
-        override fun getCaptureSoundStringSet(context: Context) =
-            getStringSet(context, TimelineObject.CaptureSoundItem::class.java)
-
-
-        override fun putCaptureSoundStringSet(context: Context, set: Set<String>) {
-            putStringSet(context, TimelineObject.CaptureSoundItem::class.java, set)
-        }
-
-        override fun getClickedKeywordStringSet(context: Context): Set<String>? =
-            getStringSet(context, TimelineObject.KeywordItem::class.java)
-
-
-        override fun putClickedKeywordStringSet(context: Context, set: Set<String>) {
-            putStringSet(context, TimelineObject.KeywordItem::class.java, set)
-        }
+        override fun putStringSet(context: Context, type: TimelineObject.Type, set: Set<String>) =
+            when(type){
+                TimelineItemType.KEYWORD -> putStringSet(context, TimelineObject.KeywordItem::class.java, set)
+                TimelineItemType.CAPTURE_SOUND -> putStringSet(context, TimelineObject.CaptureSoundItem::class.java, set)
+                TimelineItemType.BIG_IMAGE_ITEM -> putStringSet(context, TimelineObject.BigImageItem::class.java, set)
+                TimelineItemType.IMAGE_ITEM -> putStringSet(context, TimelineObject.ImageItem::class.java, set)
+                TimelineItemType.RECORD_ITEM -> putStringSet(context, TimelineObject.RecordItem::class.java, set)
+                TimelineItemType.INPUT_MELODY -> putStringSet(context, TimelineObject.InputMelodyItem::class.java, set)
+            }
     }
 
     companion object {
@@ -126,9 +75,9 @@ sealed class TimelineStateType : CompositionArtifact.IArtifact {
         var actualTimelineState: TimelineStateType = CompositionArtifacts
 
         /**
-         * @sample getOppositeArtefactType
+         * @sample getOppositeArtefactStateType
          */
-        fun getOppositeArtefactType() = when (actualTimelineState) {
+        fun getOppositeArtefactStateType() = when (actualTimelineState) {
             CompositionArtifacts -> StoredArtifacts
             StoredArtifacts -> CompositionArtifacts
         }
