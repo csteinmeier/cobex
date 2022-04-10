@@ -115,6 +115,9 @@ class TimelineViewModel(
 
         TimelineObject.Type.INPUT_MELODY ->
             timelineStateType.getInputMelodiesStringSet(context)?.toMutableList()
+
+        TimelineObject.Type.KEYWORD ->
+            timelineStateType.getClickedKeywordStringSet(context)?.toMutableList()
     }
 
     /**
@@ -140,6 +143,9 @@ class TimelineViewModel(
 
         TimelineObject.Type.CAPTURE_SOUND ->
             timelineStateType.putCaptureSoundStringSet(context, set)
+
+        TimelineObject.Type.KEYWORD ->
+            timelineStateType.putClickedKeywordStringSet(context, set)
     }
 
     /**
@@ -270,7 +276,31 @@ class TimelineViewModel(
 
             override fun storedSetToItemList(storedSet: Set<String>): List<TimelineObject> =
                 storedSet.map { storedToItem(it) }
+        }
 
+        private object Keyword : StoredToItemHelper() {
+
+            override fun getList(
+                timelineStateType: TimelineStateType,
+                context: Context
+            ): List<TimelineObject>? =
+                timelineStateType.getClickedKeywordStringSet(context)
+                    ?.let { storedSetToItemList(it) }
+
+            override fun storedToItem(savedString: String, position: Int?)=
+                TimelineObject.KeywordItem(
+                    id = savedString,
+                    createdTimeAsString = savedString.substringAfterLast("#"),
+                    keywords = savedString.substringAfter("#"),
+                    keywordAmount = getAmountOfKeywords(savedString),
+                    pos = position
+                )
+
+            private fun getAmountOfKeywords(savedString: String) =
+                savedString.count{ it == ',' }
+
+            override fun storedSetToItemList(storedSet: Set<String>): List<TimelineObject> =
+                storedSet.map { storedToItem(it) }
         }
 
         /**
@@ -329,6 +359,10 @@ class TimelineViewModel(
 
                     TimelineObject.Type.INPUT_MELODY ->
                         InputMelody.storedToItem(stringValue, position)
+
+                    TimelineObject.Type.KEYWORD ->
+                        Keyword.storedToItem(stringValue, position)
+
                 }
             }
 
@@ -341,8 +375,11 @@ class TimelineViewModel(
 
 
         companion object {
+
+            /***************************List of All Helpers ***************************************/
+
             private fun getAllDefaultHelpers() =
-                listOf(RecordActivity, Image, CaptureSound, InputMelody)
+                listOf(RecordActivity, Image, CaptureSound, InputMelody, Keyword)
 
             /**
              *

@@ -18,24 +18,12 @@ import com.example.cobex.*
  */
 sealed class TimelineStateType : CompositionArtifact.IArtifact {
 
-    /**
-     * Will get a CapturedImageStringSet via [CompositionArtifact]
-     */
     abstract fun getCapturedImagesStringSet(context: Context): Set<String>?
 
-    /**
-     * Will put a CapturedImageStringSet via [CompositionArtifact]
-     */
     abstract fun putCapturedImageStringSet(context: Context, set: Set<String>)
 
-    /**
-     * Will get a RecordActivityStringSet via [CompositionArtifact]
-     */
     abstract fun getRecordedActivitiesStringSet(context: Context): Set<String>?
 
-    /**
-     * Will put a RecordActivitySet via [CompositionArtifact]
-     */
     abstract fun putRecordedActivitiesStringSet(context: Context, set: Set<String>)
 
     abstract fun getInputMelodiesStringSet(context: Context) : Set<String>?
@@ -45,6 +33,10 @@ sealed class TimelineStateType : CompositionArtifact.IArtifact {
     abstract fun getCaptureSoundStringSet(context: Context) : Set<String>?
 
     abstract fun putCaptureSoundStringSet(context: Context, set: Set<String>)
+
+    abstract fun getClickedKeywordStringSet(context: Context) : Set<String>?
+
+    abstract fun putClickedKeywordStringSet(context: Context, set: Set<String>)
 
     object CompositionArtifacts : TimelineStateType() {
 
@@ -78,6 +70,13 @@ sealed class TimelineStateType : CompositionArtifact.IArtifact {
             putStringSet(context, CaptureSound::class.java, set)
         }
 
+        override fun getClickedKeywordStringSet(context: Context): Set<String>? =
+            getStringSet(context, InputKeyword::class.java)
+
+
+        override fun putClickedKeywordStringSet(context: Context, set: Set<String>) {
+            putStringSet(context, InputKeyword::class.java, set)
+        }
 
     }
 
@@ -111,6 +110,14 @@ sealed class TimelineStateType : CompositionArtifact.IArtifact {
 
         override fun putCaptureSoundStringSet(context: Context, set: Set<String>) {
             putStringSet(context, TimelineObject.CaptureSoundItem::class.java, set)
+        }
+
+        override fun getClickedKeywordStringSet(context: Context): Set<String>? =
+            getStringSet(context, TimelineObject.KeywordItem::class.java)
+
+
+        override fun putClickedKeywordStringSet(context: Context, set: Set<String>) {
+            putStringSet(context, TimelineObject.KeywordItem::class.java, set)
         }
     }
 

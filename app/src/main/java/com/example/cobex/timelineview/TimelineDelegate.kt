@@ -84,13 +84,45 @@ sealed class TimelineDelegate {
 
     }
 
+    /**
+     *
+     *  TimelineObject: [TimelineObject.Type.CAPTURE_SOUND]
+     *
+     *  Adapter of Layout [R.layout.timeline_item_capture_sound]
+     *
+     *  ViewHolder: [TimelineViewHolder.CaptureSoundHolder]
+     *
+     */
     private object CaptureSoundAdapter : TimelineDelegate() {
         override fun getType() = TimelineObject.Type.CAPTURE_SOUND
 
     }
 
+    /**
+     *
+     *  TimelineObject: [TimelineObject.Type.INPUT_MELODY]
+     *
+     *  Adapter of Layout [R.layout.timeline_item_input_melody]
+     *
+     *  ViewHolder: [TimelineViewHolder.InputMelodyHolder]
+     *
+     */
     private object InputMelodyAdapter : TimelineDelegate() {
         override fun getType() = TimelineObject.Type.INPUT_MELODY
+
+    }
+
+    /**
+     *
+     *  TimelineObject: [TimelineObject.Type.KEYWORD]
+     *
+     *  Adapter of Layout [R.layout.timeline_item_keyword]
+     *
+     *  ViewHolder: [TimelineViewHolder.KeywordHolder]
+     *
+     */
+    private object KeywordAdapter : TimelineDelegate() {
+        override fun getType() = TimelineObject.Type.KEYWORD
 
     }
 
@@ -108,6 +140,7 @@ sealed class TimelineDelegate {
                 TimelineObject.Type.BIG_IMAGE_ITEM -> BigImageAdapter
                 TimelineObject.Type.CAPTURE_SOUND -> CaptureSoundAdapter
                 TimelineObject.Type.INPUT_MELODY -> InputMelodyAdapter
+                TimelineObject.Type.KEYWORD -> KeywordAdapter
             }
     }
 }

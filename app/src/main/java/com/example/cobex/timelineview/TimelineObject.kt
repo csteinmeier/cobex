@@ -77,6 +77,18 @@ sealed class TimelineObject(
         TimelineObject(id, Type.BIG_IMAGE_ITEM, createdTimeAsString, pos)
 
 
+    /**
+     * Data Class for [R.layout.timeline_item_capture_sound]
+     *
+     * @param id simply the whole string stored in [CompositionArtifact]
+     *
+     * @param createdTimeAsString String in [DateTimeFormatter.ISO_INSTANT] form
+     *
+     * @param mRecord Uri saved as String
+     *
+     * @param pos *default = -1*, should not be set manually, will be set to its adapter position
+     *
+     */
     class CaptureSoundItem(
         id: String,
         createdTimeAsString: String,
@@ -85,6 +97,18 @@ sealed class TimelineObject(
     ) :
     TimelineObject(id, Type.CAPTURE_SOUND, createdTimeAsString, pos)
 
+    /**
+     * Data Class for [R.layout.timeline_item_input_melody]
+     *
+     * @param id simply the whole string stored in [CompositionArtifact]
+     *
+     * @param createdTimeAsString String in [DateTimeFormatter.ISO_INSTANT] form
+     *
+     * @param mRecord Uri saved as String
+     *
+     * @param pos *default = -1*, should not be set manually, will be set to its adapter position
+     *
+     */
     class InputMelodyItem(
         id: String,
         createdTimeAsString: String,
@@ -92,6 +116,27 @@ sealed class TimelineObject(
         pos: Int? = -1
     ) :
         TimelineObject(id, Type.INPUT_MELODY, createdTimeAsString, pos)
+
+    /**
+     * Data Class for [R.layout.timeline_item_keyword]
+     *
+     * @param id simply the whole string stored in [CompositionArtifact]
+     *
+     * @param createdTimeAsString String in [DateTimeFormatter.ISO_INSTANT] form
+     *
+     * @param mRecord Uri saved as String
+     *
+     * @param pos *default = -1*, should not be set manually, will be set to its adapter position
+     *
+     */
+    class KeywordItem(
+        id: String,
+        createdTimeAsString: String,
+        val keywords: String,
+        val keywordAmount: Int,
+        pos: Int? = -1
+    ) :
+        TimelineObject(id, Type.KEYWORD, createdTimeAsString, pos)
 
     /**
      * Used for linking between the individual components of the TimelineViews
@@ -119,9 +164,14 @@ sealed class TimelineObject(
         CAPTURE_SOUND(R.layout.timeline_item_capture_sound),
 
         /**
-         * @see [CaptureSoundItem]
+         * @see [InputMelodyItem]
          */
         INPUT_MELODY(R.layout.timeline_item_input_melody),
+
+        /**
+         * @see [KeywordItem]
+         */
+        KEYWORD(R.layout.timeline_item_keyword)
     }
 
 

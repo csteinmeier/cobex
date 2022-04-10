@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#1A7E74"
+    tools:context="com.example.cobex.CaptureSound">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/timeline_cardView_keyword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <pl.hypeapp.materialtimelineview.MaterialTimelineView
+            android:id="@+id/timeline_martial_view_keyword"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@android:color/holo_purple"
+            app:timeline_bottom_radio_color="@android:color/white"
+            app:timeline_line_color="@android:color/white"
+            app:timeline_margin_start="32dp"
+            app:timeline_position="first"
+            app:timeline_radio_outline_radius="20"
+            app:timeline_radio_radius="12"
+            app:timeline_top_radio_color="@android:color/white"
+            app:timeline_type="item">
+
+            <TextView
+                android:id="@+id/timeline_counter_keyword"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.041"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/timeline_title_keyword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:text="Created: "
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/timeline_counter_keyword"
+                app:layout_constraintTop_toTopOf="@+id/timeline_counter_keyword" />
+
+            <TextView
+                android:id="@+id/timeline_time_keyword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:layout_marginTop="8dp"
+                android:text="TextView"
+                app:layout_constraintStart_toEndOf="@+id/timeline_counter_keyword"
+                app:layout_constraintTop_toTopOf="@+id/timeline_counter_keyword" />
+
+            <ImageView
+                android:id="@+id/timeline_play_sound_keyword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="30dp"/>
+
+
+        </pl.hypeapp.materialtimelineview.MaterialTimelineView>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <pl.hypeapp.materialtimelineview.MaterialTimelineView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        app:layout_constraintStart_toStartOf="@+id/timeline_cardView_keyword"
+        app:layout_constraintTop_toBottomOf="@+id/timeline_cardView_keyword"
+        app:timeline_margin_start="32dp"
+        app:timeline_position="middle"
+        app:timeline_type="line">
+
+    </pl.hypeapp.materialtimelineview.MaterialTimelineView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

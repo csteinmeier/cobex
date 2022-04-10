@@ -13,6 +13,7 @@ import com.example.cobex.R
 import com.example.cobex.ViewHelper
 import kotlinx.android.synthetic.main.timeline_item_capture_sound.view.*
 import kotlinx.android.synthetic.main.timeline_item_input_melody.view.*
+import kotlinx.android.synthetic.main.timeline_item_keyword.view.*
 
 import kotlinx.android.synthetic.main.timeline_item_picture_big.view.*
 import kotlinx.android.synthetic.main.timeline_item_picture_small.view.*
@@ -228,6 +229,29 @@ sealed class TimelineViewHolder(
         }
     }
 
+    private class KeywordHolder(
+        parent: ViewGroup,
+        onTouchHelper: ItemTouchHelper,
+        viewModel: TimelineViewModel
+    ) : TimelineViewHolder(
+        TimelineObject.Type.KEYWORD,
+        parent,
+        onTouchHelper,
+        viewModel
+    ) {
+        override fun bind(item: TimelineObject) : Unit = with(itemView) {
+            item as TimelineObject.KeywordItem
+
+            ViewHelper.TextFieldSimpleTime(
+                itemView.timeline_time_keyword, item.createdTimeAsString, context
+            )
+
+            ViewHelper.SimpleTextField(
+                itemView.timeline_counter_keyword, item.keywordAmount.toString()
+            )
+        }
+    }
+
     companion object {
         /**
          * @return a Holder matching the [TimelineObject.type]
@@ -245,6 +269,7 @@ sealed class TimelineViewHolder(
             TimelineObject.Type.BIG_IMAGE_ITEM  -> BigImageHolder(parent, onTouchHelper, viewModel)
             TimelineObject.Type.INPUT_MELODY -> InputMelodyHolder(parent, onTouchHelper, viewModel)
             TimelineObject.Type.CAPTURE_SOUND -> CaptureSoundHolder(parent, onTouchHelper, viewModel)
+            TimelineObject.Type.KEYWORD -> KeywordHolder(parent, onTouchHelper, viewModel)
         }
     }
 }
