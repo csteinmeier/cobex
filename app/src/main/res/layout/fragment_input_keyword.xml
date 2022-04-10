@@ -15,7 +15,6 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.71"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.499">
@@ -24,46 +23,49 @@
             android:id="@+id/textview_first3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
             android:fontFamily="sans-serif-black"
+
             android:scaleX="1.5"
             android:scaleY="1.5"
-
             android:text="@string/textInputKeyword"
-            android:textColor="#FAFAFA"
-            android:layout_margin="10dp"
-            android:layout_gravity="center"
-            />
+            android:textColor="#FAFAFA" />
 
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/buttonFeelings"
-                android:layout_width="310dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:text="@string/buttonFeelings" />
+                android:text="@string/buttonFeelings"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/counterKeywordsFeeling"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_gravity="center"
                 android:background="@drawable/circle"
+                android:elevation="2dp"
                 android:gravity="center"
-                android:visibility="gone"
+                android:text="0"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#FFFFFF"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/buttonFeelings"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TableLayout
             android:id="@+id/table_feelings"
-            android:layout_width="310dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:stretchColumns="0,1"
             android:visibility="gone">
@@ -212,34 +214,41 @@
 
         </TableLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
             <Button
                 android:id="@+id/buttonEnvironment"
-                android:layout_width="310dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/buttonEnvironment" />
+                android:text="@string/buttonEnvironment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/counterKeywordsEnvironment"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:background="@drawable/circle"
+                android:elevation="2dp"
                 android:gravity="center"
-                android:visibility="gone"
+                android:text="0"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#FFFFFF"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/buttonEnvironment"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <TableLayout
             android:id="@+id/table_env"
-            android:layout_width="310dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:stretchColumns="0,1"
             android:visibility="gone">
@@ -408,35 +417,33 @@
 
         </TableLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/buttonBackCreate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="36dp"
                 android:backgroundTint="#2B2929"
                 android:text="@string/buttonBack"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:strokeColor="#0B0A0A" />
 
-
-            <View
-                android:layout_width="135dp"
-                android:layout_height="0dp" />
 
             <Button
                 android:id="@+id/buttonSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="36dp"
                 android:backgroundTint="#2B2929"
                 android:text="@string/buttonSave"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:strokeColor="#0B0A0A" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </LinearLayout>
 
