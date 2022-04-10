@@ -2,7 +2,6 @@ package com.example.cobex
 
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
-import androidx.lifecycle.LiveData
 import androidx.navigation.fragment.findNavController
 import com.example.cobex.databinding.FragmentInputKeywordBinding
 
@@ -71,7 +69,6 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
         binding.buttonSave.setOnClickListener {
                 if(isKeywordButtonPressed()) {
                     saveKeywordList()
-                    CreateNew.clickedKeyword += 1
                     val recordingmsg = Toast.makeText(activity?.baseContext, "Keyword Set Saved", Toast.LENGTH_LONG) //maybe add index of set
                     recordingmsg.show()
                     listButtonGenericKeyword.forEach { genericButton ->
@@ -85,16 +82,10 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
     }
 
     private fun saveKeywordList(){
-        val previousSets = getStringSet(requireContext(), this.javaClass)
-            ?.toMutableList() ?: mutableListOf()
+        val keywordSetSize = getStringSet(requireContext(), this.javaClass)?.size?: 0
+        val clickedWords = wrapListSetOfButtons(keywordSetSize)
 
-        val wrappedButtons = wrapListSetOfButtons(previousSets.size)
-
-        previousSets.add(wrappedButtons)
-
-        putStringSet(requireContext(), this.javaClass, previousSets.toSet())
-
-        putCounter(requireContext(), this.javaClass, previousSets.size)
+        synchroniseArtifact(requireContext(), clickedWords, InputKeyword::class.java, true)
     }
 
 

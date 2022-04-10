@@ -53,7 +53,7 @@ sealed class TimelineStateType : CompositionArtifact.IArtifact {
             when (type) {
                 TimelineItemType.KEYWORD -> getStringSet(context, TimelineObject.KeywordItem::class.java)
                 TimelineItemType.CAPTURE_SOUND -> getStringSet(context, TimelineObject.CaptureSoundItem::class.java)
-                TimelineItemType.BIG_IMAGE_ITEM -> getStringSet(context, TimelineObject.BigImageItem::class.java)
+                TimelineItemType.BIG_IMAGE_ITEM -> getStringSet(context, TimelineObject.ImageItem::class.java)
                 TimelineItemType.IMAGE_ITEM -> getStringSet(context, TimelineObject.ImageItem::class.java)
                 TimelineItemType.RECORD_ITEM -> getStringSet(context, TimelineObject.RecordItem::class.java)
                 TimelineItemType.INPUT_MELODY -> getStringSet(context, TimelineObject.InputMelodyItem::class.java)
@@ -63,7 +63,7 @@ sealed class TimelineStateType : CompositionArtifact.IArtifact {
             when(type){
                 TimelineItemType.KEYWORD -> putStringSet(context, TimelineObject.KeywordItem::class.java, set)
                 TimelineItemType.CAPTURE_SOUND -> putStringSet(context, TimelineObject.CaptureSoundItem::class.java, set)
-                TimelineItemType.BIG_IMAGE_ITEM -> putStringSet(context, TimelineObject.BigImageItem::class.java, set)
+                TimelineItemType.BIG_IMAGE_ITEM -> putStringSet(context, TimelineObject.ImageItem::class.java, set)
                 TimelineItemType.IMAGE_ITEM -> putStringSet(context, TimelineObject.ImageItem::class.java, set)
                 TimelineItemType.RECORD_ITEM -> putStringSet(context, TimelineObject.RecordItem::class.java, set)
                 TimelineItemType.INPUT_MELODY -> putStringSet(context, TimelineObject.InputMelodyItem::class.java, set)

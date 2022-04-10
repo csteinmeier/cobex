@@ -2,6 +2,7 @@ package com.example.cobex
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -10,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.cobex.databinding.FragmentCaptureSoundBinding
@@ -19,9 +21,12 @@ import com.example.cobex.databinding.FragmentCaptureSoundBinding
  */
 class CaptureSound : Fragment(), CompositionArtifact.IArtifact {
 
-    private var recNo: Int = 1
     private var mRecorder: MediaRecorder? = null
     private var _binding: FragmentCaptureSoundBinding? = null
+
+    private fun getRecNo(context: Context) = getCounter(context, this::class.java) % 5
+    private fun soundFileDir(context: Context) =
+        "${getFileDir(context)}/recording${getRecNo(requireContext())}.mp3"
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -60,6 +65,7 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact {
         web.setBackgroundColor(Color.TRANSPARENT) //for gif without background
         web.loadUrl("file:///android_asset/htmls/gif.html")
         web.visibility= View.INVISIBLE
+
     }
 
     private fun toggleRecording() {
@@ -79,29 +85,23 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact {
         }
     }
 
+
     private fun stopRecording() {
         mRecorder?.stop()
         mRecorder?.release()
 
-        saveInCompositionArtifact(activity?.filesDir?.absolutePath + "/recording"+ recNo + ".mp3")
 
-        if (recNo==5)
-        {
-            recNo = 1
-        }
-        else
-        {
-            recNo++
-        }
-
+        Toast.makeText(activity?.baseContext, "Sound ${getRecNo(requireContext()) + 1} saved", Toast.LENGTH_SHORT).show()
+        val toSave = soundFileDir(requireContext()) + "TIME:" +getTimeStamp(requireContext())
+        synchroniseArtifact(requireContext(), toSave, this::class.java, true)
     }
 
 
     private fun startRecording()
     {
-        getPermissions();
+        getPermissions()
 
-        var outputfile = activity?.filesDir?.absolutePath + "/recording"+ recNo + ".mp3"
+        var outputfile = soundFileDir(requireContext())
 
         mRecorder = MediaRecorder()
         mRecorder?.setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -111,17 +111,6 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact {
 
         mRecorder?.prepare()
         mRecorder?.start()
-    }
-
-    private fun saveInCompositionArtifact(stringToSave: String){
-        markAsSavedIfNotMarkedAsSaved(requireContext(), this::class.java)
-
-        val previousSet = getStringSet(requireContext(), this::class.java)
-            ?.toMutableList()?: mutableListOf()
-
-        previousSet.add(stringToSave +"TIME:"+getTimeStamp(requireContext()))
-
-        putStringSet(requireContext(), this.javaClass, previousSet.toSet())
     }
 
     private fun getPermissions() {

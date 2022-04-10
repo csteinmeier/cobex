@@ -19,7 +19,9 @@ class TimelineViewModel(
     var adapter: TimelineAdapter =
         TimelineAdapter(
             StoredToItemHelper.getList(
-                TimelineStateType.actualTimelineState, context).toMutableList(), this)
+                TimelineStateType.actualTimelineState, context
+            ).toMutableList(), this
+        )
 
     init {
         val itemTouchHelper = TimelineItemHelper(context, adapter)
@@ -52,10 +54,12 @@ class TimelineViewModel(
      */
     fun saveOrderedItems() {
         if (TimelineStateType.actualTimelineState == TimelineStateType.CompositionArtifacts) {
-            putStringSet(context, this.javaClass,
+            putStringSet(
+                context, this.javaClass,
                 adapter.timelineItems
                     .mapIndexed() { index, timelineObject ->
-                        "${timelineObject.type}!" + timelineObject.id + "!$index" }.toSet())
+                        "${timelineObject.type}!" + timelineObject.id + "!$index" }.toSet()
+            )
         }
     }
 
@@ -65,16 +69,18 @@ class TimelineViewModel(
      * @param item which change the list
      */
     fun exchangeItem(item: TimelineObject) {
-        val cList = currentArtifactList(item.type)!!
+        val cList = currentArtifactList(item.type)?.toMutableList()!!
         Log.i("Current List before change", cList.size.toString())
+        Log.e("dasdasd", item.id)
+        Log.e("List", cList.toString())
         cList.remove(cList.find { item.id == it })
         putArtifactList(item.type, TimelineStateType.actualTimelineState, cList.toSet())
         Log.i("Current List after change", cList.size.toString())
 
-        val oList = oppositeArtefactList(item.type)!!
+        val oList = oppositeArtefactList(item.type)?.toMutableList()!!
         Log.i("Opposite List before change", oList.size.toString())
         oList.add(item.id)
-        putArtifactList(item.type, TimelineStateType.getOppositeArtefactType(), oList.toSet())
+        putArtifactList(item.type, TimelineStateType.getOppositeArtefactStateType(), oList.toSet())
         Log.i("Opposite List after change", oList.size.toString())
     }
 
@@ -92,33 +98,13 @@ class TimelineViewModel(
      * *Designed for 2 active Artifact List*
      */
     private fun oppositeArtefactList(type: TimelineObject.Type) =
-        getArtifactList(type, TimelineStateType.getOppositeArtefactType())
+        getArtifactList(type, TimelineStateType.getOppositeArtefactStateType())
 
     /**
      * Used to get a matching list via [CompositionArtifact]
      */
-    private fun getArtifactList(
-        type: TimelineObject.Type, timelineStateType: TimelineStateType
-    ) = when (type) {
-
-        TimelineObject.Type.IMAGE_ITEM ->
-            timelineStateType.getCapturedImagesStringSet(context)?.toMutableList()
-
-        TimelineObject.Type.RECORD_ITEM ->
-            timelineStateType.getRecordedActivitiesStringSet(context)?.toMutableList()
-
-        TimelineObject.Type.BIG_IMAGE_ITEM ->
-            timelineStateType.getCapturedImagesStringSet(context)?.toMutableList()
-
-        TimelineObject.Type.CAPTURE_SOUND ->
-            timelineStateType.getCaptureSoundStringSet(context)?.toMutableList()
-
-        TimelineObject.Type.INPUT_MELODY ->
-            timelineStateType.getInputMelodiesStringSet(context)?.toMutableList()
-
-        TimelineObject.Type.KEYWORD ->
-            timelineStateType.getClickedKeywordStringSet(context)?.toMutableList()
-    }
+    private fun getArtifactList(type: TimelineObject.Type, timelineStateType: TimelineStateType) =
+        timelineStateType.getStringSet(context, type)
 
     /**
      * Used to put a list via [CompositionArtifact]
@@ -127,26 +113,7 @@ class TimelineViewModel(
         type: TimelineObject.Type,
         timelineStateType: TimelineStateType,
         set: Set<String>
-    ) = when (type) {
-
-        TimelineObject.Type.IMAGE_ITEM ->
-            timelineStateType.putCapturedImageStringSet(context, set)
-
-        TimelineObject.Type.RECORD_ITEM ->
-            timelineStateType.putRecordedActivitiesStringSet(context, set)
-
-        TimelineObject.Type.BIG_IMAGE_ITEM ->
-            timelineStateType.putCapturedImageStringSet(context, set)
-
-        TimelineObject.Type.INPUT_MELODY ->
-            timelineStateType.putInputMelodiesStringSet(context, set)
-
-        TimelineObject.Type.CAPTURE_SOUND ->
-            timelineStateType.putCaptureSoundStringSet(context, set)
-
-        TimelineObject.Type.KEYWORD ->
-            timelineStateType.putClickedKeywordStringSet(context, set)
-    }
+    ) = timelineStateType.putStringSet(context, type, set)
 
     /**
      * Helper class to convert a String to a [TimelineObject] or a StringSet to a list of
@@ -193,12 +160,11 @@ class TimelineViewModel(
 
             override fun getList(timelineStateType: TimelineStateType, context: Context):
                     List<TimelineObject>? =
-                timelineStateType.getCapturedImagesStringSet(context)
+                timelineStateType.getStringSet(context, TimelineItemType.IMAGE_ITEM)
                     ?.let { storedSetToItemList(it) }
 
-            override fun storedToItem(
-                savedString: String, position: Int?
-            ) = TimelineObject.ImageItem(
+            override fun storedToItem(savedString: String, position: Int?)
+            = TimelineObject.ImageItem(
                 id = savedString,
                 createdTimeAsString = savedString.substringAfter("app_images/"),
                 imgSrc = savedString,
@@ -210,12 +176,11 @@ class TimelineViewModel(
 
 
         }
-
         private object RecordActivity : StoredToItemHelper() {
 
             override fun getList(timelineStateType: TimelineStateType, context: Context):
                     List<TimelineObject>? =
-                timelineStateType.getRecordedActivitiesStringSet(context)
+                timelineStateType.getStringSet(context, TimelineObject.Type.RECORD_ITEM)
                     ?.let { storedSetToItemList(it) }
 
 
@@ -239,11 +204,11 @@ class TimelineViewModel(
                 timelineStateType: TimelineStateType,
                 context: Context
             ): List<TimelineObject>? =
-                timelineStateType.getCaptureSoundStringSet(context)
+                timelineStateType.getStringSet(context, TimelineObject.Type.CAPTURE_SOUND)
                     ?.let { storedSetToItemList(it) }
 
 
-            override fun storedToItem(savedString: String, position: Int?)=
+            override fun storedToItem(savedString: String, position: Int?) =
                 TimelineObject.CaptureSoundItem(
                     id = savedString,
                     createdTimeAsString = savedString.substringAfter("TIME:"),
@@ -262,10 +227,10 @@ class TimelineViewModel(
                 timelineStateType: TimelineStateType,
                 context: Context
             ): List<TimelineObject>? =
-                timelineStateType.getInputMelodiesStringSet(context)
+                timelineStateType.getStringSet(context, TimelineObject.Type.INPUT_MELODY)
                     ?.let { storedSetToItemList(it) }
 
-            override fun storedToItem(savedString: String, position: Int?)=
+            override fun storedToItem(savedString: String, position: Int?) =
                 TimelineObject.InputMelodyItem(
                     id = savedString,
                     createdTimeAsString = savedString.substringAfter("TIME:"),
@@ -284,10 +249,10 @@ class TimelineViewModel(
                 timelineStateType: TimelineStateType,
                 context: Context
             ): List<TimelineObject>? =
-                timelineStateType.getClickedKeywordStringSet(context)
+                timelineStateType.getStringSet(context, TimelineObject.Type.KEYWORD)
                     ?.let { storedSetToItemList(it) }
 
-            override fun storedToItem(savedString: String, position: Int?)=
+            override fun storedToItem(savedString: String, position: Int?) =
                 TimelineObject.KeywordItem(
                     id = savedString,
                     createdTimeAsString = savedString.substringAfterLast("#"),
@@ -297,7 +262,7 @@ class TimelineViewModel(
                 )
 
             private fun getAmountOfKeywords(savedString: String) =
-                savedString.count{ it == ',' }
+                savedString.count { it == ',' }.plus(1)
 
             override fun storedSetToItemList(storedSet: Set<String>): List<TimelineObject> =
                 storedSet.map { storedToItem(it) }
@@ -307,9 +272,7 @@ class TimelineViewModel(
          * Special class for the [TimelineObject]
          * which have already been put into a certain order by the user.
          */
-        private object ModifiedList : CompositionArtifact.IArtifact {
-
-            fun isModifiedListAvailable(context: Context) = storedList(context)?.isNotEmpty()
+        private object SortedList : CompositionArtifact.IArtifact {
 
             private fun storedList(context: Context) =
                 getStringSet(context, TimelineViewModel::class.java)
@@ -343,7 +306,7 @@ class TimelineViewModel(
             private fun storedToItem(savedString: String): TimelineObject {
                 val stringValue = stringFromSavedValue(savedString)
                 val position = positionFromSavedValue(savedString)
-                Log.e("sdasd", stringValue.substringBefore("!"))
+
 
                 return when (typeFromSavedValue(savedString)!!) {
 
@@ -360,9 +323,7 @@ class TimelineViewModel(
                     TimelineObject.Type.INPUT_MELODY ->
                         InputMelody.storedToItem(stringValue, position)
 
-                    TimelineObject.Type.KEYWORD ->
-                        Keyword.storedToItem(stringValue, position)
-
+                    TimelineObject.Type.KEYWORD -> Keyword.storedToItem(stringValue, position)
                 }
             }
 
@@ -401,15 +362,17 @@ class TimelineViewModel(
              */
             fun getList(timelineStateType: TimelineStateType, context: Context):
                     List<TimelineObject> {
-                val mListAvailable = ModifiedList.isModifiedListAvailable(context)
+
+                val logString = "Returned List:"
+
+                val sList = SortedList.getSortedList(context)
                 val isActualProject = timelineStateType == TimelineStateType.CompositionArtifacts
 
                 val defaultList = getDefaultList(timelineStateType, context)
                 val defaultListAsString = defaultList.map { it.id }
 
-                if (mListAvailable == true && isActualProject) {
-                    val sortedList = ModifiedList.getSortedList(context)
-                    val sortedListAsString = sortedList.map { it.id }
+                if (sList.isNotEmpty() && isActualProject) {
+                    val sortedListAsString = sList.map { it.id }
 
                     // if modified list is  not the same
                     val defaultEqModified = defaultListAsString.containsAll(sortedListAsString)
@@ -420,11 +383,14 @@ class TimelineViewModel(
                     return if (defaultEqModified && modifiedEqDefault
                         && defaultListAsString.size == sortedListAsString.size
                     ) {
-                        sortedList
+                        Log.i(logString, "Sorted list")
+                        sList
                     } else {
-                        adjustedSortedList(defaultList, sortedList)
+                        Log.i(logString, "Adjusted sorted list")
+                        adjustedSortedList(defaultList, sList)
                     }
                 }
+                Log.i(logString, "Default list")
                 return defaultList
             }
 
@@ -434,31 +400,40 @@ class TimelineViewModel(
                     .flatMap { it.getList(timelineStateType, context)!! }
                     .sortedBy { it.createdTimeAsString }
 
+
             private fun adjustedSortedList(
                 defaultList: List<TimelineObject>, modifiedList: List<TimelineObject>
-            ):
-                    List<TimelineObject> {
+            ): List<TimelineObject> {
 
-                //check if some values was deleted / take only values that are also in default list
                 val sortedList = defaultList
-                    .flatMap { dIt ->
-                        modifiedList
-                            .filter { it.id == dIt.id }
-                            .sortedBy { it.pos }
-                    }
+                    .getSameObjects(modifiedList)
+                    .toSet()
+                    .sortedBy { it.pos }
                     .toMutableList()
 
-                // Take the last taken value as reference
-                val earliestValue =
-                    sortedList.maxByOrNull { it.createdTimeAsString }?.createdTimeAsString!!
-
-                // Add all new taken values to the list
-                sortedList.addAll(
-                    defaultList.filter { it.createdTimeAsString > earliestValue }
-                )
+                sortedList.addAll(defaultList.getNotSameObjects(modifiedList))
 
                 return sortedList
             }
         }
     }
 }
+
+fun <T : TimelineObject> List<T>.getSameObjects(otherList: List<T>) =
+    this.flatMap { inputListItems -> otherList.filter { it.id == inputListItems.id } }
+
+/**
+ * @param otherList should be the smaller list!
+ * @return list with items which are not in both lists
+ */
+fun <T : TimelineObject> List<T>.getNotSameObjects(otherList: List<T>): MutableList<T> {
+    val t1 = this.toMutableList()
+    val t2 = mutableListOf<TimelineObject>()
+    for (i in this.indices)
+        for (j in otherList.indices)
+            if(this[i].createdTimeAsString == otherList[j].createdTimeAsString)
+                t2.add(this[i])
+    t1.removeAll(t2)
+    return t1
+}
+

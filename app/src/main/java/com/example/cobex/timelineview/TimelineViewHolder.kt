@@ -163,7 +163,7 @@ sealed class TimelineViewHolder(
         onTouchHelper: ItemTouchHelper,
         viewModel: TimelineViewModel
     ) : TimelineViewHolder(
-        TimelineObject.Type.BIG_IMAGE_ITEM,
+        TimelineItemType.BIG_IMAGE_ITEM,
         parent,
         onTouchHelper,
         viewModel
@@ -188,7 +188,7 @@ sealed class TimelineViewHolder(
         onTouchHelper: ItemTouchHelper,
         viewModel: TimelineViewModel
     ) : TimelineViewHolder(
-        TimelineObject.Type.CAPTURE_SOUND,
+        TimelineItemType.CAPTURE_SOUND,
         parent,
         onTouchHelper,
         viewModel
@@ -211,7 +211,7 @@ sealed class TimelineViewHolder(
         onTouchHelper: ItemTouchHelper,
         viewModel: TimelineViewModel
     ) : TimelineViewHolder(
-        TimelineObject.Type.INPUT_MELODY,
+        TimelineItemType.INPUT_MELODY,
         parent,
         onTouchHelper,
         viewModel
@@ -234,7 +234,7 @@ sealed class TimelineViewHolder(
         onTouchHelper: ItemTouchHelper,
         viewModel: TimelineViewModel
     ) : TimelineViewHolder(
-        TimelineObject.Type.KEYWORD,
+        TimelineItemType.KEYWORD,
         parent,
         onTouchHelper,
         viewModel
@@ -264,12 +264,12 @@ sealed class TimelineViewHolder(
             onTouchHelper: ItemTouchHelper,
             viewModel: TimelineViewModel
         ) = when (type) {
-            TimelineObject.Type.IMAGE_ITEM -> ImageHolder(parent, onTouchHelper, viewModel)
-            TimelineObject.Type.RECORD_ITEM -> RecordedActivityHolder( parent, onTouchHelper, viewModel)
-            TimelineObject.Type.BIG_IMAGE_ITEM  -> BigImageHolder(parent, onTouchHelper, viewModel)
-            TimelineObject.Type.INPUT_MELODY -> InputMelodyHolder(parent, onTouchHelper, viewModel)
-            TimelineObject.Type.CAPTURE_SOUND -> CaptureSoundHolder(parent, onTouchHelper, viewModel)
-            TimelineObject.Type.KEYWORD -> KeywordHolder(parent, onTouchHelper, viewModel)
+            TimelineItemType.IMAGE_ITEM -> ImageHolder(parent, onTouchHelper, viewModel)
+            TimelineItemType.RECORD_ITEM -> RecordedActivityHolder( parent, onTouchHelper, viewModel)
+            TimelineItemType.BIG_IMAGE_ITEM  -> BigImageHolder(parent, onTouchHelper, viewModel)
+            TimelineItemType.INPUT_MELODY -> InputMelodyHolder(parent, onTouchHelper, viewModel)
+            TimelineItemType.CAPTURE_SOUND -> CaptureSoundHolder(parent, onTouchHelper, viewModel)
+            TimelineItemType.KEYWORD -> KeywordHolder(parent, onTouchHelper, viewModel)
         }
     }
 }

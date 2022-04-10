@@ -173,7 +173,12 @@ class CaptureAction : Fragment(), PermissionHelper.IRequirePermission,
                                 ?: listOf()
 
                         if (shouldSave(savedDetectedActivities, detectedActivity.toString()))
-                            saveActivity(context, detectedActivity.toString())
+                            synchroniseArtifact(
+                                context,
+                                detectedActivity.toString(),
+                                CaptureAction::class.java,
+                                true
+                            )
                     }
                 }
             }
@@ -182,15 +187,6 @@ class CaptureAction : Fragment(), PermissionHelper.IRequirePermission,
         private fun shouldSave(savedActivities: List<String>, detectedActivity: String): Boolean =
             savedActivities.isEmpty() ||
                     savedActivities.last().substringAfterLast(":") != detectedActivity
-
-
-        private fun saveActivity(context: Context, activity: String) {
-            val set = getStringSet(context, javaClass)?.toMutableSet() ?: mutableSetOf()
-            set.add("${getTimeStamp(context)}:$activity")
-            putStringSet(context, this.javaClass, set)
-        }
-
-
     }
 
     private fun getPendingIntent(): PendingIntent =

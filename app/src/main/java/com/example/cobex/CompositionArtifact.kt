@@ -90,8 +90,8 @@ class CompositionArtifact private constructor(private val context: Context) {
     private fun <T>createInstanceOfPreference(clazz: Class<T>) =
         getPreferencesEditor().putBoolean(clazz.name, true).apply()
 
-    private fun deleteTakenPictures() =
-        getImageFileDir().deleteRecursively()
+    private fun deleteTakenFiles() =
+        getFileDir().deleteRecursively()
 
     private fun putStringSet(identifier: String, set: Set<String>) =
         getPreferencesEditor().putStringSet("${Keywords.SET.name} $identifier", set).apply()
@@ -117,8 +117,9 @@ class CompositionArtifact private constructor(private val context: Context) {
     private fun getString(identifier: String) =
         getPreferences().getString(identifier, "")
 
-    fun getImageFileDir(): File =
-        ContextWrapper(context).getDir("images", Context.MODE_PRIVATE)
+    fun getFileDir(): File =
+        context.filesDir.absoluteFile.absoluteFile
+
 
     fun getTimeStamp(): String = DateTimeFormatter.ISO_INSTANT.format(Instant.now())
 
@@ -151,8 +152,7 @@ class CompositionArtifact private constructor(private val context: Context) {
         fun clearSavedInstance(context: Context){
             CompositionArtifact.getInstance(context).clearSavedInstance()
 
-            if(getStringSet(context, CapturePicture::class.java)!!.isNotEmpty())
-                CompositionArtifact.getInstance(context).deleteTakenPictures()
+            CompositionArtifact.getInstance(context).deleteTakenFiles()
 
         }
 
@@ -213,13 +213,23 @@ class CompositionArtifact private constructor(private val context: Context) {
         fun getTimeStamp(context: Context): String =
             CompositionArtifact.getInstance(context).getTimeStamp()
 
-        fun <T>putString(context: Context, clazz: Class<T>, string: String) =
-            CompositionArtifact.getInstance(context).putString(clazz.name, string)
-
-        fun <T>getString(context: Context, clazz: Class<T>) =
-            CompositionArtifact.getInstance(context).getString(clazz.name)
-
+        fun <T>synchroniseArtifact(
+            context: Context, stringToSyn: String, clazz: Class<T>, toSave: Boolean){
+            markAsSavedIfNotMarkedAsSaved(context, clazz)
+            val list = getStringSet(context, clazz)?.toMutableList()?: mutableListOf()
+            when(toSave){
+                true -> list.add(stringToSyn)
+                false -> list.remove(stringToSyn)
+            }
+            //CreateNew.counterMap[clazz.name] to list.size
+            putCounter(context, clazz, list.size)
+            putStringSet(context, clazz, list.toSet())
+        }
+        fun getFileDir(context: Context) =
+            CompositionArtifact.getInstance(context).getFileDir()
     }
+
+
 
 }
 

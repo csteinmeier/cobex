@@ -38,7 +38,7 @@ sealed class TimelineDelegate {
     /**
      * @return [TimelineObject.Type]
      */
-    abstract fun getType(): TimelineObject.Type
+    abstract fun getType(): TimelineItemType
 
 
     /**==========================  ALL ADAPTERS ==========================*/
@@ -54,7 +54,7 @@ sealed class TimelineDelegate {
      *
      */
     private object ImageAdapter : TimelineDelegate() {
-        override fun getType() = TimelineObject.Type.IMAGE_ITEM
+        override fun getType() = TimelineItemType.IMAGE_ITEM
     }
 
     /**
@@ -67,7 +67,7 @@ sealed class TimelineDelegate {
      *
      */
     private object RecordAdapter : TimelineDelegate() {
-        override fun getType() = TimelineObject.Type.RECORD_ITEM
+        override fun getType() = TimelineItemType.RECORD_ITEM
     }
 
     /**
@@ -80,7 +80,7 @@ sealed class TimelineDelegate {
      *
      */
     private object BigImageAdapter : TimelineDelegate() {
-        override fun getType() = TimelineObject.Type.BIG_IMAGE_ITEM
+        override fun getType() = TimelineItemType.BIG_IMAGE_ITEM
 
     }
 
@@ -94,7 +94,7 @@ sealed class TimelineDelegate {
      *
      */
     private object CaptureSoundAdapter : TimelineDelegate() {
-        override fun getType() = TimelineObject.Type.CAPTURE_SOUND
+        override fun getType() = TimelineItemType.CAPTURE_SOUND
 
     }
 
@@ -108,7 +108,7 @@ sealed class TimelineDelegate {
      *
      */
     private object InputMelodyAdapter : TimelineDelegate() {
-        override fun getType() = TimelineObject.Type.INPUT_MELODY
+        override fun getType() = TimelineItemType.INPUT_MELODY
 
     }
 
@@ -122,7 +122,7 @@ sealed class TimelineDelegate {
      *
      */
     private object KeywordAdapter : TimelineDelegate() {
-        override fun getType() = TimelineObject.Type.KEYWORD
+        override fun getType() = TimelineItemType.KEYWORD
 
     }
 
@@ -135,12 +135,12 @@ sealed class TimelineDelegate {
          */
         fun getAdapter(type: TimelineObject.Type) =
             when (type) {
-                TimelineObject.Type.IMAGE_ITEM -> ImageAdapter
-                TimelineObject.Type.RECORD_ITEM -> RecordAdapter
-                TimelineObject.Type.BIG_IMAGE_ITEM -> BigImageAdapter
-                TimelineObject.Type.CAPTURE_SOUND -> CaptureSoundAdapter
-                TimelineObject.Type.INPUT_MELODY -> InputMelodyAdapter
-                TimelineObject.Type.KEYWORD -> KeywordAdapter
+                TimelineItemType.IMAGE_ITEM -> ImageAdapter
+                TimelineItemType.RECORD_ITEM -> RecordAdapter
+                TimelineItemType.BIG_IMAGE_ITEM -> BigImageAdapter
+                TimelineItemType.CAPTURE_SOUND -> CaptureSoundAdapter
+                TimelineItemType.INPUT_MELODY -> InputMelodyAdapter
+                TimelineItemType.KEYWORD -> KeywordAdapter
             }
     }
 }

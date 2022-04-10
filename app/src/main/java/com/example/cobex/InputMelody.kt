@@ -1,6 +1,7 @@
 package com.example.cobex
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -36,12 +37,10 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
     private val mPlayer: MediaPlayer? = null
 
     // we can record up to 5 melodies for each experience
-    var mFileName1: String? = null
-    var mFileName2: String? = null
-    var mFileName3: String? = null
-    var mFileName4: String? = null
-    var mFileName5: String? = null
-    var recordingno = 1
+
+    private fun getRecNo(context: Context) = getCounter(context, this::class.java) % 5
+    private fun melodyFileDir(context: Context) =
+        "${getFileDir(context)}/audiorec${getRecNo(context)}.3gp"
 
     var mStartRecording = true
     var mStartPlaying = false
@@ -54,16 +53,6 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         _binding = FragmentInputMelodyBinding.inflate(inflater, container, false)
 
         //mFileName1 = activity?.externalCacheDir?.absolutePath  <-- use if recordings should be only temporary
-        mFileName1 = activity?.filesDir?.absolutePath
-        mFileName1 += "/audiorec1.3gp"
-        mFileName2 = activity?.filesDir?.absolutePath
-        mFileName2 += "/audiorec2.3gp"
-        mFileName3 = activity?.filesDir?.absolutePath
-        mFileName3 += "/audiorec3.3gp"
-        mFileName4 = activity?.filesDir?.absolutePath
-        mFileName4 += "/audiorec4.3gp"
-        mFileName5 = activity?.filesDir?.absolutePath
-        mFileName5 += "/audiorec5.3gp"
 
         getPermissionToRecordAudio()
 
@@ -187,15 +176,6 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
             startRecording()
         } else {
             stopRecording()
-            if (recordingno == 1) {
-                val recordingmsg = Toast.makeText(activity?.baseContext, "Song " + 5 + " saved", Toast.LENGTH_SHORT)
-                recordingmsg.show()
-            } else {
-                val temprecordingno = recordingno - 1
-                val recordingmsg = Toast.makeText(activity?.baseContext,"Song $temprecordingno Saved", Toast.LENGTH_LONG)
-                saveInCompositionArtifact("${activity?.filesDir?.absolutePath}/audiorec$temprecordingno.3gp")
-                recordingmsg.show()
-            }
         }
     }
 
@@ -203,17 +183,10 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         mRecorder?.stop()
         mRecorder?.release()
         mRecorder = null
-    }
 
-    private fun saveInCompositionArtifact(stringToSave: String){
-        markAsSavedIfNotMarkedAsSaved(requireContext(), this::class.java)
-
-        val previousSet = getStringSet(requireContext(), this::class.java)
-            ?.toMutableList()?: mutableListOf()
-
-        previousSet.add(stringToSave+"TIME:"+getTimeStamp(requireContext()))
-
-        putStringSet(requireContext(), this.javaClass, previousSet.toSet())
+        Toast.makeText(activity?.baseContext, "Song ${getRecNo(requireContext()) + 1} saved", Toast.LENGTH_SHORT).show()
+        val toSave = melodyFileDir(requireContext()) + "TIME:" +getTimeStamp(requireContext())
+        synchroniseArtifact(requireContext(), toSave, this::class.java, true)
     }
 
     fun getPermissionToRecordAudio() {
@@ -241,28 +214,8 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         mRecorder?.setAudioSource(MediaRecorder.AudioSource.DEFAULT)
         mRecorder?.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
 
-        when (recordingno) {
-            1 -> {
-                mRecorder?.setOutputFile(mFileName1)
-                recordingno++
-            }
-            2 -> {
-                mRecorder?.setOutputFile(mFileName2)
-                recordingno++
-            }
-            3 -> {
-                mRecorder?.setOutputFile(mFileName3)
-                recordingno++
-            }
-            4 -> {
-                mRecorder?.setOutputFile(mFileName4)
-                recordingno++
-            }
-            5 -> {
-                mRecorder?.setOutputFile(mFileName5)
-                recordingno = 1
-            }
-        }
+
+        mRecorder?.setOutputFile(melodyFileDir(requireContext()))
 
         mRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
         mRecorder?.prepare()

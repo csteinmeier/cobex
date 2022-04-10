@@ -5,6 +5,8 @@ import com.example.cobex.CompositionArtifact
 import java.time.format.DateTimeFormatter
 import com.example.cobex.CaptureAction
 
+typealias TimelineItemType = TimelineObject.Type
+
 /**
  * Data classes for each Layout and its Views
  * Also used to Link the Adapter with their matching Holder
@@ -173,6 +175,5 @@ sealed class TimelineObject(
          */
         KEYWORD(R.layout.timeline_item_keyword)
     }
-
 
 }
