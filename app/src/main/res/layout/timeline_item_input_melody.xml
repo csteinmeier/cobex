@@ -33,11 +33,12 @@
                 android:id="@+id/timeline_image_view_input_melody"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:src="@drawable/play"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.041"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"  />
 
             <TextView
                 android:id="@+id/timeline_title_input_melody"
@@ -48,17 +49,49 @@
                 android:text="Created: "
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/timeline_image_view_input_melody"
-                app:layout_constraintTop_toTopOf="@+id/timeline_image_view_input_melody" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/timeline_duration_title_input_melody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Duration: "
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/timeline_title_input_melody"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/timeline_time_input_melody"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
                 android:text="TextView"
                 app:layout_constraintStart_toEndOf="@+id/timeline_image_view_input_melody"
-                app:layout_constraintTop_toTopOf="@+id/timeline_title_input_melody" />
+                app:layout_constraintTop_toBottomOf="@+id/timeline_title_input_melody" />
 
+            <TextView
+                android:id="@+id/timeline_duration_input_melody"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="TextView"
+                app:layout_constraintStart_toEndOf="@+id/timeline_duration_title_input_melody"
+                app:layout_constraintTop_toTopOf="@+id/timeline_duration_title_input_melody" />
+
+
+            <ProgressBar
+                android:id="@+id/timeline_progressbar_input_melody"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="80dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timeline_duration_input_melody"
+                app:layout_constraintVertical_bias="0.647" />
 
             <ImageView
                 android:id="@+id/timeline_play_sound_input_melody"

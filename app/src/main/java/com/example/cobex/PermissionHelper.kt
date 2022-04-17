@@ -17,8 +17,12 @@ object PermissionHelper {
 
     const val FRAGMENT_CAPTURE_ACTIVITY_CODE = 110
 
+    const val FRAGMENT_CAPTURE_SOUND_CODE = 120
+
     const val CAMARA_REQUEST_CODE = 11
     const val ACTIVITY_RECOGNITION_REQUEST_CODE = 43
+
+
 
 
     /**

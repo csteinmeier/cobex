@@ -94,6 +94,7 @@ sealed class TimelineObject(
         id: String,
         createdTimeAsString: String,
         val mRecord: String,
+        val musicType: Int,
         pos: Int? = -1
     ) :
     TimelineObject(id, Type.CAPTURE_SOUND, createdTimeAsString, pos)

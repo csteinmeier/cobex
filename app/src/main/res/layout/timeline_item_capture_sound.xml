@@ -40,7 +40,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/timeline_title_input_melody"
+                android:id="@+id/timeline_title_capture_sound"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -48,26 +48,48 @@
                 android:text="Created: "
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/timeline_imageView_capture_sound"
-                app:layout_constraintTop_toTopOf="@+id/timeline_imageView_capture_sound" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/timeline_duration_title_capture_sound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Duration: "
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/timeline_title_capture_sound"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/timeline_time_capture_sound"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="8dp"
                 android:text="TextView"
                 app:layout_constraintStart_toEndOf="@+id/timeline_imageView_capture_sound"
-                app:layout_constraintTop_toTopOf="@+id/timeline_imageView_capture_sound" />
+                app:layout_constraintTop_toBottomOf="@+id/timeline_title_capture_sound" />
 
-            <ImageView
-                android:id="@+id/timeline_play_sound_input_melody"
+            <TextView
+                android:id="@+id/timeline_duration_capture_sound"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="TextView"
+                app:layout_constraintStart_toEndOf="@+id/timeline_duration_title_capture_sound"
+                app:layout_constraintTop_toTopOf="@+id/timeline_duration_title_capture_sound" />
+
+            <ProgressBar
+                android:id="@+id/timeline_progressbar_capture_sound"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="80dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="30dp"/>
+                app:layout_constraintVertical_bias="0.863" />
 
 
         </pl.hypeapp.materialtimelineview.MaterialTimelineView>

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cobex.CompositionArtifact
+import com.example.cobex.R
 
 /**
  *
@@ -212,9 +213,19 @@ class TimelineViewModel(
                 TimelineObject.CaptureSoundItem(
                     id = savedString,
                     createdTimeAsString = savedString.substringAfter("TIME:"),
-                    mRecord = savedString.substringBefore("TIME:"),
+                    mRecord = extractRecord(savedString),
+                    musicType = extractMusicType(savedString),
                     pos = position
                 )
+
+            private fun extractMusicType(savedString: String): Int {
+                val type = savedString.substringBefore("/data")
+                return if(type == "ENV") R.drawable.ic_nature_24
+                    else R.drawable.ic_music_note_24
+            }
+
+            private fun extractRecord(savedString: String) =
+                "/data${savedString.substringAfter("/data").substringBefore("TIME:")}"
 
             override fun storedSetToItemList(storedSet: Set<String>): List<TimelineObject> =
                 storedSet.map { storedToItem(it) }
