@@ -1,15 +1,14 @@
 package com.example.cobex
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.cobex.capture_action.CaptureAction
 import com.example.cobex.databinding.FragmentCreateNewBinding
-import kotlinx.android.synthetic.main.recyclerview_picture_list_items.*
 
 /**
  * A simple [Fragment] subclass.

@@ -6,15 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cobex.CaptureAction
-import com.example.cobex.CaptureSound
 import com.example.cobex.Extensions.toLayout
 import com.example.cobex.R
 import com.example.cobex.ViewHelper
+import com.example.cobex.capture_action.Activities
+import com.example.cobex.timelineview.TimelineViewHolder.Companion.getHolder
 import kotlinx.android.synthetic.main.timeline_item_capture_sound.view.*
 import kotlinx.android.synthetic.main.timeline_item_input_melody.view.*
 import kotlinx.android.synthetic.main.timeline_item_keyword.view.*
-
 import kotlinx.android.synthetic.main.timeline_item_picture_big.view.*
 import kotlinx.android.synthetic.main.timeline_item_picture_small.view.*
 import kotlinx.android.synthetic.main.timeline_item_recorded_activity.view.*
@@ -133,7 +132,7 @@ sealed class TimelineViewHolder(
 
         override fun bind(item: TimelineObject): Unit = with(itemView) {
             item as TimelineObject.RecordItem
-            val detectedActivity = CaptureAction.Activities.values()
+            val detectedActivity = Activities.values()
                 .find { it.name == item.detectedActivity }
 
             ViewHelper.TextFieldSimpleTime(

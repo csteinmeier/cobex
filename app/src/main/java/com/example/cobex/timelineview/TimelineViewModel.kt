@@ -176,7 +176,7 @@ class TimelineViewModel(
 
 
         }
-        private object RecordActivity : StoredToItemHelper() {
+        private object CaptureAction : StoredToItemHelper() {
 
             override fun getList(timelineStateType: TimelineStateType, context: Context):
                     List<TimelineObject>? =
@@ -189,8 +189,8 @@ class TimelineViewModel(
             ) =
                 TimelineObject.RecordItem(
                     id = savedString,
-                    createdTimeAsString = savedString.substringBeforeLast(':'),
-                    detectedActivity = savedString.substringAfterLast(':'),
+                    createdTimeAsString = savedString.substringAfter("TIME:"),
+                    detectedActivity = savedString.substringBefore("TIME:"),
                     pos = position
                 )
 
@@ -315,7 +315,7 @@ class TimelineViewModel(
                     TimelineObject.Type.BIG_IMAGE_ITEM -> Image.storedToItem(stringValue, position)
 
                     TimelineObject.Type.RECORD_ITEM ->
-                        RecordActivity.storedToItem(stringValue, position)
+                        CaptureAction.storedToItem(stringValue, position)
 
                     TimelineObject.Type.CAPTURE_SOUND ->
                         CaptureSound.storedToItem(stringValue, position)
@@ -340,7 +340,7 @@ class TimelineViewModel(
             /***************************List of All Helpers ***************************************/
 
             private fun getAllDefaultHelpers() =
-                listOf(RecordActivity, Image, CaptureSound, InputMelody, Keyword)
+                listOf(CaptureAction, Image, CaptureSound, InputMelody, Keyword)
 
             /**
              *

@@ -1,9 +1,8 @@
 package com.example.cobex.timelineview
 
-import com.example.cobex.R
 import com.example.cobex.CompositionArtifact
+import com.example.cobex.R
 import java.time.format.DateTimeFormatter
-import com.example.cobex.CaptureAction
 
 typealias TimelineItemType = TimelineObject.Type
 
@@ -126,7 +125,7 @@ sealed class TimelineObject(
      *
      * @param createdTimeAsString String in [DateTimeFormatter.ISO_INSTANT] form
      *
-     * @param mRecord Uri saved as String
+     * @param keywords as a long string
      *
      * @param pos *default = -1*, should not be set manually, will be set to its adapter position
      *
