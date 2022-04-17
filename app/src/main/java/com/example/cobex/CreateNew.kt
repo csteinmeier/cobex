@@ -1,10 +1,14 @@
 package com.example.cobex
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.cobex.capture_action.CaptureAction
@@ -74,8 +78,15 @@ class CreateNew : Fragment(), CompositionArtifact.IArtifact{
             setCounter(counterRhythms, getCounter(requireContext(), CreateRhythm::class.java))
             setCounter(counterPictures, getCounter(requireContext(), CapturePicture::class.java))
             setCounter(counterMelodies, getCounter(requireContext(), InputMelody::class.java))
-            setCounter(counterActions, getCounter(requireContext(), CaptureAction::class.java))
+            
+            setRecordSignal(recordActivity)
         }
+    }
+
+    private fun setRecordSignal(view: View){
+        val isOn = getBoolean(requireContext(), CaptureAction::class.java)
+        if(isOn)  view.visibility = View.VISIBLE
+        else view.visibility = View.GONE
     }
 
     private fun setCounter(textView: TextView, counter: Int){
