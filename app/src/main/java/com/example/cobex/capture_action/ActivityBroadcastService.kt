@@ -41,7 +41,7 @@ class ActivityBroadcastService : BroadcastReceiver(), CompositionArtifact.IArtif
                     if (shouldSave(savedDetectedActivities, detectedActivity.toString()))
                         synchroniseArtifact(
                             context,
-                            detectedActivity.toString()+ "TIME:" + getTimeStamp(context),
+                             "${detectedActivity?.name}:TIME:${getTimeStamp(context)}",
                             CaptureAction::class.java, true
                         )
                 }
@@ -51,5 +51,5 @@ class ActivityBroadcastService : BroadcastReceiver(), CompositionArtifact.IArtif
 
     private fun shouldSave(savedActivities: List<String>, detectedActivity: String): Boolean =
         savedActivities.isEmpty() ||
-                savedActivities.last().substringAfter("TIME:") != detectedActivity
+                savedActivities.last().substringBefore(":TIME:") != detectedActivity
 }

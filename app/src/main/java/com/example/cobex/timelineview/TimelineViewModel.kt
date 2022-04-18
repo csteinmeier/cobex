@@ -190,8 +190,8 @@ class TimelineViewModel(
             ) =
                 TimelineObject.RecordItem(
                     id = savedString,
-                    createdTimeAsString = savedString.substringAfter("TIME:"),
-                    detectedActivity = savedString.substringBefore("TIME:"),
+                    createdTimeAsString = savedString.substringAfter(":TIME:"),
+                    detectedActivity = savedString.substringBefore(":TIME:"),
                     pos = position
                 )
 
