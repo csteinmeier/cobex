@@ -2,7 +2,6 @@ package com.example.cobex
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Build
@@ -14,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.cobex.databinding.FragmentInputMelodyBinding
 
@@ -27,7 +25,9 @@ import com.example.cobex.databinding.FragmentInputMelodyBinding
  * Use the [InputMelody.newInstance] factory method to
  * create an instance of this fragment.
  */
-class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelectedListener, CompositionArtifact.IArtifact {
+class InputMelody : Fragment(), View.OnTouchListener,
+    AdapterView.OnItemSelectedListener, CompositionArtifact.IArtifact,
+    PermissionHelper.IRequirePermission {
 
     private var _binding: FragmentInputMelodyBinding? = null
     private lateinit var event: ByteArray
@@ -54,8 +54,6 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
 
         //mFileName1 = activity?.externalCacheDir?.absolutePath  <-- use if recordings should be only temporary
 
-        getPermissionToRecordAudio()
-
         return binding.root
     }
 
@@ -64,7 +62,7 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         super.onViewCreated(view, savedInstanceState)
 
         binding.record.setOnClickListener {
-            record(view)
+            hasPermission { record() }
         }
 
         binding.play.setOnClickListener {
@@ -158,7 +156,22 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    fun record(view: View?) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        helperOnRequestPermissionResult(
+            requestCode = requestCode,
+            permission = permissions,
+            grantResults = grantResults,
+            hasPermission = { record() },
+            null
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun record() {
         onRecord(mStartRecording)
         if (mStartRecording) {
             binding.record.setText("Finish")
@@ -189,23 +202,6 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         synchroniseArtifact(requireContext(), toSave, this::class.java, true)
     }
 
-    fun getPermissionToRecordAudio() {
-        if (activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.RECORD_AUDIO) } != PackageManager.PERMISSION_GRANTED ||
-            activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.READ_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED ||
-            activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED )
-        {
-            // The permission is NOT already granted. Check if the user has been asked about this permission already and denied it.
-            // If so, we want to give more explanation about why the permission is needed.
-            // Fire off an async request to actually get the permission. This will show the standard permission request dialog UI
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ), 13
-            )
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun startRecording() {
@@ -364,5 +360,18 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
     override fun onNothingSelected(parent: AdapterView<*>?) {
         midihelper.selectInstrument(1)
     }
+
+    override fun mainPermission() = Manifest.permission.RECORD_AUDIO
+
+    override fun fragment() = this
+
+    override fun fragmentCode() = PermissionHelper.FRAGMENT_INPUT_MELODY_CODE
+
+    override fun requiredPermissions(): Array<out String> =
+        arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
 
 }
