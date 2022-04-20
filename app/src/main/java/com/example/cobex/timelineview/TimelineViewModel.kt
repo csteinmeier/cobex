@@ -220,7 +220,7 @@ class TimelineViewModel(
 
             private fun extractMusicType(savedString: String): Int {
                 val type = savedString.substringBefore("/data")
-                return if(type == "ENV") R.drawable.ic_nature_24
+                return if(type == "TYPE:ENV") R.drawable.ic_nature_24
                     else R.drawable.ic_music_note_24
             }
 
