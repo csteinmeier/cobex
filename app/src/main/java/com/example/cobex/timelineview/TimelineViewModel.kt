@@ -167,7 +167,7 @@ class TimelineViewModel(
             override fun storedToItem(savedString: String, position: Int?)
             = TimelineObject.ImageItem(
                 id = savedString,
-                createdTimeAsString = savedString.substringAfter("app_images/"),
+                createdTimeAsString = savedString.substringAfter("images/"),
                 imgSrc = savedString,
                 pos = position
             )

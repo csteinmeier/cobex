@@ -90,8 +90,10 @@ class CompositionArtifact private constructor(private val context: Context) {
     private fun <T>createInstanceOfPreference(clazz: Class<T>) =
         getPreferencesEditor().putBoolean(clazz.name, true).apply()
 
-    private fun deleteTakenFiles() =
+    private fun deleteTakenFiles() {
         getFileDir().deleteRecursively()
+        getImageFileDir().deleteRecursively()
+    }
 
     private fun putStringSet(identifier: String, set: Set<String>) =
         getPreferencesEditor().putStringSet("${Keywords.SET.name} $identifier", set).apply()
@@ -119,6 +121,9 @@ class CompositionArtifact private constructor(private val context: Context) {
 
     fun getFileDir(): File =
         context.filesDir.absoluteFile.absoluteFile
+
+    fun getImageFileDir(): File =
+        ContextWrapper(context).getDir("images", Context.MODE_PRIVATE)
 
 
     fun getTimeStamp(): String = DateTimeFormatter.ISO_INSTANT.format(Instant.now())

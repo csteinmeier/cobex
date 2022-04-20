@@ -46,7 +46,13 @@ object Extensions {
             progressBar.progress = mediaPlayer.currentPosition
 
             // Call this thread again after 15 milliseconds => ~ 1000/60fps
-            progressBar.postDelayed(this, 15)
+            if(!mediaPlayer.isPlaying) {
+                mediaPlayer.stop()
+                mediaPlayer.release()
+            }
+            else
+                progressBar.postDelayed(this, 15)
+
         }
     }
 

@@ -260,7 +260,7 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
                 private fun saveImageInternal(bitmap: Bitmap): File {
                     val artifact = CompositionArtifact.getInstance(context)
                     val timeStamp = artifact.getTimeStamp()
-                    val file = File("${artifact.getFileDir()}/images/", "$timeStamp.jpg")
+                    val file = File(artifact.getImageFileDir(), "$timeStamp.jpg")
                     try {
                         val stream: OutputStream = FileOutputStream(file)
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
