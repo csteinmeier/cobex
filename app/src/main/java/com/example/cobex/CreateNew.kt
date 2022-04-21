@@ -1,29 +1,29 @@
 package com.example.cobex
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.cobex.capture_action.CaptureAction
 import com.example.cobex.databinding.FragmentCreateNewBinding
 
 /**
  * A simple [Fragment] subclass.
  */
-class CreateNew : Fragment() {
+class CreateNew : Fragment(), CompositionArtifact.IArtifact{
 
     private var _binding: FragmentCreateNewBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
-    companion object{
-        var clickedKeyword = 0
-        var takenPicture = 0
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,11 +69,24 @@ class CreateNew : Fragment() {
         binding.buttonNext.setOnClickListener {
             findNavController().navigate(R.id.action_CreateNew_to_timeLineView)
         }
-        
 
-        setCounter(binding.counterKeywordsFeeling, clickedKeyword)
-        setCounter(binding.counterPictures, takenPicture)
 
+
+        binding.apply {
+            setCounter(counterKeywords, getCounter(requireContext(), InputKeyword::class.java))
+            setCounter(counterSounds, getCounter(requireContext(), CaptureSound::class.java))
+            setCounter(counterRhythms, getCounter(requireContext(), CreateRhythm::class.java))
+            setCounter(counterPictures, getCounter(requireContext(), CapturePicture::class.java))
+            setCounter(counterMelodies, getCounter(requireContext(), InputMelody::class.java))
+            
+            setRecordSignal(recordActivity)
+        }
+    }
+
+    private fun setRecordSignal(view: View){
+        val isOn = getBoolean(requireContext(), CaptureAction::class.java)
+        if(isOn)  view.visibility = View.VISIBLE
+        else view.visibility = View.GONE
     }
 
     private fun setCounter(textView: TextView, counter: Int){

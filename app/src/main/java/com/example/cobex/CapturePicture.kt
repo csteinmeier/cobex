@@ -6,7 +6,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -26,14 +24,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cobex.Extensions.toImage
 import com.example.cobex.databinding.FragmentCapturePictureBinding
+import com.example.cobex.timelineview.TimelineObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 
-class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelper.IRequirePermission {
+class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, CompositionArtifact.IArtifact {
 
     private val binding get() = _binding!!
     private var _binding: FragmentCapturePictureBinding? = null
@@ -54,18 +51,18 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
         binding.buttonCapture.setOnClickListener {
             hasPermission { takePicture() }
         }
-        CreateNew.takenPicture = 0
+
         pictureListManager = PictureListManager(
-            context                 = requireContext(),
-            recycler                = binding.recyclerPictures,
-            numberOfColumns         = 3,
-            lifecycleOwner          = viewLifecycleOwner,
-            listOfSavedImages       = getSavedImagesPath(),
-            buttonCapturePicture    = binding.buttonCapture
+            context = requireContext(),
+            recycler = binding.recyclerPictures,
+            numberOfColumns = 3,
+            lifecycleOwner = viewLifecycleOwner,
+            listOfSavedImages = getSavedImagesPath(),
+            buttonCapturePicture = binding.buttonCapture
         )
     }
 
-    private fun takePicture(){
+    private fun takePicture() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(intent, PermissionHelper.CAMARA_REQUEST_CODE)
     }
@@ -82,11 +79,19 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
             grantResults = grantResults,
             hasPermission = { takePicture() },
             null
-            )
+        )
     }
 
-    private fun getSavedImagesPath(): List<String>? =
-        getStringSet(requireContext(), this.javaClass)?.toList()
+    private fun getSavedImagesPath(): List<String> {
+        val mutableSet = mutableSetOf<String>()
+        mutableSet.apply {
+            getStringSet(requireContext(), CapturePicture::class.java)?.let { addAll(it) }
+            getStringSet(requireContext(), TimelineObject.ImageItem::class.java)?.let { addAll(it) }
+            getStringSet(requireContext(), TimelineObject.BigImageItem::class.java)?.let { addAll(it) }
+        }
+        Log.e("dasdasd", mutableSet.toString())
+        return mutableSet.toList()
+    }
 
     /**
      *
@@ -114,7 +119,7 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
         lifecycleOwner: LifecycleOwner,
         listOfSavedImages: List<String>? = null,
         buttonCapturePicture: Button,
-    ) {
+    ) : CompositionArtifact.IArtifact {
         private var pictureListAdapter: PictureListAdapter? = null
 
         init {
@@ -140,10 +145,8 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
 
         fun getAmountOfTakenPictures(): Int? = pictureListAdapter?.getAmountTakenPictures()
 
-        fun getFilesOffCapturedPictures() : List<File?>? = pictureListAdapter?.getFileToCapturedPictures()
 
         fun isPictureTaken(): Boolean = pictureListAdapter?.getCapturedPictures()?.size != 0
-
 
 
         /** Adapter Class of a Recyclerview
@@ -156,7 +159,7 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
             val lifecycleOwner: LifecycleOwner,
             val context: Context,
             val list: List<String>? = null,
-            val capturePicture: Button
+            val captureButton: Button
         ) :
             RecyclerView.Adapter<PictureListAdapter.ImageHolder>() {
             private val listHolder = mutableListOf<ImageHolder>()
@@ -164,30 +167,23 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
             /**Adds a new Bitmap Picture to the List*/
             fun addNewImage(bitmap: Bitmap) {
                 listHolder.find { holder ->
-                    !holder.isBitmapPicture() }
+                    !holder.isBitmapPicture()
+                }
                     ?.addImage(bitmap)
-
-                incrementAmountOfPictures()
             }
 
             /**Adds a new Bitmap Picture to the List*/
             fun addNewImage(path: String) {
                 listHolder.find { holder ->
-                    !holder.isBitmapPicture() }
+                    !holder.isBitmapPicture()
+                }
                     ?.addImage(path)
-
-                incrementAmountOfPictures()
-            }
-
-            private fun incrementAmountOfPictures(){
-                CreateNew.takenPicture += 1
-                capturePicture.isEnabled = CreateNew.takenPicture <= itemCount
             }
 
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
                 val inflater = LayoutInflater.from(parent.context)
                     .inflate(R.layout.recyclerview_picture_list_items, parent, false)
-                val imageHolder = ImageHolder(inflater, context)
+                val imageHolder = ImageHolder(inflater, context, captureButton)
                 listHolder.add(imageHolder)
                 return imageHolder
             }
@@ -212,17 +208,18 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
             fun getCapturedPictures() =
                 listHolder
                     .filter { it.isBitmapPicture() }
-                    .map    { it.getBitmapPicture() }
+                    .map { it.getBitmapPicture() }
 
             fun getFileToCapturedPictures() =
                 listHolder
                     .filter { it.isBitmapPicture() }
-                    .map    { it.getBitmapFile() }
+                    .map { it.getBitmapFile() }
 
 
             /**Holder Class with LiveData, will change the Image if an taken picture is set*/
-            class ImageHolder(item: View, val context: Context) : RecyclerView.ViewHolder(item),
-                Observer<ImageHolder.CapturedPicture> {
+            class ImageHolder(item: View, val context: Context, val captureButton: Button)
+                : RecyclerView.ViewHolder(item), Observer<ImageHolder.CapturedPicture>,
+                CompositionArtifact.IArtifact {
 
                 private val _pictures = MutableLiveData<CapturedPicture>()
                 val picture: LiveData<CapturedPicture> = _pictures
@@ -233,20 +230,30 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
                     image.setOnClickListener { }
                 }
 
+
                 /**Sets the value of the LiveData to the picture*/
                 fun addImage(newPicture: Bitmap) {
+                    val file = saveImageInternal(newPicture)
                     _pictures.value = CapturedPicture(
-                        bitmap  = newPicture,
-                        file    = saveImageInternal(newPicture)
+                        bitmap = newPicture,
+                        file = file
                     )
+                    synchroniseArtifact(
+                        context,
+                        file.absolutePath,
+                        CapturePicture::class.java,
+                        true
+                    )
+                    setButtonEnable()
                 }
 
-                fun addImage(filePath : String) {
+                fun addImage(filePath: String) {
                     val file = File(filePath)
                     _pictures.value = CapturedPicture(
-                        bitmap  = filePath.toImage(context),
-                        file    = file
+                        bitmap = filePath.toImage(context),
+                        file = file
                     )
+                    setButtonEnable()
                 }
 
 
@@ -268,12 +275,18 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
 
                 /**Removes the taken picture*/
                 fun removeImage() {
+                    val filePath = picture.value?.file?.absolutePath
                     _pictures.value?.file?.delete()
                     _pictures.value = CapturedPicture(placeholder = R.drawable.ic_lense_24)
-                    CreateNew.takenPicture -= 1
+                    synchroniseArtifact(context, filePath!!, CapturePicture::class.java, false)
+                    setButtonEnable()
                 }
 
-                fun isBitmapPicture() =  picture.value?.bitmap != null
+                fun setButtonEnable() {
+                    captureButton.isEnabled = getCounter(context, CapturePicture::class.java) < 9
+                }
+
+                fun isBitmapPicture() = picture.value?.bitmap != null
 
                 fun getBitmapPicture() = picture.value?.bitmap
 
@@ -314,22 +327,9 @@ class CapturePicture : Fragment(), CompositionArtifact.IArtifact, PermissionHelp
 
     override fun onDestroy() {
         super.onDestroy()
-        if (pictureListManager.isPictureTaken()) {
-
-            markAsSavedIfNotMarkedAsSaved(requireContext(), this.javaClass)
-
-            putCounter(requireContext(), this.javaClass, pictureListManager.getAmountOfTakenPictures()!!)
-            putStringSet(requireContext(), this.javaClass, getPictureUriSetToSave())
-
-        }
         _binding = null
     }
 
-    private fun getPictureUriSetToSave(): Set<String> =
-        pictureListManager.getFilesOffCapturedPictures()
-            ?.filterIsInstance<File>()
-            ?.map { Uri.parse(it.absolutePath).toString() }
-            ?.toSet()!!
 
     override fun mainPermission() = Manifest.permission.CAMERA
 

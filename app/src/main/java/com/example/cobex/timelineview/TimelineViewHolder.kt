@@ -1,22 +1,28 @@
 package com.example.cobex.timelineview
 
+import android.app.Activity
+import android.media.MediaPlayer
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cobex.CaptureAction
-import com.example.cobex.CaptureSound
+import com.example.cobex.Extensions.prepareProgressWithSound
 import com.example.cobex.Extensions.toLayout
 import com.example.cobex.R
 import com.example.cobex.ViewHelper
+import com.example.cobex.capture_action.Activities
+import com.example.cobex.timelineview.TimelineViewHolder.Companion.getHolder
 import kotlinx.android.synthetic.main.timeline_item_capture_sound.view.*
 import kotlinx.android.synthetic.main.timeline_item_input_melody.view.*
-
+import kotlinx.android.synthetic.main.timeline_item_keyword.view.*
 import kotlinx.android.synthetic.main.timeline_item_picture_big.view.*
 import kotlinx.android.synthetic.main.timeline_item_picture_small.view.*
 import kotlinx.android.synthetic.main.timeline_item_recorded_activity.view.*
+import java.util.*
 
 
 /**
@@ -132,7 +138,7 @@ sealed class TimelineViewHolder(
 
         override fun bind(item: TimelineObject): Unit = with(itemView) {
             item as TimelineObject.RecordItem
-            val detectedActivity = CaptureAction.Activities.values()
+            val detectedActivity = Activities.values()
                 .find { it.name == item.detectedActivity }
 
             ViewHelper.TextFieldSimpleTime(
@@ -162,7 +168,7 @@ sealed class TimelineViewHolder(
         onTouchHelper: ItemTouchHelper,
         viewModel: TimelineViewModel
     ) : TimelineViewHolder(
-        TimelineObject.Type.BIG_IMAGE_ITEM,
+        TimelineItemType.BIG_IMAGE_ITEM,
         parent,
         onTouchHelper,
         viewModel
@@ -183,47 +189,101 @@ sealed class TimelineViewHolder(
 
 
     private class CaptureSoundHolder(
-        parent: ViewGroup,
+        private val parent: ViewGroup,
         onTouchHelper: ItemTouchHelper,
         viewModel: TimelineViewModel
     ) : TimelineViewHolder(
-        TimelineObject.Type.CAPTURE_SOUND,
+        TimelineItemType.CAPTURE_SOUND,
         parent,
         onTouchHelper,
         viewModel
     ) {
+        var recordRes : String? = null
+
         override fun bind(item: TimelineObject) : Unit = with(itemView) {
             item as TimelineObject.CaptureSoundItem
+
+            recordRes = item.mRecord
+
+            ViewHelper.TextFieldDuration(
+                itemView.timeline_duration_capture_sound, item.mRecord, context
+            )
 
             ViewHelper.TextFieldSimpleTime(
                 itemView.timeline_time_capture_sound, item.createdTimeAsString, context
             )
-            ViewHelper.SoundButton(
-                itemView.timeline_imageView_capture_sound, item.mRecord, context
+
+            ViewHelper.ImageViewDrawable(
+                itemView.timeline_imageView_capture_sound, item.musicType, context
             )
+        }
+
+        override fun onSingleTapUp(p0: MotionEvent?): Boolean {
+            val mPlayer = MediaPlayer.create(parent.context, recordRes?.toUri())
+            val progressBar = itemView.timeline_progressbar_capture_sound
+            progressBar.prepareProgressWithSound(mPlayer)
+            mPlayer.start()
+            return true
         }
     }
 
 
     private class InputMelodyHolder(
-        parent: ViewGroup,
+        private val parent: ViewGroup,
         onTouchHelper: ItemTouchHelper,
         viewModel: TimelineViewModel
     ) : TimelineViewHolder(
-        TimelineObject.Type.INPUT_MELODY,
+        TimelineItemType.INPUT_MELODY,
         parent,
         onTouchHelper,
         viewModel
     ) {
+
+        var recordRes : String? = null
+
         override fun bind(item: TimelineObject) : Unit = with(itemView) {
             item as TimelineObject.InputMelodyItem
+
+            recordRes = item.mRecord
 
             ViewHelper.TextFieldSimpleTime(
                 itemView.timeline_time_input_melody, item.createdTimeAsString, context
             )
 
-            ViewHelper.SoundButton(
-                itemView.timeline_image_view_input_melody, item.mRecord, context
+            ViewHelper.TextFieldDuration(
+                itemView.timeline_duration_input_melody, item.mRecord, context
+            )
+        }
+
+        override fun onSingleTapUp(p0: MotionEvent?): Boolean {
+            val mPlayer = MediaPlayer.create(parent.context, recordRes?.toUri())
+            val progressBar = itemView.timeline_progressbar_input_melody
+            progressBar.prepareProgressWithSound(mPlayer)
+            mPlayer.start()
+            return true
+        }
+
+    }
+
+    private class KeywordHolder(
+        parent: ViewGroup,
+        onTouchHelper: ItemTouchHelper,
+        viewModel: TimelineViewModel
+    ) : TimelineViewHolder(
+        TimelineItemType.KEYWORD,
+        parent,
+        onTouchHelper,
+        viewModel
+    ) {
+        override fun bind(item: TimelineObject) : Unit = with(itemView) {
+            item as TimelineObject.KeywordItem
+
+            ViewHelper.TextFieldSimpleTime(
+                itemView.timeline_time_keyword, item.createdTimeAsString, context
+            )
+
+            ViewHelper.SimpleTextField(
+                itemView.timeline_counter_keyword, item.keywordAmount.toString()
             )
         }
     }
@@ -240,11 +300,12 @@ sealed class TimelineViewHolder(
             onTouchHelper: ItemTouchHelper,
             viewModel: TimelineViewModel
         ) = when (type) {
-            TimelineObject.Type.IMAGE_ITEM -> ImageHolder(parent, onTouchHelper, viewModel)
-            TimelineObject.Type.RECORD_ITEM -> RecordedActivityHolder( parent, onTouchHelper, viewModel)
-            TimelineObject.Type.BIG_IMAGE_ITEM  -> BigImageHolder(parent, onTouchHelper, viewModel)
-            TimelineObject.Type.INPUT_MELODY -> InputMelodyHolder(parent, onTouchHelper, viewModel)
-            TimelineObject.Type.CAPTURE_SOUND -> CaptureSoundHolder(parent, onTouchHelper, viewModel)
+            TimelineItemType.IMAGE_ITEM -> ImageHolder(parent, onTouchHelper, viewModel)
+            TimelineItemType.RECORD_ITEM -> RecordedActivityHolder( parent, onTouchHelper, viewModel)
+            TimelineItemType.BIG_IMAGE_ITEM  -> BigImageHolder(parent, onTouchHelper, viewModel)
+            TimelineItemType.INPUT_MELODY -> InputMelodyHolder(parent, onTouchHelper, viewModel)
+            TimelineItemType.CAPTURE_SOUND -> CaptureSoundHolder(parent, onTouchHelper, viewModel)
+            TimelineItemType.KEYWORD -> KeywordHolder(parent, onTouchHelper, viewModel)
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.cobex
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -17,7 +18,6 @@ object NotificationHelper {
         )
     }
 
-
     /**
      * Will set a Notification and let a NotificationManager notify an Notification
      *
@@ -26,7 +26,8 @@ object NotificationHelper {
      * @param title default title = [channel.channelID]
      * @param text default text = [channel.description]
      */
-    fun setNotification(context: Context, channel: CHANNEL , icon: Int?, title: String?, text: String?){
+    @SuppressLint("UnspecifiedImmutableFlag")
+    fun setNotification(context: Context, channel: CHANNEL, icon: Int?, title: String?, text: String?){
         val channelText = channel.channelID
         val mNotification =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -40,7 +41,8 @@ object NotificationHelper {
             .setContentText(text ?: channel.description)
             .setAutoCancel(true)
         val intent = Intent(context, context::class.java)
-        val pi = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pi = PendingIntent.getActivity(context, 0, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT)
         notification.setContentIntent(pi)
         mNotification.notify(0, notification.build())
     }

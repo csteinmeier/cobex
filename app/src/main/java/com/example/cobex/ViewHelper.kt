@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import com.example.cobex.Extensions.millisToMinFormat
 import com.example.cobex.Extensions.toImage
 import com.example.cobex.ViewHelper.SimpleTextField
 
@@ -121,6 +122,27 @@ abstract class ViewHelper<V : View, T>(
 
         override fun initView(): Unit =
             run { view.text = TimeHelper.fromCreatedTillNowEasyString(context!!, resource) }
+    }
+
+    /**
+     * Call this class with a **TextField** and a **resource** with a String in form of
+     * [DateTimeFormatter.ISO]
+     * and this class will set the text automatically to the **TextField**.
+     *
+     * @param context required !
+     *
+     * @sample TextFieldSimpleTime.initView
+     */
+    class TextFieldDuration(view: TextView, resource: String, context: Context) :
+        ViewHelper<TextView, String>(view, resource, context) {
+        init {
+            initView()
+        }
+
+        override fun initView() {
+            val mediaPlayer = MediaPlayer.create(context, resource.toUri())
+            view.text = mediaPlayer.duration.millisToMinFormat()
+        }
     }
 
     class SoundButton(view: ImageView, resource: String, context: Context) :

@@ -23,6 +23,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.185" />
 
+
     <Button
         android:id="@+id/buttonNext"
         android:layout_width="wrap_content"
@@ -49,8 +50,9 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="305dp"
-        android:layout_height="144dp"
+        android:layout_width="312dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,167 +60,200 @@
         app:layout_constraintTop_toTopOf="@+id/textview_first3">
 
 
-        <Button
-            android:id="@+id/buttonKeyword"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonKeywordInput" />
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/buttonInputMelody"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonMelodyInput" />
+            <Button
+                android:id="@+id/buttonKeyword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonKeywordInput"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/buttonInputRhythm"
+            <TextView
+                android:id="@+id/counterKeywords"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/circle"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:text="0"
+                android:layout_marginEnd="5dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/buttonKeyword"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonRhythmInput" />
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/buttonInputMelody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonMelodyInput"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/counterMelodies"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/circle"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:text="0"
+                android:layout_marginEnd="5dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/buttonInputMelody"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/buttonInputRhythm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonRhythmInput"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/counterRhythms"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/circle"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:layout_marginEnd="5dp"
+                android:text="0"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/buttonInputRhythm"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="305dp"
-        android:layout_height="144dp"
+        android:layout_width="312dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/buttonBackCreate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <Button
-            android:id="@+id/buttonInputMic"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonMicInput"
-            tools:layout_editor_absoluteX="56dp"
-            tools:layout_editor_absoluteY="573dp" />
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/buttonInputCam"
+            <Button
+                android:id="@+id/buttonInputMic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonMicInput"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/counterSounds"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/circle"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:layout_marginEnd="5dp"
+                android:text="0"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/buttonInputMic"
+                app:layout_constraintTop_toTopOf="parent"  />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonCamInput" />
+            android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/buttonInputActivity"
+            <Button
+                android:id="@+id/buttonInputCam"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonCamInput"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/counterPictures"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/circle"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:text="0"
+                android:layout_marginEnd="5dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/buttonInputCam"
+                app:layout_constraintTop_toTopOf="parent"  />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonActionInput" />
+            android:layout_height="match_parent">
 
+            <Button
+                android:id="@+id/buttonInputActivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonActionInput"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/recordActivity"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/rec_on"
+                android:elevation="2dp"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:layout_marginEnd="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/buttonInputActivity"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.521" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/counterKeywordsFeeling"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/circle"
-        android:gravity="center"
-        android:text="0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.901"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.305" />
-
-
-    <TextView
-        android:id="@+id/counterMelodies"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/circle"
-        android:gravity="center"
-        android:text="0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.901"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.372" />
-
-    <TextView
-        android:id="@+id/counterRhythms"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/circle"
-        android:gravity="center"
-        android:text="0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.901"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.440" />
-
-    <TextView
-        android:id="@+id/counterSounds"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/circle"
-        android:gravity="center"
-        android:text="0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.901"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.616" />
-
-    <TextView
-        android:id="@+id/counterPictures"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/circle"
-        android:gravity="center"
-        android:text="0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.901"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.684" />
-
-    <TextView
-        android:id="@+id/counterActions"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/circle"
-        android:gravity="center"
-        android:text="0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="#FFFFFF"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.901"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.752" />
 
 
     <View
@@ -227,9 +262,9 @@
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         tools:layout_editor_absoluteX="-14dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

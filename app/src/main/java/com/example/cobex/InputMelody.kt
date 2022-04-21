@@ -1,7 +1,7 @@
 package com.example.cobex
 
 import android.Manifest
-import android.content.pm.PackageManager
+import android.content.Context
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Build
@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.cobex.databinding.FragmentInputMelodyBinding
 
@@ -26,7 +25,9 @@ import com.example.cobex.databinding.FragmentInputMelodyBinding
  * Use the [InputMelody.newInstance] factory method to
  * create an instance of this fragment.
  */
-class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelectedListener, CompositionArtifact.IArtifact {
+class InputMelody : Fragment(), View.OnTouchListener,
+    AdapterView.OnItemSelectedListener, CompositionArtifact.IArtifact,
+    PermissionHelper.IRequirePermission {
 
     private var _binding: FragmentInputMelodyBinding? = null
     private lateinit var event: ByteArray
@@ -36,12 +37,10 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
     private val mPlayer: MediaPlayer? = null
 
     // we can record up to 5 melodies for each experience
-    var mFileName1: String? = null
-    var mFileName2: String? = null
-    var mFileName3: String? = null
-    var mFileName4: String? = null
-    var mFileName5: String? = null
-    var recordingno = 1
+
+    private fun getRecNo(context: Context) = getCounter(context, this::class.java) % 5
+    private fun melodyFileDir(context: Context) =
+        "${getFileDir(context)}/audiorec${getRecNo(context)}.3gp"
 
     var mStartRecording = true
     var mStartPlaying = false
@@ -54,18 +53,6 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         _binding = FragmentInputMelodyBinding.inflate(inflater, container, false)
 
         //mFileName1 = activity?.externalCacheDir?.absolutePath  <-- use if recordings should be only temporary
-        mFileName1 = activity?.filesDir?.absolutePath
-        mFileName1 += "/audiorec1.3gp"
-        mFileName2 = activity?.filesDir?.absolutePath
-        mFileName2 += "/audiorec2.3gp"
-        mFileName3 = activity?.filesDir?.absolutePath
-        mFileName3 += "/audiorec3.3gp"
-        mFileName4 = activity?.filesDir?.absolutePath
-        mFileName4 += "/audiorec4.3gp"
-        mFileName5 = activity?.filesDir?.absolutePath
-        mFileName5 += "/audiorec5.3gp"
-
-        getPermissionToRecordAudio()
 
         return binding.root
     }
@@ -75,7 +62,7 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         super.onViewCreated(view, savedInstanceState)
 
         binding.record.setOnClickListener {
-            record(view)
+            hasPermission { record() }
         }
 
         binding.play.setOnClickListener {
@@ -169,7 +156,22 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    fun record(view: View?) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        helperOnRequestPermissionResult(
+            requestCode = requestCode,
+            permission = permissions,
+            grantResults = grantResults,
+            hasPermission = { record() },
+            null
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun record() {
         onRecord(mStartRecording)
         if (mStartRecording) {
             binding.record.setText("Finish")
@@ -187,15 +189,6 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
             startRecording()
         } else {
             stopRecording()
-            if (recordingno == 1) {
-                val recordingmsg = Toast.makeText(activity?.baseContext, "Song " + 5 + " saved", Toast.LENGTH_SHORT)
-                recordingmsg.show()
-            } else {
-                val temprecordingno = recordingno - 1
-                val recordingmsg = Toast.makeText(activity?.baseContext,"Song $temprecordingno Saved", Toast.LENGTH_LONG)
-                saveInCompositionArtifact("${activity?.filesDir?.absolutePath}/audiorec$temprecordingno.3gp")
-                recordingmsg.show()
-            }
         }
     }
 
@@ -203,36 +196,12 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         mRecorder?.stop()
         mRecorder?.release()
         mRecorder = null
+
+        Toast.makeText(activity?.baseContext, "Song ${getRecNo(requireContext()) + 1} saved", Toast.LENGTH_SHORT).show()
+        val toSave = melodyFileDir(requireContext()) + "TIME:" +getTimeStamp(requireContext())
+        synchroniseArtifact(requireContext(), toSave, this::class.java, true)
     }
 
-    private fun saveInCompositionArtifact(stringToSave: String){
-        markAsSavedIfNotMarkedAsSaved(requireContext(), this::class.java)
-
-        val previousSet = getStringSet(requireContext(), this::class.java)
-            ?.toMutableList()?: mutableListOf()
-
-        previousSet.add(stringToSave+"TIME:"+getTimeStamp(requireContext()))
-
-        putStringSet(requireContext(), this.javaClass, previousSet.toSet())
-    }
-
-    fun getPermissionToRecordAudio() {
-        if (activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.RECORD_AUDIO) } != PackageManager.PERMISSION_GRANTED ||
-            activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.READ_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED ||
-            activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED )
-        {
-            // The permission is NOT already granted. Check if the user has been asked about this permission already and denied it.
-            // If so, we want to give more explanation about why the permission is needed.
-            // Fire off an async request to actually get the permission. This will show the standard permission request dialog UI
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ), 13
-            )
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun startRecording() {
@@ -241,28 +210,8 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
         mRecorder?.setAudioSource(MediaRecorder.AudioSource.DEFAULT)
         mRecorder?.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
 
-        when (recordingno) {
-            1 -> {
-                mRecorder?.setOutputFile(mFileName1)
-                recordingno++
-            }
-            2 -> {
-                mRecorder?.setOutputFile(mFileName2)
-                recordingno++
-            }
-            3 -> {
-                mRecorder?.setOutputFile(mFileName3)
-                recordingno++
-            }
-            4 -> {
-                mRecorder?.setOutputFile(mFileName4)
-                recordingno++
-            }
-            5 -> {
-                mRecorder?.setOutputFile(mFileName5)
-                recordingno = 1
-            }
-        }
+
+        mRecorder?.setOutputFile(melodyFileDir(requireContext()))
 
         mRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
         mRecorder?.prepare()
@@ -411,5 +360,18 @@ class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelected
     override fun onNothingSelected(parent: AdapterView<*>?) {
         midihelper.selectInstrument(1)
     }
+
+    override fun mainPermission() = Manifest.permission.RECORD_AUDIO
+
+    override fun fragment() = this
+
+    override fun fragmentCode() = PermissionHelper.FRAGMENT_INPUT_MELODY_CODE
+
+    override fun requiredPermissions(): Array<out String> =
+        arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
 
 }

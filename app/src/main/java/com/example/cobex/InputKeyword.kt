@@ -2,7 +2,6 @@ package com.example.cobex
 
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +27,7 @@ import com.example.cobex.databinding.FragmentInputKeywordBinding
 
 class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
 
+
     /** Binding */
     private var _binding: FragmentInputKeywordBinding? = null
     private val binding get() = _binding!!
@@ -38,7 +38,6 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
     /**Counter used for the TextView*/
     private lateinit var counterList: List<KeywordCounter>
 
-
     /**All existing keyword types are to be added here*/
     enum class KeywordType{
         FEELING,
@@ -48,16 +47,6 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonBackCreate.setOnClickListener {
-            findNavController().navigate(R.id.action_inputKeyword_to_CreateNew)
-        }
-        binding.buttonSave.setOnClickListener {
-            // todo: save set of keywords with timestamp
-            val recordingmsg= Toast.makeText(activity?.baseContext,"Keyword Set Saved", Toast.LENGTH_LONG) //maybe add index of set
-            recordingmsg.show()
-            // todo: clear selection
-        }
 
         counterList = listOf(
             KeywordCounter(binding.counterKeywordsFeeling, KeywordType.FEELING),
@@ -71,25 +60,43 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
             /**New Generic Buttons should be added here*/
         )
 
-        if(isInstanceOfSavedPreferencesAvailable(requireContext(), this.javaClass))
-            recreateOldState()
-    }
-
-    private fun recreateOldState(){
-        // Set of Saved Buttons
-        val savedSet = getStringSet(requireContext(), this.javaClass)
-
-        //Must be reset otherwise it will simply continue to count on it
-        CreateNew.clickedKeyword = 0
-
-        savedSet?.forEach { s ->
-            listButtonGenericKeyword.forEach{ it.recreateState(extractButtonStringText(s))}
+        binding.buttonBackCreate.setOnClickListener {
+            findNavController().navigate(R.id.action_inputKeyword_to_CreateNew)
         }
+
+
+
+        binding.buttonSave.setOnClickListener {
+                if(isKeywordButtonPressed()) {
+                    saveKeywordList()
+                    val recordingmsg = Toast.makeText(activity?.baseContext, "Keyword Set Saved", Toast.LENGTH_LONG) //maybe add index of set
+                    recordingmsg.show()
+                    listButtonGenericKeyword.forEach { genericButton ->
+                        genericButton.listButtonKeywords.forEach { keywordButton ->
+                            keywordButton.setDeactivated() }
+                    }
+                }
+        }
+
+
     }
 
-    private fun extractButtonStringText(string: String): String {
-        return string.substringAfterLast(':').dropLast(1)
+    private fun saveKeywordList(){
+        val keywordSetSize = getStringSet(requireContext(), this.javaClass)?.size?: 0
+        val clickedWords = wrapListSetOfButtons(keywordSetSize)
+
+        synchroniseArtifact(requireContext(), clickedWords, InputKeyword::class.java, true)
     }
+
+
+    private fun wrapListSetOfButtons(counter: Int) =
+        "$counter#${listOfPressedButtonAsString()}#${getTimeStamp(requireContext())};"
+
+    /**
+     * @return a sequence of all clicked buttons
+     * */
+    private fun listOfPressedButtonAsString() =
+        listButtonGenericKeyword.flatMap { it.getClickedButtonsAsSequence() }.toString()
 
 
     override fun onCreateView(
@@ -138,7 +145,6 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
 
         var state = ButtonState.DEACTIVATED
 
-
         /**Depending on the state, the colors of the buttons are set*/
         protected fun setButtonColour() {
             when(state) {
@@ -146,16 +152,16 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
                     ContextCompat.getColor( context.requireContext(), R.color.orange))
 
                 ButtonState.DEACTIVATED -> button.setBackgroundColor(
-                    ContextCompat.getColor( context.requireContext(), R.color.purple_500))
+                    ContextCompat.getColor( context.requireContext(), R.color.purple_200))
             }
         }
 
-        protected open fun setActivated(){
+        open fun setActivated(){
             state = ButtonState.ACTIVATED
             setButtonColour()
         }
 
-        protected open fun setDeactivated(){
+        open fun setDeactivated(){
             state = ButtonState.DEACTIVATED
             setButtonColour()
         }
@@ -176,10 +182,6 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
             button.setOnClickListener (this)
         }
 
-        fun recreateState(){
-            setActivated()
-        }
-
         override fun toString(): String {
             return ("[KeywordType:${keywordType.name}]:[KeywordName:${button.text}]")
         }
@@ -191,13 +193,11 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
         override fun setActivated() {
             super.setActivated()
             context.updateKeyWordCounter(1, keywordType)
-            CreateNew.clickedKeyword +=1
         }
 
         override fun setDeactivated() {
             super.setDeactivated()
             context.updateKeyWordCounter(-1, keywordType)
-            CreateNew.clickedKeyword -=1
         }
     }
 
@@ -219,7 +219,7 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
         ButtonStruct(button,context) {
         private val table: TableLayout = tableLayout
 
-        private var listButtonKeywords : MutableList<ButtonKeyword> = mutableListOf()
+        var listButtonKeywords : MutableList<ButtonKeyword> = mutableListOf()
 
         init {
             button.setOnClickListener(this)
@@ -250,46 +250,37 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
             setTableVisibility()
         }
 
-        /**
-         * @param button text of the button, serves as identifier
-         *
-         * */
-        fun recreateState(button: String){
-            //Should only be one possible Button
-            val toRecreate = listButtonKeywords.firstOrNull { it.button.text == button }
-            toRecreate?.recreateState()
-        }
 
         /**
          * @return true as soon as one of the buttons is clicked
          * */
-        fun isButtonPressed() : Boolean{
-            return listButtonKeywords.any { it.state == ButtonState.ACTIVATED }
-        }
+        fun isButtonPressed() : Boolean =
+            listButtonKeywords.any { it.state == ButtonState.ACTIVATED }
+
 
         /**
          * @return all buttons that were clicked as sequence
          * */
-        fun getClickedButtonsAsSequence() : Sequence<ButtonKeyword>{
-            return listButtonKeywords.filter { it.state == ButtonState.ACTIVATED }.asSequence()
-        }
+        fun getClickedButtonsAsSequence() : Sequence<ButtonKeyword> =
+            listButtonKeywords.filter { it.state == ButtonState.ACTIVATED }.asSequence()
+
 
         private fun setTableVisibility(){
             table.visibility = if(state == ButtonState.ACTIVATED) View.VISIBLE else View.GONE
         }
 
-        private fun createButtonKeyword(button: Button): ButtonKeyword{
-            return ButtonKeyword(button, context, keywordType)
-        }
+        private fun createButtonKeyword(button: Button): ButtonKeyword =
+            ButtonKeyword(button, context, keywordType)
 
 
-        private fun getButtonSequenceFromTable(): Sequence<Button> {
-            return getRowSequenceFromTable().flatMap { it.children.filterIsInstance<Button>()}
-        }
 
-        private fun getRowSequenceFromTable(): Sequence<TableRow> {
-            return tableLayout.children.filterIsInstance<TableRow>()
-        }
+        private fun getButtonSequenceFromTable(): Sequence<Button> =
+            getRowSequenceFromTable().flatMap { it.children.filterIsInstance<Button>()}
+
+
+        private fun getRowSequenceFromTable(): Sequence<TableRow> =
+            tableLayout.children.filterIsInstance<TableRow>()
+
 
     }
 
@@ -303,28 +294,9 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if(isKeywordButtonPressed()){
 
-            markAsSavedIfNotMarkedAsSaved(requireContext(), this.javaClass)
-
-            val pressedButtons = getSetOfPressedButtons()
-
-            putStringSet(requireContext(), this.javaClass, pressedButtons)
-
-            putCounter(requireContext(), this.javaClass, pressedButtons.size)
-        }
         _binding = null
     }
 
-
-    /**
-     * @return a sequence of all clicked buttons
-     * */
-    private fun getSetOfPressedButtons(): Set<String>{
-        val tmp = mutableSetOf<String>()
-        val allPressedButton = listButtonGenericKeyword.flatMap { it.getClickedButtonsAsSequence()}
-        allPressedButton.forEach{tmp.add(it.toString())}
-        return tmp
-    }
 
 }

@@ -2,6 +2,7 @@ package com.example.cobex
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,8 +62,12 @@ class SecondFragment : Fragment(), CompositionArtifact.IArtifact {
         binding.buttonContinue.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_CreateNew)
 
+
+            /*
             CreateNew.clickedKeyword = getCounter(requireContext(), InputKeyword::class.java)
-            CreateNew.takenPicture = getCounter(requireContext(), CapturePicture::class.java)
+            CreateNew.capturedPicture = getCounter(requireContext(), CapturePicture::class.java)
+
+             */
         }
     }
 
@@ -78,8 +83,6 @@ class SecondFragment : Fragment(), CompositionArtifact.IArtifact {
 
     private fun deleteOldInstanceListener() {
         clearSavedInstance(requireContext())
-        CreateNew.takenPicture = 0
-        CreateNew.clickedKeyword = 0
         markAsProjectStarted(requireContext())
         findNavController().navigate(R.id.action_SecondFragment_to_CreateNew)
     }

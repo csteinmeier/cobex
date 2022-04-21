@@ -2,6 +2,7 @@ package com.example.cobex
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -10,6 +11,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.cobex.databinding.FragmentCaptureSoundBinding
@@ -17,15 +20,19 @@ import com.example.cobex.databinding.FragmentCaptureSoundBinding
 /**
  * A simple [Fragment] subclass.
  */
-class CaptureSound : Fragment(), CompositionArtifact.IArtifact {
+class CaptureSound : Fragment(), CompositionArtifact.IArtifact, PermissionHelper.IRequirePermission {
 
-    private var recNo: Int = 1
     private var mRecorder: MediaRecorder? = null
     private var _binding: FragmentCaptureSoundBinding? = null
+
+    private fun getRecNo(context: Context) = getCounter(context, this::class.java) % 5
+    private fun soundFileDir(context: Context) =
+        "${getFileDir(context)}/recording${getRecNo(requireContext())}.mp3"
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    /**used to recognize Type of Sound*/
     private var environmentSounds = false
     private var started = false
 
@@ -49,17 +56,33 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact {
             toggleSoundInputType()
         }
         binding.buttonMusic.setOnClickListener {
+
             environmentSounds = false
             toggleSoundInputType()
         }
         binding.buttonStart.setOnClickListener {
-            toggleRecording()
+            hasPermission { toggleRecording() }
         }
 
         var web = binding.webView
         web.setBackgroundColor(Color.TRANSPARENT) //for gif without background
         web.loadUrl("file:///android_asset/htmls/gif.html")
         web.visibility= View.INVISIBLE
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        helperOnRequestPermissionResult(
+            requestCode = requestCode,
+            permission = permissions,
+            grantResults = grantResults,
+            hasPermission = { toggleRecording() },
+            null
+        )
     }
 
     private fun toggleRecording() {
@@ -79,29 +102,22 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact {
         }
     }
 
+
     private fun stopRecording() {
         mRecorder?.stop()
         mRecorder?.release()
 
-        saveInCompositionArtifact(activity?.filesDir?.absolutePath + "/recording"+ recNo + ".mp3")
-
-        if (recNo==5)
-        {
-            recNo = 1
-        }
-        else
-        {
-            recNo++
-        }
-
+        Toast.makeText(activity?.baseContext, "Sound ${getRecNo(requireContext()) + 1} saved", Toast.LENGTH_SHORT).show()
+        val soundType = if(environmentSounds) "ENV" else "MUSIC"
+        val toSave = soundFileDir(requireContext()) + "TIME:" + getTimeStamp(requireContext())
+        synchroniseArtifact(requireContext(), "TYPE:$soundType$toSave", this::class.java, true)
     }
 
 
     private fun startRecording()
     {
-        getPermissions();
 
-        var outputfile = activity?.filesDir?.absolutePath + "/recording"+ recNo + ".mp3"
+        var outputfile = soundFileDir(requireContext())
 
         mRecorder = MediaRecorder()
         mRecorder?.setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -111,35 +127,6 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact {
 
         mRecorder?.prepare()
         mRecorder?.start()
-    }
-
-    private fun saveInCompositionArtifact(stringToSave: String){
-        markAsSavedIfNotMarkedAsSaved(requireContext(), this::class.java)
-
-        val previousSet = getStringSet(requireContext(), this::class.java)
-            ?.toMutableList()?: mutableListOf()
-
-        previousSet.add(stringToSave +"TIME:"+getTimeStamp(requireContext()))
-
-        putStringSet(requireContext(), this.javaClass, previousSet.toSet())
-    }
-
-    private fun getPermissions() {
-        if (activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.RECORD_AUDIO) } != PackageManager.PERMISSION_GRANTED ||
-            activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.READ_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED ||
-            activity?.let { ContextCompat.checkSelfPermission(it.baseContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) } != PackageManager.PERMISSION_GRANTED )
-        {
-            // The permission is NOT already granted. Check if the user has been asked about this permission already and denied it.m
-            // If so, we want to give more explanation about why the permission is needed.
-            // Fire off an async request to actually get the permission. This will show the standard permission request dialog UI
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ), 13
-            )
-        }
     }
 
     private fun toggleSoundInputType() {
@@ -159,4 +146,16 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun mainPermission() = Manifest.permission.RECORD_AUDIO
+
+    override fun fragment(): Fragment  = this
+
+    override fun fragmentCode(): Int = PermissionHelper.FRAGMENT_CAPTURE_SOUND_CODE
+
+    override fun requiredPermissions(): Array<out String> =
+        arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE)
 }
