@@ -49,6 +49,9 @@ class TimelineViewFragment : Fragment(), CompositionArtifact.IArtifact {
             buttonBack.setOnClickListener {
                 findNavController().navigate(R.id.CreateNew)
             }
+            buttonNext.setOnClickListener {
+                findNavController().navigate(R.id.influenceDependencies)
+            }
         }
     }
 

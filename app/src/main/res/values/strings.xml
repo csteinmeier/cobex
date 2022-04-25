@@ -139,7 +139,7 @@
     <string name="timelineHours">Hour/s ago</string>
     <string name="timelineMinutes">Minute/s ago</string>
     <string name="timelineRecently">a short while ago</string>
-    
+
     <string name="dialog_delete_old_project_title">Delete Old Project?</string>
     <string name="timelineProject">Actual Project</string>
     <string name="timelineStored">Stored Items</string>

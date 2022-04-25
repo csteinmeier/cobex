@@ -58,6 +58,9 @@
         <action
             android:id="@+id/action_CreateNew_to_createRhythm"
             app:destination="@id/createRhythm" />
+        <action
+            android:id="@+id/action_CreateNew_to_influenceDependencies"
+            app:destination="@id/influenceDependencies" />
 
     </fragment>
 
@@ -131,6 +134,15 @@
         tools:layout="@layout/fragment_create_rhythm" >
         <action
             android:id="@+id/action_createRhythm_to_CreateNew"
+            app:destination="@id/CreateNew" />
+    </fragment>
+    <fragment
+        android:id="@+id/influenceDependencies"
+        android:name="com.example.cobex.InfluenceDependencies"
+        android:label="fragment_influence_dependencies"
+        tools:layout="@layout/fragment_influence_dependencies" >
+        <action
+            android:id="@+id/action_influenceDependencies_to_CreateNew"
             app:destination="@id/CreateNew" />
     </fragment>
 
