@@ -7,11 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.cobex.CompositionArtifact
 import com.example.cobex.R
-import com.example.cobex.TimeHelper
+import com.example.cobex.helper.TimeHelper
 import com.example.cobex.databinding.FragmentTimelineViewBinding
 
 /**

@@ -1,6 +1,7 @@
-package com.example.cobex
+package com.example.cobex.helper
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.media.MediaPlayer
@@ -55,5 +56,7 @@ object Extensions {
 
         }
     }
+
+    fun Int.resourceToString(context: Context) = ContextWrapper(context).getString(this)
 
 }

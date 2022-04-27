@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.example.cobex.CompositionArtifact
-import com.example.cobex.NotificationHelper
+import com.example.cobex.helper.NotificationHelper
 import com.google.android.gms.location.ActivityTransitionResult
 
 class ActivityBroadcastService : BroadcastReceiver(), CompositionArtifact.IArtifact {

@@ -16,6 +16,10 @@
     <string name="buttonStart">Start</string>
     <string name="buttonBack">Back</string>
 
+    <string name="buttonRecord">Record</string>
+    <string name="buttonStop">Stop</string>
+    <string name="buttonFinish">Finish</string>
+
     <string name="buttonCreateNew">Create New</string>
     <string name="buttonGallery">My Experiences</string>
     <string name="buttonHelp">Help</string>
@@ -145,5 +149,15 @@
     <string name="timelineStored">Stored Items</string>
     <string name="buttonSave">Save</string>
 
+    <!-- Dependency Settings -->
+    <string name="depCapturePicture">Visual Experience</string>
+    <string name="depCaptureSound">Recorded Voice</string>
+    <string name="depInputKeyword">Keywords</string>
+    <string name="depInputMelody">Melody Input</string>
+    <string name="depCaptureAction">Recorded Activities</string>
+    <string name="depCreateRhythm">Rhythm Input</string>
+
+    <string name="depAiInfluence">AI Influence</string>
+    <string name="depUserInput">Your Input</string>
 
 </resources>

@@ -70,12 +70,12 @@ class TimelineAdapter(
 
     /**
      * Simple function to "extend" an image.
-     * Will replace a [TimelineObject.ImageItem] with a [TimelineObject.BigImageItem]
+     * Will replace a [TimelineObject.CapturePictureItem] with a [TimelineObject.BigImageItem]
      *
      * TODO (BUG if a User double click by animation)
      */
     fun extendImage(position: Int) {
-        val image = timelineItems[position] as TimelineObject.ImageItem
+        val image = timelineItems[position] as TimelineObject.CapturePictureItem
         val biggerImage =
             TimelineObject.BigImageItem(image.id, image.createdTimeAsString, image.imgSrc)
         replaceItems(position, biggerImage)
@@ -83,14 +83,14 @@ class TimelineAdapter(
 
     /**
      * Simple function to "extend" an image.
-     * Will replace a [TimelineObject.BigImageItem] with a [TimelineObject.ImageItem]
+     * Will replace a [TimelineObject.BigImageItem] with a [TimelineObject.CapturePictureItem]
      *
      * TODO (BUG if a User double click by animation)
      */
     fun shrinkImage(position: Int) {
         val image = timelineItems[position] as TimelineObject.BigImageItem
         val smallerImage =
-            TimelineObject.ImageItem(image.id, image.createdTimeAsString, image.imgSrc)
+            TimelineObject.CapturePictureItem(image.id, image.createdTimeAsString, image.imgSrc)
         replaceItems(position, smallerImage)
     }
 

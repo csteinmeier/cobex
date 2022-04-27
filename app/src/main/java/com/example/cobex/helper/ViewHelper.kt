@@ -1,4 +1,4 @@
-package com.example.cobex
+package com.example.cobex.helper
 
 import android.content.Context
 import android.media.MediaPlayer
@@ -7,9 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import com.example.cobex.Extensions.millisToMinFormat
-import com.example.cobex.Extensions.toImage
-import com.example.cobex.ViewHelper.SimpleTextField
+import com.example.cobex.R
+import com.example.cobex.helper.Extensions.millisToMinFormat
+import com.example.cobex.helper.Extensions.toImage
+import com.example.cobex.helper.ViewHelper.SimpleTextField
 
 /**
  *

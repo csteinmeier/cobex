@@ -138,7 +138,7 @@
     </fragment>
     <fragment
         android:id="@+id/influenceDependencies"
-        android:name="com.example.cobex.InfluenceDependencies"
+        android:name="com.example.cobex.settings.InfluenceDependencies"
         android:label="fragment_influence_dependencies"
         tools:layout="@layout/fragment_influence_dependencies" >
         <action

@@ -68,8 +68,9 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
 
         binding.buttonSave.setOnClickListener {
                 if(isKeywordButtonPressed()) {
-                    saveKeywordList()
-                    val recordingmsg = Toast.makeText(activity?.baseContext, "Keyword Set Saved", Toast.LENGTH_LONG) //maybe add index of set
+                    val index = saveKeywordList()
+                    val recordingmsg =
+                        Toast.makeText(activity?.baseContext, "Keyword $index Set Saved", Toast.LENGTH_LONG) //maybe add index of set
                     recordingmsg.show()
                     listButtonGenericKeyword.forEach { genericButton ->
                         genericButton.listButtonKeywords.forEach { keywordButton ->
@@ -81,11 +82,15 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
 
     }
 
-    private fun saveKeywordList(){
+    /**
+     * @return size of Saved Keywords + 1
+     */
+    private fun saveKeywordList() : Int{
         val keywordSetSize = getStringSet(requireContext(), this.javaClass)?.size?: 0
         val clickedWords = wrapListSetOfButtons(keywordSetSize)
 
         synchroniseArtifact(requireContext(), clickedWords, InputKeyword::class.java, true)
+        return keywordSetSize.plus(1)
     }
 
 
