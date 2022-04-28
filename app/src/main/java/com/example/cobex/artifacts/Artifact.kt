@@ -6,14 +6,22 @@ import com.example.cobex.timelineview.TimelineCards
 sealed class Artifact(
     val ordinal : Int,
     val displayString: Int,
-    val color: Int
+    val color: Int,
+    val symbol: Int
 ) {
 
-    object CapturePicture : Artifact(0, R.string.depCapturePicture, android.R.color.holo_blue_dark)
-    object CaptureAction : Artifact(1, R.string.depCaptureAction, android.R.color.holo_orange_light)
-    object CaptureSound : Artifact(2, R.string.depCaptureSound, android.R.color.holo_red_light)
-    object InputMelody : Artifact(3, R.string.depInputMelody, android.R.color.holo_green_light)
-    object InputKeywords : Artifact(4, R.string.depInputKeyword, android.R.color.holo_purple)
+    object CapturePicture
+        : Artifact(0, R.string.depCapturePicture, android.R.color.holo_blue_dark, R.drawable.ic_lense_24)
+    object CaptureAction
+        : Artifact(1, R.string.depCaptureAction, android.R.color.holo_orange_light, R.drawable.ic_directions_run_24)
+    object CaptureSound
+        : Artifact(2, R.string.depCaptureSound, android.R.color.holo_red_light, R.drawable.ic_music_note_24)
+    object InputMelody
+        : Artifact(3, R.string.depInputMelody, android.R.color.holo_green_light, R.drawable.ic_nature_24)
+    object InputKeywords
+        : Artifact(4, R.string.depInputKeyword, android.R.color.holo_purple, R.drawable.ic_arrow_circle_24)
+    object CreateRhythm
+        : Artifact(5, R.string.depCreateRhythm, android.R.color.holo_green_dark, R.drawable.play)
 
     companion object {
         fun getAllArtifactTypes() = listOf(
@@ -21,7 +29,8 @@ sealed class Artifact(
             CaptureAction,
             CaptureSound,
             InputMelody,
-            InputKeywords
+            InputKeywords,
+            CreateRhythm
         )
     }
 

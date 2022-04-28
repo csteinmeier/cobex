@@ -9,7 +9,7 @@ import com.example.cobex.timelineview.TimelineDelegate.Companion.getAdapter
 /**
  * # The real Adapter
  *
- * * Work with a delegate approach
+ * * Works with a delegate approach
  *
  * * Unlike normal recyclerview approaches,
  *   holders are not an inner class of adapters.

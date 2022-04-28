@@ -8,9 +8,11 @@ import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.net.toUri
+import androidx.navigation.findNavController
 import java.io.File
 
 object Extensions {
@@ -57,6 +59,8 @@ object Extensions {
         }
     }
 
-    fun Int.resourceToString(context: Context) = ContextWrapper(context).getString(this)
+    fun Button.navigateOnClick(dest: Int) = this.setOnClickListener { findNavController().navigate(dest) }
 
+    fun Int.resourceToString(context: Context) = ContextWrapper(context).getString(this)
+    fun Int.resourceToColor(context: Context) = ContextWrapper(context).getColor(this)
 }

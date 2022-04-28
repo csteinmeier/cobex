@@ -153,11 +153,15 @@
     <string name="depCapturePicture">Visual Experience</string>
     <string name="depCaptureSound">Recorded Voice</string>
     <string name="depInputKeyword">Keywords</string>
+    <string name="deCreateRhythm">Create Rhythm</string>
     <string name="depInputMelody">Melody Input</string>
     <string name="depCaptureAction">Recorded Activities</string>
     <string name="depCreateRhythm">Rhythm Input</string>
 
     <string name="depAiInfluence">AI Influence</string>
     <string name="depUserInput">Your Input</string>
+
+    <string name="depHeaderRhythmArtifacts">Influence of Rhythm Artifacts</string>
+    <string name="depHeaderMelodyArtifacts">Influence of Melody Artifacts</string>
 
 </resources>

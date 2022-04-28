@@ -17,7 +17,7 @@ class TimelineViewModel(
 ) : CompositionArtifact.IArtifact {
 
 
-    var adapter: TimelineAdapter =
+    val adapter: TimelineAdapter =
         TimelineAdapter(
             StoredToItemHelper.getList(
                 TimelineStateType.actualTimelineState, context

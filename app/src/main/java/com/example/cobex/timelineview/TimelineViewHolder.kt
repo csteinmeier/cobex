@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cobex.helper.Extensions.prepareProgressWithSound
 import com.example.cobex.helper.Extensions.toLayout
 import com.example.cobex.R
-import com.example.cobex.helper.ViewHelper
+import com.example.cobex.ViewHelper
 import com.example.cobex.capture_action.Activities
 import com.example.cobex.timelineview.TimelineViewHolder.Companion.getHolder
 import kotlinx.android.synthetic.main.timeline_item_capture_sound.view.*
@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.timeline_item_recorded_activity.view.*
  * @sample getHolder
  */
 sealed class TimelineViewHolder(
-    type: TimelineObject.Type,
+    type: TimelineItemType,
     parent: ViewGroup,
     private val touchHelper: ItemTouchHelper,
     protected val viewModel: TimelineViewModel
@@ -114,7 +114,7 @@ sealed class TimelineViewHolder(
     }
 
     /**
-     * Adapter: [TimelineDelegate.RecordAdapter]
+     * Adapter: [TimelineDelegate.CaptureActionAdapter]
      *
      * Layout: [R.layout.timeline_item_recorded_activity]
      *

@@ -13,7 +13,7 @@ typealias TimelineItemType = TimelineObject.Type
  */
 sealed class TimelineObject(
     val id: String,
-    val type: TimelineObject.Type,
+    val type: Type,
     var createdTimeAsString: String,
     val pos: Int?
 ) {
