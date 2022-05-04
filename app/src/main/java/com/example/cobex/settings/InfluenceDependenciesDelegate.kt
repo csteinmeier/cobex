@@ -4,8 +4,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 sealed class InfluenceDependenciesDelegate{
-    fun onCreateViewHolder(parent: ViewGroup)
-            : RecyclerView.ViewHolder
+
+    var pieChartManager : PieChartManager ?= null
+
+    fun onCreateViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder
     = InfluenceDependenciesHolder.getHolder(getType(), parent)
 
     fun onBindViewHolder(holder: RecyclerView.ViewHolder, model: InfluenceDependenciesModel) {

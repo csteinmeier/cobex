@@ -41,7 +41,7 @@
                 android:layout_weight="1"/>
 
             <SeekBar
-                android:id="@+id/seekBar"
+                android:id="@+id/influence_dependencies_seekBar"
                 style="@style/Widget.AppCompat.SeekBar.Discrete"
                 android:layout_width="100dp"
                 android:layout_marginEnd="20dp"

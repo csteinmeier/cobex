@@ -1,7 +1,9 @@
 package com.example.cobex.settings
 
+import android.content.AbstractThreadedSyncAdapter
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,7 @@ import com.example.cobex.artifacts.Artifact
 import com.example.cobex.databinding.FragmentInfluenceDependenciesBinding
 import com.example.cobex.helper.Extensions.navigateOnClick
 import com.example.cobex.helper.Extensions.resourceToString
+import kotlinx.coroutines.android.awaitFrame
 
 
 class InfluenceDependenciesFragment : Fragment() {
@@ -19,29 +22,10 @@ class InfluenceDependenciesFragment : Fragment() {
     private var _binding: FragmentInfluenceDependenciesBinding? = null
     private val binding get() = _binding!!
 
-    private val melodyArtifacts = listOf(
-        Artifact.InputMelody,
-        Artifact.CaptureSound,
-        Artifact.InputKeywords,
-        Artifact.CapturePicture
-    )
+    private lateinit var model : InfluenceDependenciesViewModel
+    lateinit var adapter: InfluenceDependenciesAdapter
 
-    private val rhythmArtifacts = listOf(
-        Artifact.CaptureAction,
-        Artifact.CreateRhythm
-    )
 
-    private fun melodyPieChart(context: Context) = InfluenceDependenciesModel.ConcretePieChartModel(
-        context,
-        melodyArtifacts,
-        R.string.depHeaderMelodyArtifacts.resourceToString(requireContext())
-    )
-
-    private fun rhythmPieChart(context: Context) = InfluenceDependenciesModel.ConcretePieChartModel(
-        context,
-        rhythmArtifacts,
-        R.string.depHeaderRhythmArtifacts.resourceToString(requireContext())
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,25 +42,12 @@ class InfluenceDependenciesFragment : Fragment() {
         binding.apply {
             buttonBack.navigateOnClick(R.id.timeLineView)
 
-            val componentList = mutableListOf<InfluenceDependenciesModel>().apply {
-                /*** Melody PieChart */
-                add(melodyPieChart(requireContext()))
+            model = InfluenceDependenciesViewModel(requireContext())
 
-                addAll(melodyArtifacts.map { InfluenceDependenciesModel.PieChartSeekbarModel(it) })
-
-                /*** Rhythm PieChart*/
-                add(rhythmPieChart(requireContext()))
-
-                addAll(rhythmArtifacts.map { InfluenceDependenciesModel.PieChartSeekbarModel(it) })
-            }
-
-            val adapter = InfluenceDependenciesAdapter(componentList)
+            adapter = InfluenceDependenciesAdapter(model.componentList)
             recyclerInfluenceDependencies.layoutManager = LinearLayoutManager(context)
             recyclerInfluenceDependencies.adapter = adapter
         }
-
-
     }
-
 
 }
