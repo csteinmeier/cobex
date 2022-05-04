@@ -7,9 +7,6 @@ import com.example.cobex.helper.Extensions.resourceToString
 
 class InfluenceDependenciesViewModel(context: Context) {
 
-    companion object {
-        val pieChartManagerList = mutableListOf<PieChartManager>()
-    }
 
     private val melodyArtifacts = listOf(
         Artifact.InputMelody,
@@ -24,6 +21,8 @@ class InfluenceDependenciesViewModel(context: Context) {
     )
 
     private val melodyPieChart = PieChartManager(context, melodyArtifacts)
+
+    private val visualCheckBox = PieCheckBoxManager()
 
     private val rhythmPieChart = PieChartManager(context, rhythmArtifacts)
 
@@ -44,18 +43,34 @@ class InfluenceDependenciesViewModel(context: Context) {
         /*** Melody PieChart */
         add(melodyModel)
 
-        addAll(melodyArtifacts.map {
+
+        val meanValueMelody = 100 / (melodyArtifacts.size + 1)
+
+        addAll(listOf(
             InfluenceDependenciesModel.PieChartSeekbarModel(
-                melodyPieChart, it, 100 / melodyArtifacts.size,
+                melodyPieChart, null,  Artifact.InputMelody, meanValueMelody,
+            ),
+            InfluenceDependenciesModel.PieChartSeekbarModel(
+                melodyPieChart, null,  Artifact.CaptureSound, meanValueMelody,
+            ),
+            InfluenceDependenciesModel.PieChartSeekbarModel(
+                melodyPieChart, null,  Artifact.InputKeywords, meanValueMelody,
+            ),
+            InfluenceDependenciesModel.PieChartSeekbarModel(
+                melodyPieChart, visualCheckBox,  Artifact.CapturePicture, meanValueMelody,
             )
-        })
+        ))
+
+        add(InfluenceDependenciesModel.PieTickBoxModel(
+            melodyPieChart, R.string.checkBoxOptionVisualArtifacts, visualCheckBox, Artifact.CapturePicture
+        ))
 
         /*** Rhythm PieChart*/
         add(rhythmModel)
 
         addAll(rhythmArtifacts.map {
             InfluenceDependenciesModel.PieChartSeekbarModel(
-                rhythmPieChart ,it,100 / rhythmArtifacts.size
+                rhythmPieChart, null ,it,100 / rhythmArtifacts.size
             )
         })
 

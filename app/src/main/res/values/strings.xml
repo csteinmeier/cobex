@@ -164,4 +164,6 @@
     <string name="depHeaderRhythmArtifacts">Influence of Rhythm Artifacts</string>
     <string name="depHeaderMelodyArtifacts">Influence of Melody Artifacts</string>
 
+    <string name="checkBoxOptionVisualArtifacts">Only use visual Artifacts for Videos</string>
+
 </resources>

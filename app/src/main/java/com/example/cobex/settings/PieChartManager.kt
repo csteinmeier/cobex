@@ -18,14 +18,14 @@ import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 
 class PieChartManager(
-    val context: Context,
-    val artifacts: List<Artifact>
+    private val context: Context,
+    private val artifacts: List<Artifact>
 )  {
 
 
-    lateinit var entries : List<PieEntry>
-    lateinit var values: MutableMap<Artifact, Float>
-    lateinit var pieDataSet: PieDataSet
+    private lateinit var entries : List<PieEntry>
+    private lateinit var values: MutableMap<Artifact, Float>
+    private lateinit var pieDataSet: PieDataSet
     private var pie : PieChart ?= null
 
     fun initPieChart(pie: PieChart) = with(pie){
@@ -76,6 +76,18 @@ class PieChartManager(
 
     fun onChanged(value: Int, artifact: Artifact) {
         values[artifact] = value.toFloat()
+        updateData()
+    }
+
+    fun onCheckBoxClicked(isChecked: Boolean, artifact: Artifact){
+        when(isChecked){
+            true -> values.remove(artifact)
+            false -> values[artifact] = 25f
+        }
+        updateData()
+    }
+
+    private fun updateData(){
         val pieDataSet = PieDataSet(generatePieEntries(), "")
         pieDataSet.initial(artifacts)
         this.pie!!.data = PieData(pieDataSet)

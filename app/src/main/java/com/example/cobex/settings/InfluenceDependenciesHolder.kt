@@ -1,8 +1,6 @@
 package com.example.cobex.settings
 
-import android.content.Context
 import android.content.ContextWrapper
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +10,7 @@ import com.example.cobex.helper.Extensions.resourceToString
 import com.example.cobex.helper.Extensions.toLayout
 import kotlinx.android.synthetic.main.pie_chart_concrete.view.*
 import kotlinx.android.synthetic.main.pie_chart_seekbar.view.*
+import kotlinx.android.synthetic.main.pie_chart_tick_box.view.*
 
 sealed class InfluenceDependenciesHolder(
     type: InfluenceDependenciesType,
@@ -51,9 +50,10 @@ sealed class InfluenceDependenciesHolder(
 
             influence_dependencies_card_view.setCardBackgroundColor(ContextWrapper(context).getColor(model.artifact.color))
 
-            influence_dependencies_seekBar.progress = model.value
-
-            influence_dependencies_seekBar.setOnSeekBarChangeListener(this@PieChartSeekBarHolder)
+            influence_dependencies_seekBar.apply {
+                progress = model.value
+                setOnSeekBarChangeListener(this@PieChartSeekBarHolder)
+            }
 
             ViewHelper.ImageViewDrawable(
                 influence_dependencies_icon_seekbar, model.artifact.symbol, context
@@ -63,11 +63,12 @@ sealed class InfluenceDependenciesHolder(
                 influence_dependencies_text_seekbar, model.artifact.displayString, context
             )
 
-
             this@PieChartSeekBarHolder.manager = model.pieChartManager
             this@PieChartSeekBarHolder.artifact = model.artifact
 
             influence_dependencies_seekBar.setOnSeekBarChangeListener(this@PieChartSeekBarHolder)
+
+            model.pieCheckBoxManager?.map?.set(artifact!!, influence_dependencies_card_view)
 
         }
 
@@ -75,14 +76,24 @@ sealed class InfluenceDependenciesHolder(
             this.manager!!.onChanged(progress, this.artifact!!)
         }
 
-        override fun onStartTrackingTouch(seekBar: SeekBar?) {
+        override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+        override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
 
+    }
+
+    private class PieChartTickBoxHolder(parent: ViewGroup)
+        : InfluenceDependenciesHolder(InfluenceDependenciesType.PIE_TICK_BOX, parent){
+
+        override fun bind(model: InfluenceDependenciesModel) : Unit = with(itemView) {
+            model as InfluenceDependenciesModel.PieTickBoxModel
+
+            pie_chart_checkBox.text = model.stringRes.resourceToString(context)
+
+            pie_chart_checkBox.setOnCheckedChangeListener { _, isChecked ->
+                model.pieCheckBoxManager?.toggleCardView(model.artifact)
+                model.pieChartManager.onCheckBoxClicked(isChecked, model.artifact)
+            }
         }
-
-        override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-        }
-
     }
 
     companion object {
@@ -93,6 +104,7 @@ sealed class InfluenceDependenciesHolder(
         ) = when(type){
             InfluenceDependenciesType.CONCRETE_PIE_CHART -> ConcretePieChartHolder(parent)
             InfluenceDependenciesType.PIE_CHART_SEEKBAR -> PieChartSeekBarHolder(parent)
+            InfluenceDependenciesType.PIE_TICK_BOX -> PieChartTickBoxHolder(parent)
         }
     }
 }

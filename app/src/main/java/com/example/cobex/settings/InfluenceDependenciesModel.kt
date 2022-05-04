@@ -8,7 +8,7 @@ typealias InfluenceDependenciesType = InfluenceDependenciesModel.Type
 
 sealed class InfluenceDependenciesModel(
     val type: InfluenceDependenciesType,
-    val pieChartManager: PieChartManager
+    val pieChartManager: PieChartManager,
     ) {
 
     class ConcretePieChartModel(
@@ -20,13 +20,22 @@ sealed class InfluenceDependenciesModel(
 
     class PieChartSeekbarModel(
         pieChartManager: PieChartManager,
+        val pieCheckBoxManager: PieCheckBoxManager ?= null,
         val artifact: Artifact,
         val value: Int
     ) : InfluenceDependenciesModel(Type.PIE_CHART_SEEKBAR, pieChartManager)
 
+    class PieTickBoxModel(
+        pieChartManager: PieChartManager,
+        val stringRes: Int,
+        val pieCheckBoxManager: PieCheckBoxManager ?= null,
+        val artifact: Artifact,
+    ) : InfluenceDependenciesModel(Type.PIE_TICK_BOX, pieChartManager)
+
     enum class Type(val layout: Int) {
         CONCRETE_PIE_CHART(R.layout.pie_chart_concrete),
         PIE_CHART_SEEKBAR(R.layout.pie_chart_seekbar),
+        PIE_TICK_BOX(R.layout.pie_chart_tick_box)
     }
 
 
