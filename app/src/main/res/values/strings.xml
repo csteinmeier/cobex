@@ -157,6 +157,9 @@
     <string name="depInputMelody">Melody Input</string>
     <string name="depCaptureAction">Recorded Activities</string>
     <string name="depCreateRhythm">Rhythm Input</string>
+    <string name="depAI">AI Influence</string>
+    <string name="depUser">User Input</string>
+
 
     <string name="depAiInfluence">AI Influence</string>
     <string name="depUserInput">Your Input</string>

@@ -22,6 +22,11 @@ sealed class Artifact(
         : Artifact(4, R.string.depInputKeyword, android.R.color.holo_purple, R.drawable.ic_arrow_circle_24)
     object CreateRhythm
         : Artifact(5, R.string.depCreateRhythm, android.R.color.holo_green_dark, R.drawable.play)
+    object AI
+        :Artifact(6, R.string.depAI, android.R.color.holo_red_dark, R.drawable.ic_developer_board_24)
+    object Human
+        :Artifact(7, R.string.depUser, android.R.color.holo_blue_dark, R.drawable.ic_person_24)
+
 
     companion object {
         fun getAllArtifactTypes() = listOf(
@@ -30,7 +35,9 @@ sealed class Artifact(
             CaptureSound,
             InputMelody,
             InputKeywords,
-            CreateRhythm
+            CreateRhythm,
+            AI,
+            Human
         )
     }
 

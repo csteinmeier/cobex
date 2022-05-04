@@ -27,12 +27,17 @@ sealed class InfluenceDependenciesDelegate{
         override fun getType() = InfluenceDependenciesType.PIE_TICK_BOX
     }
 
+    private object PieChartDivision: InfluenceDependenciesDelegate(){
+        override fun getType() = InfluenceDependenciesType.PIE_CHART_DIVISION
+    }
+
     companion object{
         fun getAdapter(type: InfluenceDependenciesType) =
             when(type){
                 InfluenceDependenciesType.PIE_CHART_SEEKBAR -> PieChartSeekbarAdapter
                 InfluenceDependenciesType.CONCRETE_PIE_CHART -> ConcretePieChartAdapter
                 InfluenceDependenciesType.PIE_TICK_BOX -> PieChartTickBox
+                InfluenceDependenciesType.PIE_CHART_DIVISION -> PieChartDivision
             }
     }
 }

@@ -8,7 +8,9 @@ import com.example.cobex.ViewHelper
 import com.example.cobex.artifacts.Artifact
 import com.example.cobex.helper.Extensions.resourceToString
 import com.example.cobex.helper.Extensions.toLayout
+import com.example.cobex.view.CircularTextView
 import kotlinx.android.synthetic.main.pie_chart_concrete.view.*
+import kotlinx.android.synthetic.main.pie_chart_division.view.*
 import kotlinx.android.synthetic.main.pie_chart_seekbar.view.*
 import kotlinx.android.synthetic.main.pie_chart_tick_box.view.*
 
@@ -32,7 +34,7 @@ sealed class InfluenceDependenciesHolder(
             ViewHelper.SimpleTextField(
                 concretePieTitle, model.title)
 
-            model.pieChartManager.initPieChart(pieChart)
+            model.pieChartManager?.initPieChart(pieChart)
 
         }
     }
@@ -91,9 +93,45 @@ sealed class InfluenceDependenciesHolder(
 
             pie_chart_checkBox.setOnCheckedChangeListener { _, isChecked ->
                 model.pieCheckBoxManager?.toggleCardView(model.artifact)
-                model.pieChartManager.onCheckBoxClicked(isChecked, model.artifact)
+                model.pieChartManager?.onCheckBoxClicked(isChecked, model.artifact)
             }
         }
+    }
+
+
+    private class PieChartDivisionHolder(parent : ViewGroup)
+        : InfluenceDependenciesHolder(InfluenceDependenciesType.PIE_CHART_DIVISION, parent),
+    SeekBar.OnSeekBarChangeListener{
+
+        private var circularTextView1 : CircularTextView ?= null
+        private var circularTextView2 : CircularTextView ?= null
+
+        override fun bind(model: InfluenceDependenciesModel) : Unit = with(itemView) {
+            model as InfluenceDependenciesModel.PieChartDivisionModel
+
+
+            val titleStringP0 = model.artifact_0.displayString.resourceToString(context)
+            val titleStringP1 = model.artifact_1.displayString.resourceToString(context)
+
+            ViewHelper.SimpleTextField(
+                influence_dependencies_division_textview, "$titleStringP0 vs $titleStringP1"
+            )
+
+            circularTextView1 = influence_dependencies_circular1
+            circularTextView2 = influence_dependencies_circular2
+
+            influence_dependencies_division_seekbar.setOnSeekBarChangeListener(this@PieChartDivisionHolder)
+
+        }
+
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            circularTextView1?.resize(progress.toFloat())
+            circularTextView2?.resize(progress.toFloat())
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+
+        override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
     }
 
     companion object {
@@ -105,6 +143,7 @@ sealed class InfluenceDependenciesHolder(
             InfluenceDependenciesType.CONCRETE_PIE_CHART -> ConcretePieChartHolder(parent)
             InfluenceDependenciesType.PIE_CHART_SEEKBAR -> PieChartSeekBarHolder(parent)
             InfluenceDependenciesType.PIE_TICK_BOX -> PieChartTickBoxHolder(parent)
+            InfluenceDependenciesType.PIE_CHART_DIVISION -> PieChartDivisionHolder(parent)
         }
     }
 }

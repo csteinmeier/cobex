@@ -74,6 +74,10 @@ class InfluenceDependenciesViewModel(context: Context) {
             )
         })
 
+        add(InfluenceDependenciesModel.PieChartDivisionModel(
+            Artifact.AI, Artifact.Human
+        ))
+
     }
 
 }
