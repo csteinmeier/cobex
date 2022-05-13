@@ -33,14 +33,13 @@ class DivisionBar @JvmOverloads constructor(
     var symbol01 : Bitmap ?= null
     var symbol02 : Bitmap ?= null
 
-    private val textPaint = Paint()
     private val bitmapPaint = Paint()
-
-    private var text01 = ""
-    private var text02 = ""
 
 
     init {
+        /**
+         * Some init Values, set at layout level
+         */
         transparentPaint.color = android.R.color.transparent.resourceToColor(context)
 
         val ovalPaintDefaultColor01 = android.R.color.holo_red_dark.resourceToColor(context)
@@ -50,26 +49,25 @@ class DivisionBar @JvmOverloads constructor(
             ovalPaint01.color = getColor(R.styleable.DivisionBar_color01, ovalPaintDefaultColor01)
             ovalPaint02.color = getColor(R.styleable.DivisionBar_color02, ovalPaintDefaultColor02)
 
-            text01 = getString(R.styleable.DivisionBar_text01)?: ""
-            text02 = getString(R.styleable.DivisionBar_text02)?: ""
-
             cornerRadius = getDimension(R.styleable.DivisionBar_circularCorner, 0f)
         }
-
-        textPaint.color = Color.WHITE
-        textPaint.textSize = 40f
-
     }
 
     private var value = 50f
     private var dragLeft = false
 
+    /**
+     * @param value between 0 - 100,
+     * example: value 60 will set the left Bar to percentage of 60 and the other on to 40
+     *
+     */
     fun resize(value: Float){
         dragLeft = this.value - value < 0
 
         this.value = value
         invalidate()
     }
+
 
     override fun draw(canvas: Canvas) {
 
@@ -84,6 +82,10 @@ class DivisionBar @JvmOverloads constructor(
 
         canvas.clipPath(path)
 
+        /**
+         * So no Icon will overdraw by its opposite bar,
+         * its necessary the drawing will happen in the right order
+         */
         drawInOrder(canvas, manager, dragLeft)
 
         super.draw(canvas)
@@ -144,22 +146,50 @@ class DivisionBar @JvmOverloads constructor(
 
     private class SizeManager(val width : Float, val height: Float, val progress: Float){
 
+        /**
+         * @return Calculates the middle with a value given between 0 and 100
+         */
         fun calcMid() = (width / 100 * progress)
 
+        /**
+         * @return Left rectangle and its place
+         */
         fun getLeftSide() = RectF(0f, 10f, calcMid(), height)
 
+        /**
+         * @return Padding to the top
+         */
         fun verticalPadding() = height / 4
 
+        /**
+         * @return Start point of the icon
+         */
         fun iconTop() = verticalPadding()
 
+        /**
+         * @return Bottom pont of the icon
+         */
         fun iconBot() = height - verticalPadding()
 
+        /**
+         * @return Middle point of the left rectangle
+         */
         fun getMiddleOfLeftSide() = (((width / 100) * progress) / 2)
 
+
+        /**
+         * @return Middle point of the right rectangle
+         */
         fun getMiddleOfRightSide() = (getRightSide().right / 2) + (((width / 100) * progress) / 2)
 
+        /**
+         * @return Right rectangle and its place
+         */
         fun getRightSide() = RectF(calcMid(), 10f, width, height)
 
+        /**
+         * @return Rectangle and its place of the left icon
+         */
         fun getLeftIconPlace(iconSize: Int) =
             RectF(
                 getMiddleOfLeftSide() - iconSize,
@@ -167,6 +197,9 @@ class DivisionBar @JvmOverloads constructor(
                 getMiddleOfLeftSide() + iconSize,
                 iconBot())
 
+        /**
+         * @return Rectangle and its place of the right icon
+         */
         fun getRightIconPlace(iconSize: Int) =
             RectF(
                 getMiddleOfRightSide() - iconSize,
