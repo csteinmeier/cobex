@@ -1,14 +1,16 @@
 package com.example.cobex.settings
 
+import android.content.Context
 import android.content.ContextWrapper
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cobex.ViewHelper
 import com.example.cobex.artifacts.Artifact
+import com.example.cobex.helper.Extensions.resourceToBitmap
 import com.example.cobex.helper.Extensions.resourceToString
 import com.example.cobex.helper.Extensions.toLayout
-import com.example.cobex.view.CircularTextView
+import com.example.cobex.view.DivisionBar
 import kotlinx.android.synthetic.main.pie_chart_concrete.view.*
 import kotlinx.android.synthetic.main.pie_chart_division.view.*
 import kotlinx.android.synthetic.main.pie_chart_seekbar.view.*
@@ -103,30 +105,27 @@ sealed class InfluenceDependenciesHolder(
         : InfluenceDependenciesHolder(InfluenceDependenciesType.PIE_CHART_DIVISION, parent),
     SeekBar.OnSeekBarChangeListener{
 
-        private var circularTextView1 : CircularTextView ?= null
-        private var circularTextView2 : CircularTextView ?= null
+        private var divisionBar : DivisionBar ?= null
+        private var context : Context ?= null
 
         override fun bind(model: InfluenceDependenciesModel) : Unit = with(itemView) {
             model as InfluenceDependenciesModel.PieChartDivisionModel
 
+            this@PieChartDivisionHolder.context = context
 
-            val titleStringP0 = model.artifact_0.displayString.resourceToString(context)
-            val titleStringP1 = model.artifact_1.displayString.resourceToString(context)
+            influence_dependencies_division_title01.text =
+                Artifact.AI.displayString.resourceToString(context)
+            influence_dependencies_division_title02.text =
+                Artifact.Human.displayString.resourceToString(context)
 
-            ViewHelper.SimpleTextField(
-                influence_dependencies_division_textview, "$titleStringP0 vs $titleStringP1"
-            )
-
-            circularTextView1 = influence_dependencies_circular1
-            circularTextView2 = influence_dependencies_circular2
-
+            divisionBar = influence_dependencies_big_bar
+            divisionBar!!.symbol01 = Artifact.AI.symbol.resourceToBitmap(context, 70, 70)
+            divisionBar!!.symbol02 = Artifact.Human.symbol.resourceToBitmap(context, 70, 70)
             influence_dependencies_division_seekbar.setOnSeekBarChangeListener(this@PieChartDivisionHolder)
-
         }
 
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            circularTextView1?.resize(progress.toFloat())
-            circularTextView2?.resize(progress.toFloat())
+            divisionBar?.resize(progress.toFloat())
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
