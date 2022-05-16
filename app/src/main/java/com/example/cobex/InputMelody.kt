@@ -140,7 +140,11 @@ class InputMelody : Fragment(), View.OnTouchListener,
 
         Toast.makeText(activity?.baseContext, "Song ${getRecNo(requireContext()) + 1} saved", Toast.LENGTH_SHORT).show()
         val toSave = melodyFileDir(requireContext()) + "TIME:" +getTimeStamp(requireContext())
-        synchroniseArtifact(requireContext(), toSave, this::class.java, true)
+        synchroniseArtifact(
+            requireContext(),
+            toSave, this::class.java,
+            CompositionArtifact.IArtifact.SynchronizeMode.APPEND
+        )
     }
 
 

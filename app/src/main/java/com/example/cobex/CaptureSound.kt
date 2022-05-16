@@ -109,7 +109,12 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact, PermissionHelper
         Toast.makeText(activity?.baseContext, "Sound ${getRecNo(requireContext()) + 1} saved", Toast.LENGTH_SHORT).show()
         val soundType = if(environmentSounds) "ENV" else "MUSIC"
         val toSave = soundFileDir(requireContext()) + "TIME:" + getTimeStamp(requireContext())
-        synchroniseArtifact(requireContext(), "TYPE:$soundType$toSave", Artifact.CaptureSound.javaClass, true)
+        synchroniseArtifact(
+            requireContext(),
+            "TYPE:$soundType$toSave",
+            Artifact.CaptureSound.javaClass,
+            CompositionArtifact.IArtifact.SynchronizeMode.APPEND
+        )
     }
 
 

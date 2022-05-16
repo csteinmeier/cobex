@@ -244,7 +244,7 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
                         context,
                         file.absolutePath,
                         CapturePicture::class.java,
-                        true
+                        CompositionArtifact.IArtifact.SynchronizeMode.APPEND
                     )
                     setButtonEnable()
                 }
@@ -280,7 +280,12 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
                     val filePath = picture.value?.file?.absolutePath
                     _pictures.value?.file?.delete()
                     _pictures.value = CapturedPicture(placeholder = R.drawable.ic_lense_24)
-                    synchroniseArtifact(context, filePath!!, Artifact.CapturePicture.javaClass, false)
+                    synchroniseArtifact(
+                        context,
+                        filePath!!,
+                        Artifact.CapturePicture.javaClass,
+                        CompositionArtifact.IArtifact.SynchronizeMode.REMOVE
+                    )
                     setButtonEnable()
                 }
 

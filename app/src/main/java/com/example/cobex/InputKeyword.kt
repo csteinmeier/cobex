@@ -89,7 +89,12 @@ class InputKeyword : Fragment(), CompositionArtifact.IArtifact {
         val keywordSetSize = getStringSet(requireContext(), this.javaClass)?.size?: 0
         val clickedWords = wrapListSetOfButtons(keywordSetSize)
 
-        synchroniseArtifact(requireContext(), clickedWords, InputKeyword::class.java, true)
+        synchroniseArtifact(
+            requireContext(),
+            clickedWords,
+            InputKeyword::class.java,
+            CompositionArtifact.IArtifact.SynchronizeMode.APPEND
+        )
         return keywordSetSize.plus(1)
     }
 

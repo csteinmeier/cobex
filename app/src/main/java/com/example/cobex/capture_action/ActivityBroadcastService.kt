@@ -42,7 +42,8 @@ class ActivityBroadcastService : BroadcastReceiver(), CompositionArtifact.IArtif
                         synchroniseArtifact(
                             context,
                              "${detectedActivity?.name}:TIME:${getTimeStamp(context)}",
-                            CaptureAction::class.java, true
+                            CaptureAction::class.java,
+                            CompositionArtifact.IArtifact.SynchronizeMode.APPEND
                         )
                 }
             }
