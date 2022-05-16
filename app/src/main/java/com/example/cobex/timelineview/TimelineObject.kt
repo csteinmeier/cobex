@@ -9,7 +9,6 @@ typealias TimelineItemType = TimelineObject.Type
 
 /**
  * Data classes for each Layout and its Views
- * Also used to Link the Adapter with their matching Holder
  */
 sealed class TimelineObject(
     val id: String,

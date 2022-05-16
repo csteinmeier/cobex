@@ -1,22 +1,18 @@
 package com.example.cobex.settings
 
-import android.content.AbstractThreadedSyncAdapter
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cobex.R
-import com.example.cobex.artifacts.Artifact
 import com.example.cobex.databinding.FragmentInfluenceDependenciesBinding
 import com.example.cobex.helper.Extensions.navigateOnClick
-import com.example.cobex.helper.Extensions.resourceToString
-import kotlinx.coroutines.android.awaitFrame
 
-
+/**
+ * Concrete Fragment of [R.layout.fragment_influence_dependencies]
+ */
 class InfluenceDependenciesFragment : Fragment() {
 
     private var _binding: FragmentInfluenceDependenciesBinding? = null

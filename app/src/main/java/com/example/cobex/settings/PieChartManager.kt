@@ -22,7 +22,6 @@ class PieChartManager(
     private val artifacts: List<Artifact>
 )  {
 
-
     private lateinit var entries : List<PieEntry>
     private lateinit var values: MutableMap<Artifact, Float>
     private lateinit var pieDataSet: PieDataSet
@@ -56,6 +55,10 @@ class PieChartManager(
         PieEntry(entry.value, entry.key)
     }
 
+    /**
+     * Colors to be assigned to the individual parts.
+     * Set as attribute in the respective [Artifact]
+     */
     private fun getColorsFromArtifact(artifacts: List<Artifact>) =
         artifacts.map { it.color.resourceToColor(context) }
 
@@ -74,19 +77,28 @@ class PieChartManager(
         colors = getColorsFromArtifact(artifacts)
     }
 
+    /**
+     * will update the Pie a new Value
+     */
     fun onChanged(value: Int, artifact: Artifact) {
         values[artifact] = value.toFloat()
         updateData()
     }
 
+    /**
+     * Removes the matching artifact
+     */
     fun onCheckBoxClicked(isChecked: Boolean, artifact: Artifact){
         when(isChecked){
             true -> values.remove(artifact)
-            false -> values[artifact] = 25f
+            false -> values[artifact] = 100f / entries.size
         }
         updateData()
     }
 
+    /**
+     * Called to set new Data
+     */
     private fun updateData(){
         val pieDataSet = PieDataSet(generatePieEntries(), "")
         pieDataSet.initial(artifacts)

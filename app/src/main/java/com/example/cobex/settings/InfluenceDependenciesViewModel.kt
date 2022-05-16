@@ -8,6 +8,7 @@ import com.example.cobex.helper.Extensions.resourceToString
 class InfluenceDependenciesViewModel(context: Context) {
 
 
+    //All Components of Melody Pie Chart
     private val melodyArtifacts = listOf(
         Artifact.InputMelody,
         Artifact.CaptureSound,
@@ -15,30 +16,37 @@ class InfluenceDependenciesViewModel(context: Context) {
         Artifact.CapturePicture
     )
 
+    //All Components of Rhythm Pie Chart
     private val rhythmArtifacts = listOf(
         Artifact.CaptureAction,
         Artifact.CreateRhythm
     )
 
+    // Manager of Melody pie chart
     private val melodyPieChart = PieChartManager(context, melodyArtifacts)
 
+    // Checkbox for Visual Experience Checkbox
     private val visualCheckBox = PieCheckBoxManager()
 
+    // Manager of Rhythm Pie Chart
     private val rhythmPieChart = PieChartManager(context, rhythmArtifacts)
 
-    private val melodyModel = InfluenceDependenciesModel.ConcretePieChartModel(
+    // Concrete pie chart of melody
+    private val melodyModel = InfluenceDependenciesModel.ConcretePieChart(
         pieChartManager = melodyPieChart,
         context = context,
         title = R.string.depHeaderMelodyArtifacts.resourceToString(context)
     )
 
-    private val rhythmModel = InfluenceDependenciesModel.ConcretePieChartModel(
+    // Concrete pie chart of rhythm
+    private val rhythmModel = InfluenceDependenciesModel.ConcretePieChart(
         pieChartManager = rhythmPieChart,
         context = context,
         title = R.string.depHeaderRhythmArtifacts.resourceToString(context)
     )
 
 
+    // Each component of RecylerView, order in which it is to be drawn
     val componentList = mutableListOf<InfluenceDependenciesModel>().apply {
         /*** Melody PieChart */
         add(melodyModel)
@@ -47,21 +55,21 @@ class InfluenceDependenciesViewModel(context: Context) {
         val meanValueMelody = 100 / (melodyArtifacts.size + 1)
 
         addAll(listOf(
-            InfluenceDependenciesModel.PieChartSeekbarModel(
+            InfluenceDependenciesModel.PieChartSeekbar(
                 melodyPieChart, null,  Artifact.InputMelody, meanValueMelody,
             ),
-            InfluenceDependenciesModel.PieChartSeekbarModel(
+            InfluenceDependenciesModel.PieChartSeekbar(
                 melodyPieChart, null,  Artifact.CaptureSound, meanValueMelody,
             ),
-            InfluenceDependenciesModel.PieChartSeekbarModel(
+            InfluenceDependenciesModel.PieChartSeekbar(
                 melodyPieChart, null,  Artifact.InputKeywords, meanValueMelody,
             ),
-            InfluenceDependenciesModel.PieChartSeekbarModel(
+            InfluenceDependenciesModel.PieChartSeekbar(
                 melodyPieChart, visualCheckBox,  Artifact.CapturePicture, meanValueMelody,
             )
         ))
 
-        add(InfluenceDependenciesModel.PieTickBoxModel(
+        add(InfluenceDependenciesModel.PieTickBox(
             melodyPieChart, R.string.checkBoxOptionVisualArtifacts, visualCheckBox, Artifact.CapturePicture
         ))
 
@@ -69,12 +77,12 @@ class InfluenceDependenciesViewModel(context: Context) {
         add(rhythmModel)
 
         addAll(rhythmArtifacts.map {
-            InfluenceDependenciesModel.PieChartSeekbarModel(
+            InfluenceDependenciesModel.PieChartSeekbar(
                 rhythmPieChart, null ,it,100 / rhythmArtifacts.size
             )
         })
 
-        add(InfluenceDependenciesModel.PieChartDivisionModel(
+        add(InfluenceDependenciesModel.PieChartDivision(
             Artifact.AI, Artifact.Human
         ))
 

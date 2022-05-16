@@ -80,7 +80,7 @@ sealed class TimelineViewHolder(
     abstract fun bind(item: TimelineObject)
 
     /**
-     * Adapter: [TimelineDelegate.ImageAdapter]
+     * Adapter: [TimelineDelegate.CapturePictureAdapter]
      *
      * Layout: [R.layout.timeline_item_picture_small]
      *
@@ -184,7 +184,13 @@ sealed class TimelineViewHolder(
         }
     }
 
-
+    /**
+     * Adapter: [TimelineDelegate.CaptureSoundAdapter]
+     *
+     * Layout: [R.layout.timeline_item_capture_sound]
+     *
+     * TimelineObject: [TimelineObject.CaptureSoundItem]
+     */
     private class CaptureSoundHolder(
         private val parent: ViewGroup,
         onTouchHelper: ItemTouchHelper,
@@ -224,7 +230,13 @@ sealed class TimelineViewHolder(
         }
     }
 
-
+    /**
+     * Adapter: [TimelineDelegate.InputMelodyAdapter]
+     *
+     * Layout: [R.layout.timeline_item_input_melody]
+     *
+     * TimelineObject: [TimelineObject.InputMelodyItem]
+     */
     private class InputMelodyHolder(
         private val parent: ViewGroup,
         onTouchHelper: ItemTouchHelper,
@@ -262,6 +274,13 @@ sealed class TimelineViewHolder(
 
     }
 
+    /**
+     * Adapter: [TimelineDelegate.InputKeywordAdapter]
+     *
+     * Layout: [R.layout.timeline_item_keyword]
+     *
+     * TimelineObject: [TimelineObject.InputKeywordItem]
+     */
     private class InputKeywordHolder(
         parent: ViewGroup,
         onTouchHelper: ItemTouchHelper,
