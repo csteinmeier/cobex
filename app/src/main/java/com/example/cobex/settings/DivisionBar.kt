@@ -2,25 +2,24 @@ package com.example.cobex.settings
 
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
+import androidx.core.graphics.ColorUtils
 import com.example.cobex.R
 import com.example.cobex.artifacts.Artifact
 import com.example.cobex.helper.Extensions.resourceToBitmap
 import com.example.cobex.helper.Extensions.resourceToColor
-import kotlin.math.absoluteValue
+
 
 class DivisionBar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) : View(context, attrs, defStyleAttr), SaveAbleChart, SeekBar.OnSeekBarChangeListener{
-
-    private data class ArtifactWrapper(val artifact: Artifact, val symbol: Bitmap)
 
     private var dragLeft = false
     private var values : MutableMap<Artifact, Float> = mutableMapOf()
@@ -34,6 +33,11 @@ class DivisionBar @JvmOverloads constructor(
     private var symbol02 : Bitmap ?= null
 
     private var value = 50f
+
+    private enum class SIDE{
+        RIGHT,
+        LEFT
+    }
 
     fun initValues(artifact01: Artifact, artifact02: Artifact, seekBar: SeekBar){
 
@@ -65,9 +69,6 @@ class DivisionBar @JvmOverloads constructor(
     private val transparentPaint = Paint()
     private val ovalPaint01 = Paint()
     private val ovalPaint02 = Paint()
-
-
-
     private val bitmapPaint = Paint()
 
 
@@ -80,12 +81,14 @@ class DivisionBar @JvmOverloads constructor(
         val ovalPaintDefaultColor01 = android.R.color.holo_red_dark.resourceToColor(context)
         val ovalPaintDefaultColor02 = android.R.color.holo_blue_dark.resourceToColor(context)
 
-        context.withStyledAttributes(attrs, R.styleable.DivisionBar){
+        context.withStyledAttributes(attrs, R.styleable.DivisionBar) {
             ovalPaint01.color = getColor(R.styleable.DivisionBar_color01, ovalPaintDefaultColor01)
             ovalPaint02.color = getColor(R.styleable.DivisionBar_color02, ovalPaintDefaultColor02)
 
             cornerRadius = getDimension(R.styleable.DivisionBar_circularCorner, 0f)
         }
+
+
 
     }
 
@@ -171,22 +174,52 @@ class DivisionBar @JvmOverloads constructor(
     }
 
     private fun drawLeftFirst(canvas: Canvas, manager: SizeManager){
+        ovalPaint01.drawWithGradientTouchAndBorder(canvas, SIDE.LEFT, manager.getLeftSide())
         canvas.drawRect(manager.getLeftSide(), ovalPaint01)
+
         if(symbol01 != null)
             drawWhiteBitmap(canvas, symbol01!!, manager.getLeftIconPlace(symbol01!!.width))
 
+        ovalPaint02.drawWithGradientTouchAndBorder(canvas, SIDE.RIGHT, manager.getRightSide())
         canvas.drawRect(manager.getRightSide(), ovalPaint02)
+
         if(symbol02 != null)
             drawWhiteBitmap(canvas, symbol02!!,
                 manager.getRightIconPlace(symbol02!!.width))
     }
 
+
+    private fun Paint.drawWithGradientTouchAndBorder
+                (canvas: Canvas, side: SIDE, rectF: RectF){
+        val lighterColor = ColorUtils.blendARGB(this.color, Color.WHITE, 0.6f)
+
+        val firstColor = if(side == SIDE.RIGHT) lighterColor else this.color
+        val secondColor = if(side == SIDE.RIGHT) this.color else lighterColor
+
+        this.shader = LinearGradient(
+            0f,
+            0f,
+            width.toFloat(),
+            height.toFloat(),
+            firstColor,
+            secondColor,
+            Shader.TileMode.MIRROR)
+
+        this.style = Paint.Style.FILL_AND_STROKE
+        canvas.drawRect(rectF, this)
+
+
+    }
+
+
     private fun drawRightFirst(canvas: Canvas, manager: SizeManager){
-        canvas.drawRect(manager.getRightSide(), ovalPaint02)
+        ovalPaint02.drawWithGradientTouchAndBorder(canvas, SIDE.RIGHT ,manager.getRightSide())
+
         if(symbol02 != null)
             drawWhiteBitmap(canvas, symbol02!!, manager.getRightIconPlace(symbol02!!.width))
 
-        canvas.drawRect(manager.getLeftSide(), ovalPaint01)
+        ovalPaint01.drawWithGradientTouchAndBorder(canvas, SIDE.LEFT, manager.getLeftSide())
+
         if(symbol01 != null)
             drawWhiteBitmap(canvas, symbol01!!,
                 manager.getLeftIconPlace(symbol01!!.width))
