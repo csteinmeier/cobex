@@ -2,17 +2,17 @@ package com.example.cobex.settings
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cobex.CompositionArtifact
 import com.example.cobex.R
 import com.example.cobex.ViewHelper
 import com.example.cobex.artifacts.Artifact
-import com.example.cobex.helper.Extensions.resourceToBitmap
 import com.example.cobex.helper.Extensions.resourceToString
 import com.example.cobex.helper.Extensions.toLayout
 import com.example.cobex.timelineview.TimelineViewHolder.Companion.getHolder
-import com.example.cobex.view.DivisionBar
 import kotlinx.android.synthetic.main.pie_chart_concrete.view.*
 import kotlinx.android.synthetic.main.pie_chart_division.view.*
 import kotlinx.android.synthetic.main.pie_chart_seekbar.view.*
@@ -75,7 +75,7 @@ sealed class InfluenceDependenciesHolder(
      */
     private class PieChartSeekBarHolder(
         parent: ViewGroup
-    ) : SeekBar.OnSeekBarChangeListener, InfluenceDependenciesHolder(
+    ) : SeekBar.OnSeekBarChangeListener, CompositionArtifact.IArtifact, InfluenceDependenciesHolder(
         InfluenceDependenciesType.PIE_CHART_SEEKBAR, parent
     ){
         var manager : PieChartManager ?= null
@@ -103,8 +103,13 @@ sealed class InfluenceDependenciesHolder(
             this@PieChartSeekBarHolder.manager = model.pieChartManager
             this@PieChartSeekBarHolder.artifact = model.artifact
             influence_dependencies_seekBar.setOnSeekBarChangeListener(this@PieChartSeekBarHolder)
-            model.pieCheckBoxManager?.map?.set(artifact!!, influence_dependencies_card_view)
+            influence_dependencies_seekBar.progress =
+                model.pieChartManager?.values?.get(model.artifact)?.toInt() ?:25
 
+            model.pieCheckBoxManager?.map?.set(artifact!!, influence_dependencies_card_view)
+            if(model.pieChartManager?.values?.get(model.artifact)?.toInt() == 0){
+                model.pieCheckBoxManager?.toggleCardView(model.artifact)
+            }
         }
 
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -112,7 +117,9 @@ sealed class InfluenceDependenciesHolder(
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
-        override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            this.manager!!.saveValues()
+        }
 
     }
 
@@ -148,11 +155,11 @@ sealed class InfluenceDependenciesHolder(
      * InfluenceDependenciesModel: [InfluenceDependenciesModel.PieChartDivision]
      */
     private class PieChartDivisionHolder(parent : ViewGroup)
-        : InfluenceDependenciesHolder(InfluenceDependenciesType.PIE_CHART_DIVISION, parent),
-    SeekBar.OnSeekBarChangeListener{
+        : InfluenceDependenciesHolder(InfluenceDependenciesType.PIE_CHART_DIVISION, parent){
 
-        private var divisionBar : DivisionBar ?= null
+        private var divisionBar : DivisionBar?= null
         private var context : Context ?= null
+        private var seekBar : SeekBar ?= null
 
         override fun bind(model: InfluenceDependenciesModel) : Unit = with(itemView) {
             model as InfluenceDependenciesModel.PieChartDivision
@@ -164,19 +171,13 @@ sealed class InfluenceDependenciesHolder(
             influence_dependencies_division_title02.text =
                 Artifact.Human.displayString.resourceToString(context)
 
-            divisionBar = influence_dependencies_big_bar
-            divisionBar!!.symbol01 = model.artifact_0.symbol.resourceToBitmap(context, 70, 70)
-            divisionBar!!.symbol02 = model.artifact_1.symbol.resourceToBitmap(context, 70, 70)
-            influence_dependencies_division_seekbar.setOnSeekBarChangeListener(this@PieChartDivisionHolder)
+            this@PieChartDivisionHolder.divisionBar = influence_dependencies_big_bar
+            this@PieChartDivisionHolder.seekBar = influence_dependencies_division_seekbar
+
+            divisionBar!!.initValues(model.artifact_0, model.artifact_1, seekBar!!)
         }
 
-        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            divisionBar?.resize(progress.toFloat())
-        }
 
-        override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
-
-        override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
     }
 
     companion object {

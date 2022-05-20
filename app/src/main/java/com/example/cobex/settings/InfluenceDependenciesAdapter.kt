@@ -41,6 +41,7 @@ class InfluenceDependenciesAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         adapter!!.onBindViewHolder(holder, dependencies[position])
+        holder.setIsRecyclable(false)
     }
 
     override fun getItemCount() = dependencies.size

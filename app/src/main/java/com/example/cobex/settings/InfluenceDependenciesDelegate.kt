@@ -23,8 +23,8 @@ import com.example.cobex.settings.InfluenceDependenciesHolder.Companion.getHolde
  */
 sealed class InfluenceDependenciesDelegate{
 
-    fun onCreateViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder
-    = InfluenceDependenciesHolder.getHolder(getType(), parent)
+    fun onCreateViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder =
+        getHolder(getType(), parent)
 
     fun onBindViewHolder(holder: RecyclerView.ViewHolder, model: InfluenceDependenciesModel) {
         holder as InfluenceDependenciesHolder

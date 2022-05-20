@@ -240,7 +240,5 @@ class CompositionArtifact private constructor(private val context: Context) {
             CompositionArtifact.getInstance(context).getFileDir()
     }
 
-
-
 }
 

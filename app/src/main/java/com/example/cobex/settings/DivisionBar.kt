@@ -1,26 +1,62 @@
-package com.example.cobex.view
+package com.example.cobex.settings
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
-import android.util.Size
 import android.view.View
+import android.widget.SeekBar
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import com.example.cobex.R
 import com.example.cobex.artifacts.Artifact
 import com.example.cobex.helper.Extensions.resourceToBitmap
 import com.example.cobex.helper.Extensions.resourceToColor
+import kotlin.math.absoluteValue
 
 class DivisionBar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr){
+    defStyleAttr: Int = 0,
+) : View(context, attrs, defStyleAttr), SaveAbleChart, SeekBar.OnSeekBarChangeListener{
+
+    private data class ArtifactWrapper(val artifact: Artifact, val symbol: Bitmap)
+
+    private var dragLeft = false
+    private var values : MutableMap<Artifact, Float> = mutableMapOf()
+
+    private var seekBar : SeekBar ?= null
+
+    private var symbol01 : Bitmap ?= null
+    private var artifact01 : Artifact ?= null
+
+    private var artifact02 : Artifact ?= null
+    private var symbol02 : Bitmap ?= null
+
+    private var value = 50f
+
+    fun initValues(artifact01: Artifact, artifact02: Artifact, seekBar: SeekBar){
+
+        this.artifact01 = artifact01
+        this.symbol01 = artifact01.symbol.resourceToBitmap(context, 70, 70)
+
+        this.artifact02 = artifact02
+        this.symbol02 = artifact02.symbol.resourceToBitmap(context, 70, 70)
+
+        this.seekBar = seekBar
+        this.seekBar!!.setOnSeekBarChangeListener(this)
+
+        val artifacts = listOf(artifact01, artifact02)
+        values = getSavedValuesOrNew(context, this.javaClass, artifacts)
+        if(values[artifact01] == null)
+            values = mutableMapOf(artifact01 to 50f, artifact02 to 50f)
+        else {
+            value = values[artifact01]!!
+            seekBar.progress = value.toInt()
+        }
+    }
 
     private var cornerRadius: Float?= 0f
-
 
     private var fullRect : RectF ?= null
 
@@ -30,8 +66,7 @@ class DivisionBar @JvmOverloads constructor(
     private val ovalPaint01 = Paint()
     private val ovalPaint02 = Paint()
 
-    var symbol01 : Bitmap ?= null
-    var symbol02 : Bitmap ?= null
+
 
     private val bitmapPaint = Paint()
 
@@ -51,23 +86,40 @@ class DivisionBar @JvmOverloads constructor(
 
             cornerRadius = getDimension(R.styleable.DivisionBar_circularCorner, 0f)
         }
+
     }
 
-    private var value = 50f
-    private var dragLeft = false
 
     /**
      * @param value between 0 - 100,
      * example: value 60 will set the left Bar to percentage of 60 and the other on to 40
      *
      */
-    fun resize(value: Float){
-        dragLeft = this.value - value < 0
+    private fun resize(value: Float){
+        dragLeft = this.value.minus(value) < 0
 
         this.value = value
         invalidate()
     }
 
+    /**
+     * Saves values with SaveAbleChart
+     */
+    private fun saveValues(){
+        this.values[artifact01!!] = this.value
+        saveValues(context, this.javaClass, values)
+    }
+
+
+    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        resize(progress.toFloat())
+    }
+
+    override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+
+    override fun onStopTrackingTouch(seekBar: SeekBar?) {
+        saveValues()
+    }
 
     override fun draw(canvas: Canvas) {
 
@@ -125,7 +177,8 @@ class DivisionBar @JvmOverloads constructor(
 
         canvas.drawRect(manager.getRightSide(), ovalPaint02)
         if(symbol02 != null)
-            drawWhiteBitmap(canvas, symbol02!!, manager.getRightIconPlace(symbol02!!.width))
+            drawWhiteBitmap(canvas, symbol02!!,
+                manager.getRightIconPlace(symbol02!!.width))
     }
 
     private fun drawRightFirst(canvas: Canvas, manager: SizeManager){
@@ -135,7 +188,8 @@ class DivisionBar @JvmOverloads constructor(
 
         canvas.drawRect(manager.getLeftSide(), ovalPaint01)
         if(symbol01 != null)
-            drawWhiteBitmap(canvas, symbol01!!, manager.getLeftIconPlace(symbol01!!.width))
+            drawWhiteBitmap(canvas, symbol01!!,
+                manager.getLeftIconPlace(symbol01!!.width))
     }
 
     private fun drawWhiteBitmap(canvas: Canvas, bitmap: Bitmap, place: RectF){
