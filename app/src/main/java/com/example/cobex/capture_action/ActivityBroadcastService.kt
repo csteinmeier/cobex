@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.example.cobex.CompositionArtifact
-import com.example.cobex.NotificationHelper
+import com.example.cobex.helper.NotificationHelper
 import com.google.android.gms.location.ActivityTransitionResult
 
 class ActivityBroadcastService : BroadcastReceiver(), CompositionArtifact.IArtifact {
@@ -42,7 +42,8 @@ class ActivityBroadcastService : BroadcastReceiver(), CompositionArtifact.IArtif
                         synchroniseArtifact(
                             context,
                              "${detectedActivity?.name}:TIME:${getTimeStamp(context)}",
-                            CaptureAction::class.java, true
+                            CaptureAction::class.java,
+                            CompositionArtifact.IArtifact.SynchronizeMode.APPEND
                         )
                 }
             }

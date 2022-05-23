@@ -13,11 +13,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import com.example.cobex.helper.Extensions.resourceToString
+import com.example.cobex.artifacts.Artifact
 import com.example.cobex.databinding.FragmentInputMelodyBinding
-
-
-
+import com.example.cobex.helper.MidiHelper
+import com.example.cobex.helper.PermissionHelper
 
 
 /**
@@ -38,7 +40,7 @@ class InputMelody : Fragment(), View.OnTouchListener,
 
     // we can record up to 5 melodies for each experience
 
-    private fun getRecNo(context: Context) = getCounter(context, this::class.java) % 5
+    private fun getRecNo(context: Context) = getCounter(context, Artifact.InputMelody.javaClass) % 5
     private fun melodyFileDir(context: Context) =
         "${getFileDir(context)}/audiorec${getRecNo(context)}.3gp"
 
@@ -90,69 +92,8 @@ class InputMelody : Fragment(), View.OnTouchListener,
         }
         //endregion
 
-        //region listener binding for piano keys
-        binding.w1.setOnTouchListener(this)
-        binding.w2.setOnTouchListener(this)
-        binding.w3.setOnTouchListener(this)
-        binding.w4.setOnTouchListener(this)
-        binding.w5.setOnTouchListener(this)
-        binding.w6.setOnTouchListener(this)
-        binding.w7.setOnTouchListener(this)
-        binding.w8.setOnTouchListener(this)
-        binding.w9.setOnTouchListener(this)
-        binding.w10.setOnTouchListener(this)
-        binding.w11.setOnTouchListener(this)
-        binding.w12.setOnTouchListener(this)
-        binding.w13.setOnTouchListener(this)
-        binding.w14.setOnTouchListener(this)
-        binding.w15.setOnTouchListener(this)
-        binding.w16.setOnTouchListener(this)
-        binding.w17.setOnTouchListener(this)
-        binding.w18.setOnTouchListener(this)
-        binding.w19.setOnTouchListener(this)
-        binding.w20.setOnTouchListener(this)
-        binding.w21.setOnTouchListener(this)
-        binding.w22.setOnTouchListener(this)
-        binding.w23.setOnTouchListener(this)
-        binding.w24.setOnTouchListener(this)
-        binding.w25.setOnTouchListener(this)
-        binding.w26.setOnTouchListener(this)
-        binding.w27.setOnTouchListener(this)
-        binding.w28.setOnTouchListener(this)
-        binding.w29.setOnTouchListener(this)
-        binding.w30.setOnTouchListener(this)
-        binding.w31.setOnTouchListener(this)
-        binding.w32.setOnTouchListener(this)
-        binding.w33.setOnTouchListener(this)
-        binding.w34.setOnTouchListener(this)
-        binding.w35.setOnTouchListener(this)
+        binding.keyboardLayout.children.forEach { it.setOnTouchListener(this) }
 
-        binding.b1.setOnTouchListener(this)
-        binding.b2.setOnTouchListener(this)
-        binding.b3.setOnTouchListener(this)
-        binding.b4.setOnTouchListener(this)
-        binding.b5.setOnTouchListener(this)
-        binding.b6.setOnTouchListener(this)
-        binding.b7.setOnTouchListener(this)
-        binding.b8.setOnTouchListener(this)
-        binding.b9.setOnTouchListener(this)
-        binding.b10.setOnTouchListener(this)
-        binding.b11.setOnTouchListener(this)
-        binding.b12.setOnTouchListener(this)
-        binding.b13.setOnTouchListener(this)
-        binding.b14.setOnTouchListener(this)
-        binding.b15.setOnTouchListener(this)
-        binding.b16.setOnTouchListener(this)
-        binding.b17.setOnTouchListener(this)
-        binding.b18.setOnTouchListener(this)
-        binding.b19.setOnTouchListener(this)
-        binding.b20.setOnTouchListener(this)
-        binding.b21.setOnTouchListener(this)
-        binding.b22.setOnTouchListener(this)
-        binding.b23.setOnTouchListener(this)
-        binding.b24.setOnTouchListener(this)
-        binding.b25.setOnTouchListener(this)
-//endregion
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -174,10 +115,10 @@ class InputMelody : Fragment(), View.OnTouchListener,
     fun record() {
         onRecord(mStartRecording)
         if (mStartRecording) {
-            binding.record.setText("Finish")
+            binding.record.text = R.string.buttonFinish.resourceToString(requireContext())
             binding.record.setBackgroundResource(R.drawable.recordbutton)
         } else {
-            binding.record.setText("Record")
+            binding.record.text = R.string.buttonRecord.resourceToString(requireContext())
             binding.record.setBackgroundResource(R.drawable.recordbutton)
         }
         mStartRecording = !mStartRecording
@@ -199,7 +140,11 @@ class InputMelody : Fragment(), View.OnTouchListener,
 
         Toast.makeText(activity?.baseContext, "Song ${getRecNo(requireContext()) + 1} saved", Toast.LENGTH_SHORT).show()
         val toSave = melodyFileDir(requireContext()) + "TIME:" +getTimeStamp(requireContext())
-        synchroniseArtifact(requireContext(), toSave, this::class.java, true)
+        synchroniseArtifact(
+            requireContext(),
+            toSave, this::class.java,
+            CompositionArtifact.IArtifact.SynchronizeMode.APPEND
+        )
     }
 
 
@@ -339,7 +284,7 @@ class InputMelody : Fragment(), View.OnTouchListener,
         midihelper.start()
 
         // Get the configuration.
-        var config = midihelper.config()
+        val config = midihelper.config()
 
         // Print out the details.
         Log.d(this.javaClass.name, "maxVoices: " + config.get(0))

@@ -1,6 +1,8 @@
-package com.example.cobex
+package com.example.cobex.helper
 
 import android.content.Context
+import com.example.cobex.CompositionArtifact
+import com.example.cobex.R
 
 object TimeHelper {
 

@@ -22,8 +22,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cobex.Extensions.toImage
+import com.example.cobex.helper.Extensions.toImage
+import com.example.cobex.artifacts.Artifact
 import com.example.cobex.databinding.FragmentCapturePictureBinding
+import com.example.cobex.helper.PermissionHelper
 import com.example.cobex.timelineview.TimelineObject
 import java.io.File
 import java.io.FileOutputStream
@@ -86,7 +88,7 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
         val mutableSet = mutableSetOf<String>()
         mutableSet.apply {
             getStringSet(requireContext(), CapturePicture::class.java)?.let { addAll(it) }
-            getStringSet(requireContext(), TimelineObject.ImageItem::class.java)?.let { addAll(it) }
+            getStringSet(requireContext(), TimelineObject.CapturePictureItem::class.java)?.let { addAll(it) }
             getStringSet(requireContext(), TimelineObject.BigImageItem::class.java)?.let { addAll(it) }
         }
         Log.e("dasdasd", mutableSet.toString())
@@ -242,7 +244,7 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
                         context,
                         file.absolutePath,
                         CapturePicture::class.java,
-                        true
+                        CompositionArtifact.IArtifact.SynchronizeMode.APPEND
                     )
                     setButtonEnable()
                 }
@@ -278,7 +280,12 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
                     val filePath = picture.value?.file?.absolutePath
                     _pictures.value?.file?.delete()
                     _pictures.value = CapturedPicture(placeholder = R.drawable.ic_lense_24)
-                    synchroniseArtifact(context, filePath!!, CapturePicture::class.java, false)
+                    synchroniseArtifact(
+                        context,
+                        filePath!!,
+                        Artifact.CapturePicture.javaClass,
+                        CompositionArtifact.IArtifact.SynchronizeMode.REMOVE
+                    )
                     setButtonEnable()
                 }
 

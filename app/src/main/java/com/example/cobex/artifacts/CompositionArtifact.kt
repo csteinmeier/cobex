@@ -130,18 +130,8 @@ class CompositionArtifact private constructor(private val context: Context) {
 
 
     /**
-     * To write data to the artifact,
-     * this interface should be implemented in the respective class.
      *
-     * * To signal that an instance of an artifact has been started,
-     * a Boolean can be saved with the command
-     * [markAsSavedIfNotMarkedAsSaved].
-     * Here a Boolean is stored which signals that something has been
-     * placed in SharedPreferences as well as the executing class
-     * which has saved data.
-     *
-     * * To see if data was written [isInstanceOfSavedPreferencesAvailable] can be used.
-     * This can be done with the context alone or with the help of the respective class.
+     * * To Save Data use [synchroniseArtifact]
      *
      * * To write concrete data to the references it is enough to use one of the methods:
      * [putStringSet], [putCounter] ...
@@ -153,6 +143,12 @@ class CompositionArtifact private constructor(private val context: Context) {
      * * To delete everything saved use [clearSavedInstance]
      */
     interface IArtifact {
+
+
+        enum class SynchronizeMode{
+            APPEND,
+            REMOVE
+        }
 
         fun clearSavedInstance(context: Context){
             CompositionArtifact.getInstance(context).clearSavedInstance()
@@ -218,23 +214,31 @@ class CompositionArtifact private constructor(private val context: Context) {
         fun getTimeStamp(context: Context): String =
             CompositionArtifact.getInstance(context).getTimeStamp()
 
+        /**
+         * Used to automatically save data, extending already saved data, or remove existing data,
+         * also setting the counter in the Create New Fragment.
+         *
+         * @param clazz that can be identified with the stored string
+         *
+         * @param stringToSyn new data
+         *
+         * @param mode [SynchronizeMode.APPEND] or [SynchronizeMode.REMOVE] to remove or add a
+         * artifact
+         */
         fun <T>synchroniseArtifact(
-            context: Context, stringToSyn: String, clazz: Class<T>, toSave: Boolean){
+            context: Context, stringToSyn: String, clazz: Class<T>, mode: SynchronizeMode){
             markAsSavedIfNotMarkedAsSaved(context, clazz)
             val list = getStringSet(context, clazz)?.toMutableList()?: mutableListOf()
-            when(toSave){
-                true -> list.add(stringToSyn)
-                false -> list.remove(stringToSyn)
+            when(mode){
+                SynchronizeMode.APPEND -> list.add(stringToSyn)
+                SynchronizeMode.REMOVE -> list.remove(stringToSyn)
             }
-            //CreateNew.counterMap[clazz.name] to list.size
             putCounter(context, clazz, list.size)
             putStringSet(context, clazz, list.toSet())
         }
         fun getFileDir(context: Context) =
             CompositionArtifact.getInstance(context).getFileDir()
     }
-
-
 
 }
 

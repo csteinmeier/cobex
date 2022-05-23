@@ -7,8 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import com.example.cobex.Extensions.millisToMinFormat
-import com.example.cobex.Extensions.toImage
+import com.example.cobex.helper.Extensions.millisToMinFormat
+import com.example.cobex.helper.Extensions.toImage
+import com.example.cobex.helper.TimeHelper
 import com.example.cobex.ViewHelper.SimpleTextField
 
 /**
@@ -158,6 +159,5 @@ abstract class ViewHelper<V : View, T>(
                 mPlayer.start()
             }
         }
-
     }
 }

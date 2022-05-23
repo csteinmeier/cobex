@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DivisionBar">
+        <attr name="color01" format="color" />
+        <attr name="color02" format="color" />
+        <attr name="text01" format="string" />
+        <attr name="text02" format="string" />
+        <attr name="circularCorner" format="dimension" />
+    </declare-styleable>
+</resources>

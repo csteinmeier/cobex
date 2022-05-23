@@ -1,15 +1,20 @@
-package com.example.cobex
+package com.example.cobex.helper
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.ImageDecoder
 import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.navigation.findNavController
 import java.io.File
 
 object Extensions {
@@ -56,4 +61,16 @@ object Extensions {
         }
     }
 
+    fun Button.navigateOnClick(dest: Int) = this.setOnClickListener { findNavController().navigate(dest) }
+
+    fun Int.resourceToString(context: Context) = ContextWrapper(context).getString(this)
+    fun Int.resourceToColor(context: Context) = ContextWrapper(context).getColor(this)
+    fun Int.resourceToBitmap(context: Context, width: Int, height: Int) : Bitmap{
+        val drawAble = ContextCompat.getDrawable(context, this)
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawAble!!.setBounds(0, 0, width, height)
+        drawAble.draw(canvas)
+        return bitmap
+    }
 }

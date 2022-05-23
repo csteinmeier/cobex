@@ -1,4 +1,4 @@
-package com.example.cobex
+package com.example.cobex.helper
 
 import android.app.Activity
 import android.app.Dialog
@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.example.cobex.R
 
 object PermissionHelper {
 

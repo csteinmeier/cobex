@@ -46,28 +46,28 @@ sealed class TimelineDelegate {
 
     /**
      *
-     *  TimelineObject: [TimelineObject.Type.IMAGE_ITEM]
+     *  TimelineObject: [TimelineObject.Type.CAPTURE_PICTURE_ITEM]
      *
      *  Adapter of Layout [R.layout.timeline_item_picture_small]
      *
-     *  ViewHolder: [TimelineViewHolder.ImageHolder]
+     *  ViewHolder: [TimelineViewHolder.CaptureImageHolder]
      *
      */
-    private object ImageAdapter : TimelineDelegate() {
-        override fun getType() = TimelineItemType.IMAGE_ITEM
+    private object CapturePictureAdapter : TimelineDelegate() {
+        override fun getType() = TimelineItemType.CAPTURE_PICTURE_ITEM
     }
 
     /**
      *
-     *  TimelineObject: [TimelineObject.Type.RECORD_ITEM]
+     *  TimelineObject: [TimelineObject.Type.CAPTURE_ACTION_ITEM]
      *
      *  Adapter of Layout [R.layout.timeline_item_recorded_activity]
      *
-     *  ViewHolder: [TimelineViewHolder.RecordedActivityHolder]
+     *  ViewHolder: [TimelineViewHolder.CaptureActionHolder]
      *
      */
-    private object RecordAdapter : TimelineDelegate() {
-        override fun getType() = TimelineItemType.RECORD_ITEM
+    private object CaptureActionAdapter : TimelineDelegate() {
+        override fun getType() = TimelineItemType.CAPTURE_ACTION_ITEM
     }
 
     /**
@@ -86,7 +86,7 @@ sealed class TimelineDelegate {
 
     /**
      *
-     *  TimelineObject: [TimelineObject.Type.CAPTURE_SOUND]
+     *  TimelineObject: [TimelineObject.Type.CAPTURE_SOUND_ITEM]
      *
      *  Adapter of Layout [R.layout.timeline_item_capture_sound]
      *
@@ -94,13 +94,13 @@ sealed class TimelineDelegate {
      *
      */
     private object CaptureSoundAdapter : TimelineDelegate() {
-        override fun getType() = TimelineItemType.CAPTURE_SOUND
+        override fun getType() = TimelineItemType.CAPTURE_SOUND_ITEM
 
     }
 
     /**
      *
-     *  TimelineObject: [TimelineObject.Type.INPUT_MELODY]
+     *  TimelineObject: [TimelineObject.Type.INPUT_MELODY_ITEM]
      *
      *  Adapter of Layout [R.layout.timeline_item_input_melody]
      *
@@ -108,21 +108,21 @@ sealed class TimelineDelegate {
      *
      */
     private object InputMelodyAdapter : TimelineDelegate() {
-        override fun getType() = TimelineItemType.INPUT_MELODY
+        override fun getType() = TimelineItemType.INPUT_MELODY_ITEM
 
     }
 
     /**
      *
-     *  TimelineObject: [TimelineObject.Type.KEYWORD]
+     *  TimelineObject: [TimelineObject.Type.INPUT_KEYWORD_ITEM]
      *
      *  Adapter of Layout [R.layout.timeline_item_keyword]
      *
      *  ViewHolder: [TimelineViewHolder.KeywordHolder]
      *
      */
-    private object KeywordAdapter : TimelineDelegate() {
-        override fun getType() = TimelineItemType.KEYWORD
+    private object InputKeywordAdapter : TimelineDelegate() {
+        override fun getType() = TimelineItemType.INPUT_KEYWORD_ITEM
 
     }
 
@@ -135,12 +135,12 @@ sealed class TimelineDelegate {
          */
         fun getAdapter(type: TimelineObject.Type) =
             when (type) {
-                TimelineItemType.IMAGE_ITEM -> ImageAdapter
-                TimelineItemType.RECORD_ITEM -> RecordAdapter
+                TimelineItemType.CAPTURE_PICTURE_ITEM -> CapturePictureAdapter
+                TimelineItemType.CAPTURE_ACTION_ITEM -> CaptureActionAdapter
                 TimelineItemType.BIG_IMAGE_ITEM -> BigImageAdapter
-                TimelineItemType.CAPTURE_SOUND -> CaptureSoundAdapter
-                TimelineItemType.INPUT_MELODY -> InputMelodyAdapter
-                TimelineItemType.KEYWORD -> KeywordAdapter
+                TimelineItemType.CAPTURE_SOUND_ITEM -> CaptureSoundAdapter
+                TimelineItemType.INPUT_MELODY_ITEM -> InputMelodyAdapter
+                TimelineItemType.INPUT_KEYWORD_ITEM -> InputKeywordAdapter
             }
     }
 }

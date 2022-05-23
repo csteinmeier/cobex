@@ -1,6 +1,7 @@
 package com.example.cobex.timelineview
 
 import android.view.View
+import com.example.cobex.artifacts.Artifact
 import kotlinx.android.synthetic.main.timeline_item_picture_big.view.*
 import kotlinx.android.synthetic.main.timeline_item_picture_small.view.*
 import kotlinx.android.synthetic.main.timeline_item_recorded_activity.view.*
@@ -52,12 +53,12 @@ sealed class TimelineCards {
     }
 
     enum class Types(val card: TimelineCards, val color: Int) {
-        RECORD_ACTIVITY(RecordedActivity, android.R.color.holo_blue_dark),
-        IMAGE(Image, android.R.color.holo_orange_light),
-        BIG_IMAGE(BigImage, android.R.color.holo_orange_light),
-        CAPTURE_SOUND(CaptureSound, android.R.color.holo_red_light),
-        INPUT_MELODY(InputMelody, android.R.color.holo_green_light),
-        KEYWORD(Keyword, android.R.color.holo_purple)
+        CAPTURE_ACTION(RecordedActivity, Artifact.CaptureAction.color),
+        CAPTURE_PICTURE(Image, Artifact.CapturePicture.color),
+        BIG_IMAGE(BigImage, Artifact.CapturePicture.color),
+        CAPTURE_SOUND(CaptureSound, Artifact.CaptureSound.color),
+        INPUT_MELODY(InputMelody, Artifact.InputMelody.color),
+        INPUT_KEYWORD(Keyword, Artifact.InputKeywords.color)
     }
 
     companion object {

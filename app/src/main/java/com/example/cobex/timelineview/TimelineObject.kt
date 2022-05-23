@@ -2,13 +2,13 @@ package com.example.cobex.timelineview
 
 import com.example.cobex.CompositionArtifact
 import com.example.cobex.R
+import com.example.cobex.artifacts.Artifact
 import java.time.format.DateTimeFormatter
 
 typealias TimelineItemType = TimelineObject.Type
 
 /**
  * Data classes for each Layout and its Views
- * Also used to Link the Adapter with their matching Holder
  */
 sealed class TimelineObject(
     val id: String,
@@ -29,13 +29,13 @@ sealed class TimelineObject(
      * @param pos *default = -1*, should not be set manually, will be set to its adapter position
      *
      */
-    class ImageItem(
+    class CapturePictureItem(
         id: String,
         createdTimeAsString: String,
         val imgSrc: String,
         pos: Int? = -1
     ) :
-        TimelineObject(id, Type.IMAGE_ITEM, createdTimeAsString, pos)
+        TimelineObject(id, Type.CAPTURE_PICTURE_ITEM, createdTimeAsString, pos)
 
     /**
      * Data Class for [R.layout.timeline_item_recorded_activity]
@@ -49,13 +49,13 @@ sealed class TimelineObject(
      * @param pos *default = -1*, should not be set manually, will be set to its adapter position
      *
      */
-    class RecordItem(
+    class CaptureActionItem(
         id: String,
         createdTimeAsString: String,
         val detectedActivity: String,
         pos: Int? = -1
     ) :
-        TimelineObject(id, Type.RECORD_ITEM, createdTimeAsString, pos)
+        TimelineObject(id, Type.CAPTURE_ACTION_ITEM, createdTimeAsString, pos)
 
     /**
      * Data Class for [R.layout.timeline_item_picture_big]
@@ -97,7 +97,7 @@ sealed class TimelineObject(
         val musicType: Int,
         pos: Int? = -1
     ) :
-    TimelineObject(id, Type.CAPTURE_SOUND, createdTimeAsString, pos)
+    TimelineObject(id, Type.CAPTURE_SOUND_ITEM, createdTimeAsString, pos)
 
     /**
      * Data Class for [R.layout.timeline_item_input_melody]
@@ -117,7 +117,7 @@ sealed class TimelineObject(
         val mRecord: String,
         pos: Int? = -1
     ) :
-        TimelineObject(id, Type.INPUT_MELODY, createdTimeAsString, pos)
+        TimelineObject(id, Type.INPUT_MELODY_ITEM, createdTimeAsString, pos)
 
     /**
      * Data Class for [R.layout.timeline_item_keyword]
@@ -131,14 +131,14 @@ sealed class TimelineObject(
      * @param pos *default = -1*, should not be set manually, will be set to its adapter position
      *
      */
-    class KeywordItem(
+    class InputKeywordItem(
         id: String,
         createdTimeAsString: String,
         val keywords: String,
         val keywordAmount: Int,
         pos: Int? = -1
     ) :
-        TimelineObject(id, Type.KEYWORD, createdTimeAsString, pos)
+        TimelineObject(id, Type.INPUT_KEYWORD_ITEM, createdTimeAsString, pos)
 
     /**
      * Used for linking between the individual components of the TimelineViews
@@ -146,14 +146,14 @@ sealed class TimelineObject(
     enum class Type(val layout: Int) {
 
         /**
-         * @see [ImageItem]
+         * @see [CapturePictureItem]
          */
-        IMAGE_ITEM(R.layout.timeline_item_picture_small),
+        CAPTURE_PICTURE_ITEM(R.layout.timeline_item_picture_small),
 
         /**
-         * @see [RecordItem]
+         * @see [CaptureActionItem]
          */
-        RECORD_ITEM(R.layout.timeline_item_recorded_activity),
+        CAPTURE_ACTION_ITEM(R.layout.timeline_item_recorded_activity),
 
         /**
          * @see [BigImageItem]
@@ -163,17 +163,17 @@ sealed class TimelineObject(
         /**
          * @see [CaptureSoundItem]
          */
-        CAPTURE_SOUND(R.layout.timeline_item_capture_sound),
+        CAPTURE_SOUND_ITEM(R.layout.timeline_item_capture_sound),
 
         /**
          * @see [InputMelodyItem]
          */
-        INPUT_MELODY(R.layout.timeline_item_input_melody),
+        INPUT_MELODY_ITEM(R.layout.timeline_item_input_melody),
 
         /**
-         * @see [KeywordItem]
+         * @see [InputKeywordItem]
          */
-        KEYWORD(R.layout.timeline_item_keyword)
+        INPUT_KEYWORD_ITEM(R.layout.timeline_item_keyword)
     }
 
 }

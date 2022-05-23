@@ -3,19 +3,18 @@ package com.example.cobex
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.ContextWrapper
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.cobex.helper.Extensions.resourceToString
+import com.example.cobex.artifacts.Artifact
 import com.example.cobex.databinding.FragmentCaptureSoundBinding
+import com.example.cobex.helper.PermissionHelper
 
 /**
  * A simple [Fragment] subclass.
@@ -25,7 +24,7 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact, PermissionHelper
     private var mRecorder: MediaRecorder? = null
     private var _binding: FragmentCaptureSoundBinding? = null
 
-    private fun getRecNo(context: Context) = getCounter(context, this::class.java) % 5
+    private fun getRecNo(context: Context) = getCounter(context, Artifact.CaptureSound.javaClass) % 5
     private fun soundFileDir(context: Context) =
         "${getFileDir(context)}/recording${getRecNo(requireContext())}.mp3"
 
@@ -64,7 +63,7 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact, PermissionHelper
             hasPermission { toggleRecording() }
         }
 
-        var web = binding.webView
+        val web = binding.webView
         web.setBackgroundColor(Color.TRANSPARENT) //for gif without background
         web.loadUrl("file:///android_asset/htmls/gif.html")
         web.visibility= View.INVISIBLE
@@ -89,14 +88,14 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact, PermissionHelper
         if (!started)
         {
             started = true
-            binding.buttonStart.text = "Stop"
+            binding.buttonStart.text = R.string.buttonStop.resourceToString(requireContext())
             binding.webView.visibility= View.VISIBLE
             startRecording()
         }
         else
         {
             started = false
-            binding.buttonStart.text = "Start"
+            binding.buttonStart.text = R.string.buttonStart.resourceToString(requireContext())
             binding.webView.visibility= View.INVISIBLE
             stopRecording()
         }
@@ -110,14 +109,19 @@ class CaptureSound : Fragment(), CompositionArtifact.IArtifact, PermissionHelper
         Toast.makeText(activity?.baseContext, "Sound ${getRecNo(requireContext()) + 1} saved", Toast.LENGTH_SHORT).show()
         val soundType = if(environmentSounds) "ENV" else "MUSIC"
         val toSave = soundFileDir(requireContext()) + "TIME:" + getTimeStamp(requireContext())
-        synchroniseArtifact(requireContext(), "TYPE:$soundType$toSave", this::class.java, true)
+        synchroniseArtifact(
+            requireContext(),
+            "TYPE:$soundType$toSave",
+            Artifact.CaptureSound.javaClass,
+            CompositionArtifact.IArtifact.SynchronizeMode.APPEND
+        )
     }
 
 
     private fun startRecording()
     {
 
-        var outputfile = soundFileDir(requireContext())
+        val outputfile = soundFileDir(requireContext())
 
         mRecorder = MediaRecorder()
         mRecorder?.setAudioSource(MediaRecorder.AudioSource.MIC)

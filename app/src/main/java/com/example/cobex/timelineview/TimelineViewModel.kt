@@ -17,7 +17,7 @@ class TimelineViewModel(
 ) : CompositionArtifact.IArtifact {
 
 
-    var adapter: TimelineAdapter =
+    val adapter: TimelineAdapter =
         TimelineAdapter(
             StoredToItemHelper.getList(
                 TimelineStateType.actualTimelineState, context
@@ -161,11 +161,11 @@ class TimelineViewModel(
 
             override fun getList(timelineStateType: TimelineStateType, context: Context):
                     List<TimelineObject>? =
-                timelineStateType.getStringSet(context, TimelineItemType.IMAGE_ITEM)
+                timelineStateType.getStringSet(context, TimelineItemType.CAPTURE_PICTURE_ITEM)
                     ?.let { storedSetToItemList(it) }
 
             override fun storedToItem(savedString: String, position: Int?)
-            = TimelineObject.ImageItem(
+            = TimelineObject.CapturePictureItem(
                 id = savedString,
                 createdTimeAsString = savedString.substringAfter("images/"),
                 imgSrc = savedString,
@@ -181,14 +181,14 @@ class TimelineViewModel(
 
             override fun getList(timelineStateType: TimelineStateType, context: Context):
                     List<TimelineObject>? =
-                timelineStateType.getStringSet(context, TimelineObject.Type.RECORD_ITEM)
+                timelineStateType.getStringSet(context, TimelineObject.Type.CAPTURE_ACTION_ITEM)
                     ?.let { storedSetToItemList(it) }
 
 
             override fun storedToItem(
                 savedString: String, position: Int?
             ) =
-                TimelineObject.RecordItem(
+                TimelineObject.CaptureActionItem(
                     id = savedString,
                     createdTimeAsString = savedString.substringAfter(":TIME:"),
                     detectedActivity = savedString.substringBefore(":TIME:"),
@@ -205,7 +205,7 @@ class TimelineViewModel(
                 timelineStateType: TimelineStateType,
                 context: Context
             ): List<TimelineObject>? =
-                timelineStateType.getStringSet(context, TimelineObject.Type.CAPTURE_SOUND)
+                timelineStateType.getStringSet(context, TimelineObject.Type.CAPTURE_SOUND_ITEM)
                     ?.let { storedSetToItemList(it) }
 
 
@@ -238,7 +238,7 @@ class TimelineViewModel(
                 timelineStateType: TimelineStateType,
                 context: Context
             ): List<TimelineObject>? =
-                timelineStateType.getStringSet(context, TimelineObject.Type.INPUT_MELODY)
+                timelineStateType.getStringSet(context, TimelineObject.Type.INPUT_MELODY_ITEM)
                     ?.let { storedSetToItemList(it) }
 
             override fun storedToItem(savedString: String, position: Int?) =
@@ -260,11 +260,11 @@ class TimelineViewModel(
                 timelineStateType: TimelineStateType,
                 context: Context
             ): List<TimelineObject>? =
-                timelineStateType.getStringSet(context, TimelineObject.Type.KEYWORD)
+                timelineStateType.getStringSet(context, TimelineObject.Type.INPUT_KEYWORD_ITEM)
                     ?.let { storedSetToItemList(it) }
 
             override fun storedToItem(savedString: String, position: Int?) =
-                TimelineObject.KeywordItem(
+                TimelineObject.InputKeywordItem(
                     id = savedString,
                     createdTimeAsString = savedString.substringAfterLast("#"),
                     keywords = savedString.substringAfter("#"),
@@ -321,20 +321,20 @@ class TimelineViewModel(
 
                 return when (typeFromSavedValue(savedString)!!) {
 
-                    TimelineObject.Type.IMAGE_ITEM -> Image.storedToItem(stringValue, position)
+                    TimelineObject.Type.CAPTURE_PICTURE_ITEM -> Image.storedToItem(stringValue, position)
 
                     TimelineObject.Type.BIG_IMAGE_ITEM -> Image.storedToItem(stringValue, position)
 
-                    TimelineObject.Type.RECORD_ITEM ->
+                    TimelineObject.Type.CAPTURE_ACTION_ITEM ->
                         CaptureAction.storedToItem(stringValue, position)
 
-                    TimelineObject.Type.CAPTURE_SOUND ->
+                    TimelineObject.Type.CAPTURE_SOUND_ITEM ->
                         CaptureSound.storedToItem(stringValue, position)
 
-                    TimelineObject.Type.INPUT_MELODY ->
+                    TimelineObject.Type.INPUT_MELODY_ITEM ->
                         InputMelody.storedToItem(stringValue, position)
 
-                    TimelineObject.Type.KEYWORD -> Keyword.storedToItem(stringValue, position)
+                    TimelineObject.Type.INPUT_KEYWORD_ITEM -> Keyword.storedToItem(stringValue, position)
                 }
             }
 
