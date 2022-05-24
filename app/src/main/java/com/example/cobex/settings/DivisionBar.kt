@@ -2,7 +2,6 @@ package com.example.cobex.settings
 
 import android.content.Context
 import android.graphics.*
-import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
 import android.widget.SeekBar
@@ -166,21 +165,21 @@ class DivisionBar @JvmOverloads constructor(
     private fun assumeRight(canvas: Canvas, manager: SizeManager){
         if (symbol02 != null){
             if(manager.calcMid() > symbol02!!.width + 20) {
-                drawRightFirst(canvas, manager)
-            } else {
                 drawLeftFirst(canvas, manager)
+            } else {
+                drawRightFirst(canvas, manager)
             }
         }
     }
 
     private fun drawLeftFirst(canvas: Canvas, manager: SizeManager){
-        ovalPaint01.drawWithGradientTouchAndBorder(canvas, SIDE.LEFT, manager.getLeftSide())
+        ovalPaint01.drawWithGradientTouch(canvas, SIDE.LEFT, manager.getLeftSide())
         canvas.drawRect(manager.getLeftSide(), ovalPaint01)
 
         if(symbol01 != null)
             drawWhiteBitmap(canvas, symbol01!!, manager.getLeftIconPlace(symbol01!!.width))
 
-        ovalPaint02.drawWithGradientTouchAndBorder(canvas, SIDE.RIGHT, manager.getRightSide())
+        ovalPaint02.drawWithGradientTouch(canvas, SIDE.RIGHT, manager.getRightSide())
         canvas.drawRect(manager.getRightSide(), ovalPaint02)
 
         if(symbol02 != null)
@@ -189,7 +188,7 @@ class DivisionBar @JvmOverloads constructor(
     }
 
 
-    private fun Paint.drawWithGradientTouchAndBorder
+    private fun Paint.drawWithGradientTouch
                 (canvas: Canvas, side: SIDE, rectF: RectF){
         val lighterColor = ColorUtils.blendARGB(this.color, Color.WHITE, 0.6f)
 
@@ -213,12 +212,12 @@ class DivisionBar @JvmOverloads constructor(
 
 
     private fun drawRightFirst(canvas: Canvas, manager: SizeManager){
-        ovalPaint02.drawWithGradientTouchAndBorder(canvas, SIDE.RIGHT ,manager.getRightSide())
+        ovalPaint02.drawWithGradientTouch(canvas, SIDE.RIGHT ,manager.getRightSide())
 
         if(symbol02 != null)
             drawWhiteBitmap(canvas, symbol02!!, manager.getRightIconPlace(symbol02!!.width))
 
-        ovalPaint01.drawWithGradientTouchAndBorder(canvas, SIDE.LEFT, manager.getLeftSide())
+        ovalPaint01.drawWithGradientTouch(canvas, SIDE.LEFT, manager.getLeftSide())
 
         if(symbol01 != null)
             drawWhiteBitmap(canvas, symbol01!!,
