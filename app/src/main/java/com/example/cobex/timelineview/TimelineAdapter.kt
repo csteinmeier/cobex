@@ -3,7 +3,7 @@ package com.example.cobex.timelineview
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cobex.CompositionArtifact
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.timelineview.TimelineDelegate.Companion.getAdapter
 
 /**

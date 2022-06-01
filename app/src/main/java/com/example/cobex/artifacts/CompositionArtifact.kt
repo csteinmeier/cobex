@@ -1,43 +1,11 @@
-package com.example.cobex
+package com.example.cobex.artifacts
 
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.SharedPreferences
-import android.graphics.ImageDecoder
-import android.media.Image
-import android.text.BoringLayout
-import androidx.core.net.toUri
+import com.example.cobex.helper.SingletonHolder
 import java.io.File
-import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.format.DateTimeFormatter
-import java.util.*
-
-open class SingletonHolder<out T : Any, in A>(creator: (A) -> T) {
-    private var creator: ((A) -> T)? = creator
-
-    @Volatile
-    private var instance: T? = null
-
-    fun getInstance(arg: A): T {
-        val checkInstance = instance
-        if (checkInstance != null) {
-            return checkInstance
-        }
-
-        return synchronized(this) {
-            val checkInstanceAgain = instance
-            if (checkInstanceAgain != null) {
-                checkInstanceAgain
-            } else {
-                val created = creator!!(arg)
-                instance = created
-                creator = null
-                created
-            }
-        }
-    }
-}
 
 /**
  *
@@ -145,6 +113,9 @@ class CompositionArtifact private constructor(private val context: Context) {
     interface IArtifact {
 
 
+        /**
+         * Mode, either [APPEND] or [REMOVE] to append or Remove an Artifact with [synchroniseArtifact]
+         */
         enum class SynchronizeMode{
             APPEND,
             REMOVE
@@ -226,7 +197,8 @@ class CompositionArtifact private constructor(private val context: Context) {
          * artifact
          */
         fun <T>synchroniseArtifact(
-            context: Context, stringToSyn: String, clazz: Class<T>, mode: SynchronizeMode){
+            context: Context, stringToSyn: String, clazz: Class<T>, mode: SynchronizeMode
+        ){
             markAsSavedIfNotMarkedAsSaved(context, clazz)
             val list = getStringSet(context, clazz)?.toMutableList()?: mutableListOf()
             when(mode){

@@ -1,10 +1,8 @@
 package com.example.cobex.settings
 
 import android.content.Context
-import android.util.Log
-import com.example.cobex.CompositionArtifact
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.artifacts.Artifact
-import com.example.cobex.timelineview.TimelineStateType
 
 /**
  * Child of CompositionArtifact.IArtifact

@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cobex.CompositionArtifact
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.R
 
 /**

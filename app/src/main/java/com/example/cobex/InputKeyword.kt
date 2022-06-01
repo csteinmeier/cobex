@@ -10,6 +10,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.navigation.fragment.findNavController
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.databinding.FragmentInputKeywordBinding
 
 /**

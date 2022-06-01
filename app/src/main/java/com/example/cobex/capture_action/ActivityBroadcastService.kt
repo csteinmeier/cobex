@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.example.cobex.CompositionArtifact
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.helper.NotificationHelper
 import com.google.android.gms.location.ActivityTransitionResult
 

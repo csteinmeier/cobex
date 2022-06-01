@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cobex.helper.Extensions.toImage
 import com.example.cobex.artifacts.Artifact
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.databinding.FragmentCapturePictureBinding
 import com.example.cobex.helper.PermissionHelper
 import com.example.cobex.timelineview.TimelineObject

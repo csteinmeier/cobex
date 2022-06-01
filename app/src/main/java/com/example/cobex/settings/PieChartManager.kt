@@ -1,7 +1,7 @@
 package com.example.cobex.settings
 
 import android.content.Context
-import com.example.cobex.CompositionArtifact
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.R
 import com.example.cobex.artifacts.Artifact
 import com.example.cobex.helper.Extensions.resourceToColor

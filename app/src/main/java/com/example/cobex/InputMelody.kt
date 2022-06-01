@@ -17,6 +17,7 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.example.cobex.helper.Extensions.resourceToString
 import com.example.cobex.artifacts.Artifact
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.databinding.FragmentInputMelodyBinding
 import com.example.cobex.helper.MidiHelper
 import com.example.cobex.helper.PermissionHelper

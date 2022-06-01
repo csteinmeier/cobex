@@ -1,8 +1,7 @@
 package com.example.cobex.timelineview
 
-import com.example.cobex.CompositionArtifact
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.R
-import com.example.cobex.artifacts.Artifact
 import java.time.format.DateTimeFormatter
 
 typealias TimelineItemType = TimelineObject.Type

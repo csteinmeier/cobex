@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.cobex.CompositionArtifact
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.helper.Extensions.showAsToast
 import com.example.cobex.helper.PermissionHelper
 import com.example.cobex.R

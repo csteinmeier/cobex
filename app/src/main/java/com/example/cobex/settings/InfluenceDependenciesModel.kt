@@ -1,10 +1,8 @@
 package com.example.cobex.settings
 
 import android.content.Context
-import com.example.cobex.CompositionArtifact
 import com.example.cobex.R
 import com.example.cobex.artifacts.Artifact
-import java.time.format.DateTimeFormatter
 
 typealias InfluenceDependenciesType = InfluenceDependenciesModel.Type
 

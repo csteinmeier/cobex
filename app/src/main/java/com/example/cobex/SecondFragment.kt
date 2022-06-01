@@ -2,12 +2,12 @@ package com.example.cobex
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.databinding.FragmentSecondBinding
 
 /**

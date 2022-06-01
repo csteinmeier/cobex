@@ -1,16 +1,13 @@
 package com.example.cobex
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.capture_action.CaptureAction
 import com.example.cobex.databinding.FragmentCreateNewBinding
 

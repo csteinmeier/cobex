@@ -2,11 +2,10 @@ package com.example.cobex.settings
 
 import android.content.Context
 import android.content.ContextWrapper
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cobex.CompositionArtifact
+import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.R
 import com.example.cobex.ViewHelper
 import com.example.cobex.artifacts.Artifact
