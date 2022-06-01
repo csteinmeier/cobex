@@ -1,4 +1,4 @@
-package com.example.cobex
+package com.example.cobex.capture_picture
 
 import android.Manifest
 import android.app.Activity
@@ -22,10 +22,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cobex.helper.Extensions.toImage
+import com.example.cobex.R
 import com.example.cobex.artifacts.Artifact
 import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.databinding.FragmentCapturePictureBinding
+import com.example.cobex.helper.Extensions.toImage
 import com.example.cobex.helper.PermissionHelper
 import com.example.cobex.timelineview.TimelineObject
 import java.io.File
@@ -39,6 +40,7 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
     private var _binding: FragmentCapturePictureBinding? = null
     private lateinit var pictureListManager: PictureListManager
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,6 +49,8 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
         _binding = FragmentCapturePictureBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -92,7 +96,6 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
             getStringSet(requireContext(), TimelineObject.CapturePictureItem::class.java)?.let { addAll(it) }
             getStringSet(requireContext(), TimelineObject.BigImageItem::class.java)?.let { addAll(it) }
         }
-        Log.e("dasdasd", mutableSet.toString())
         return mutableSet.toList()
     }
 
@@ -236,17 +239,25 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
 
                 /**Sets the value of the LiveData to the picture*/
                 fun addImage(newPicture: Bitmap) {
-                    val file = saveImageInternal(newPicture)
+                    // ObjectDetection via tfLite
+                    val prediction = ObjectDetectionHelper.getInstance(context).predict(newPicture)
+
+                    val label : String = prediction?.label?: "UNABLE_TO_DETECT"
+
+                    val file = saveImageInternal(newPicture, label)
+                    
                     _pictures.value = CapturedPicture(
                         bitmap = newPicture,
                         file = file
                     )
+
                     synchroniseArtifact(
                         context,
                         file.absolutePath,
                         CapturePicture::class.java,
                         CompositionArtifact.IArtifact.SynchronizeMode.APPEND
                     )
+
                     setButtonEnable()
                 }
 
@@ -260,10 +271,10 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
                 }
 
 
-                private fun saveImageInternal(bitmap: Bitmap): File {
+                private fun saveImageInternal(bitmap: Bitmap, prediction: String): File {
                     val artifact = CompositionArtifact.getInstance(context)
                     val timeStamp = artifact.getTimeStamp()
-                    val file = File(artifact.getImageFileDir(), "$timeStamp.jpg")
+                    val file = File(artifact.getImageFileDir(), "$timeStamp:$prediction.jpg")
                     try {
                         val stream: OutputStream = FileOutputStream(file)
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
@@ -350,5 +361,7 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE
     )
+
+
 
 }

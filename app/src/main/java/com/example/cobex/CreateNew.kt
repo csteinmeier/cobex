@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.capture_action.CaptureAction
+import com.example.cobex.capture_picture.CapturePicture
 import com.example.cobex.databinding.FragmentCreateNewBinding
 
 /**

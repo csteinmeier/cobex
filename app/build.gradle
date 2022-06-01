@@ -84,9 +84,11 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly-SNAPSHOT'
     implementation 'org.tensorflow:tensorflow-lite-support:0.0.0-nightly-SNAPSHOT'
 
-    //PieChart
+
+
+    // PieChart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
-    //TimeLine
+    // TimeLine
     implementation 'pl.hypeapp:materialtimelineview:1.1'
 }
