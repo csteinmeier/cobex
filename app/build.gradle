@@ -58,6 +58,11 @@ android {
     buildFeatures {
         dataBinding true
         viewBinding true
+        mlModelBinding true
+    }
+
+    aaptOptions {
+        noCompress "tflite"
     }
 }
 
@@ -75,14 +80,15 @@ dependencies {
     implementation 'androidx.test:core-ktx:1.4.0'
     implementation 'com.google.android.gms:play-services-location:19.0.1'
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     // Tensorflow lite dependencies
-    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly-SNAPSHOT'
-    implementation 'org.tensorflow:tensorflow-lite-gpu:0.0.0-nightly-SNAPSHOT'
-    implementation 'org.tensorflow:tensorflow-lite-support:0.0.0-nightly-SNAPSHOT'
+    implementation 'org.tensorflow:tensorflow-lite:2.4.0'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.1.0'
+    implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0'
 
 
 

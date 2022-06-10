@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.ImageDecoder
 import android.media.MediaPlayer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,4 +74,8 @@ object Extensions {
         drawAble.draw(canvas)
         return bitmap
     }
+
+    fun String.extractPathOfImage() = this.substringBefore('!')
+    fun String.extractPossiblePredictionsOfImage() = this.substringAfter('!')
+
 }

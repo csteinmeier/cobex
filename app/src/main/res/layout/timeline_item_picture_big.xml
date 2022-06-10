@@ -32,10 +32,48 @@
                 android:id="@+id/timeline_imageView_picture_big"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
+                android:layout_margin="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:layout_width="189dp"
+                android:layout_height="218dp"
+                android:layout_marginStart="1dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/timeline_imageView_picture_big"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="20dp"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:id="@+id/timeline_imageView_picture_big_prediction1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/timeline_imageView_picture_big_prediction2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="TextView" />
+
+                <TextView
+                    android:id="@+id/timeline_imageView_picture_big_prediction3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:text="TextView" />
+            </LinearLayout>
 
         </pl.hypeapp.materialtimelineview.MaterialTimelineView>
 

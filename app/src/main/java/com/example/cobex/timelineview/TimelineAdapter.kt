@@ -77,7 +77,12 @@ class TimelineAdapter(
     fun extendImage(position: Int) {
         val image = timelineItems[position] as TimelineObject.CapturePictureItem
         val biggerImage =
-            TimelineObject.BigImageItem(image.id, image.createdTimeAsString, image.imgSrc)
+            TimelineObject.BigImageItem(
+                id = image.id,
+                createdTimeAsString = image.createdTimeAsString,
+                imgSrc = image.imgSrc,
+                predictions = image.predictions
+            )
         replaceItems(position, biggerImage)
     }
 
@@ -90,7 +95,12 @@ class TimelineAdapter(
     fun shrinkImage(position: Int) {
         val image = timelineItems[position] as TimelineObject.BigImageItem
         val smallerImage =
-            TimelineObject.CapturePictureItem(image.id, image.createdTimeAsString, image.imgSrc)
+            TimelineObject.CapturePictureItem(
+                id = image.id,
+                createdTimeAsString = image.createdTimeAsString,
+                imgSrc = image.imgSrc,
+                predictions = image.predictions
+            )
         replaceItems(position, smallerImage)
     }
 

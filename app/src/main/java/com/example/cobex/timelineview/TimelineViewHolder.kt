@@ -1,6 +1,7 @@
 package com.example.cobex.timelineview
 
 import android.media.MediaPlayer
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -8,11 +9,11 @@ import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cobex.helper.Extensions.prepareProgressWithSound
-import com.example.cobex.helper.Extensions.toLayout
 import com.example.cobex.R
 import com.example.cobex.ViewHelper
 import com.example.cobex.capture_action.Activities
+import com.example.cobex.helper.Extensions.prepareProgressWithSound
+import com.example.cobex.helper.Extensions.toLayout
 import com.example.cobex.timelineview.TimelineViewHolder.Companion.getHolder
 import kotlinx.android.synthetic.main.timeline_item_capture_sound.view.*
 import kotlinx.android.synthetic.main.timeline_item_input_melody.view.*
@@ -176,7 +177,40 @@ sealed class TimelineViewHolder(
             ViewHelper.ImageViewBitmap(
                 itemView.timeline_imageView_picture_big, item.imgSrc, context
             )
+
+            val predictions = getPredictions(item)
+
+            ViewHelper.SimpleTextField(
+                view = itemView.timeline_imageView_picture_big_prediction1,
+                resource = predictions[0]
+            )
+
+
+            ViewHelper.SimpleTextField(
+                view = itemView.timeline_imageView_picture_big_prediction2,
+                resource = predictions[1]
+            )
+
+            ViewHelper.SimpleTextField(
+                view = itemView.timeline_imageView_picture_big_prediction3,
+                resource = predictions[2]
+            )
+
         }
+
+        private fun getPredictions(item: TimelineObject.BigImageItem): List<String> {
+            var predictions = item.predictions
+            predictions = predictions.substring(1, predictions.length - 1)
+            val predictionList = predictions.split(',')
+            return predictionList.map { it.savedPredictionToReadableString() }
+        }
+
+        private fun String.savedPredictionToReadableString() : String{
+            var label = this.substringAfter("Label:").substringBefore('|')
+            var score = this.substringAfter('|').substringBefore("]")
+            return "$label:\n$score"
+        }
+
 
         override fun onSingleTapUp(p0: MotionEvent?): Boolean {
             viewModel.adapter.shrinkImage(adapterPosition)

@@ -32,6 +32,7 @@ sealed class TimelineObject(
         id: String,
         createdTimeAsString: String,
         val imgSrc: String,
+        val predictions : String,
         pos: Int? = -1
     ) :
         TimelineObject(id, Type.CAPTURE_PICTURE_ITEM, createdTimeAsString, pos)
@@ -72,6 +73,7 @@ sealed class TimelineObject(
         id: String,
         createdTimeAsString: String,
         val imgSrc: String,
+        val predictions: String,
         pos: Int? = -1
     ) :
         TimelineObject(id, Type.BIG_IMAGE_ITEM, createdTimeAsString, pos)

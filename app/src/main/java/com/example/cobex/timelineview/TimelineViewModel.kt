@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.R
+import com.example.cobex.helper.Extensions.extractPathOfImage
+import com.example.cobex.helper.Extensions.extractPossiblePredictionsOfImage
 
 /**
  *
@@ -168,8 +170,9 @@ class TimelineViewModel(
             = TimelineObject.CapturePictureItem(
                 id = savedString,
                 createdTimeAsString = savedString.substringAfter("images/"),
-                imgSrc = savedString,
-                pos = position
+                imgSrc = savedString.extractPathOfImage(),
+                pos = position,
+                predictions = savedString.extractPossiblePredictionsOfImage()
             )
 
             override fun storedSetToItemList(storedSet: Set<String>): List<TimelineObject> =

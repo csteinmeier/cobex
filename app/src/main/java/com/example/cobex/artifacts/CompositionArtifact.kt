@@ -2,6 +2,7 @@ package com.example.cobex.artifacts
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.util.Log
 import com.example.cobex.helper.SingletonHolder
 import java.io.File
 import java.time.Instant
@@ -201,13 +202,28 @@ class CompositionArtifact private constructor(private val context: Context) {
         ){
             markAsSavedIfNotMarkedAsSaved(context, clazz)
             val list = getStringSet(context, clazz)?.toMutableList()?: mutableListOf()
+            Log.e("List", list.toString())
             when(mode){
                 SynchronizeMode.APPEND -> list.add(stringToSyn)
-                SynchronizeMode.REMOVE -> list.remove(stringToSyn)
+                SynchronizeMode.REMOVE -> list.remove(list.findSameSaved(stringToSyn))
             }
             putCounter(context, clazz, list.size)
             putStringSet(context, clazz, list.toSet())
         }
+
+        private fun List<String>.findSameSaved(stringToSyn: String): String? {
+            Log.e("St", stringToSyn)
+            Log.e("L", this.toString())
+            val finding = this.find { it.substringBefore('!') == stringToSyn }
+            if (finding != null) {
+                Log.e("Finding", finding)
+            }
+            return finding
+        }
+
+
+
+
         fun getFileDir(context: Context) =
             CompositionArtifact.getInstance(context).getFileDir()
     }

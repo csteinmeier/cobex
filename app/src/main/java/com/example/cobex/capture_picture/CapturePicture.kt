@@ -23,9 +23,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cobex.R
-import com.example.cobex.artifacts.Artifact
 import com.example.cobex.artifacts.CompositionArtifact
 import com.example.cobex.databinding.FragmentCapturePictureBinding
+import com.example.cobex.helper.Extensions.extractPathOfImage
 import com.example.cobex.helper.Extensions.toImage
 import com.example.cobex.helper.PermissionHelper
 import com.example.cobex.timelineview.TimelineObject
@@ -183,7 +183,7 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
                 listHolder.find { holder ->
                     !holder.isBitmapPicture()
                 }
-                    ?.addImage(path)
+                    ?.addImage(path.extractPathOfImage())
             }
 
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
@@ -242,7 +242,7 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
                     // ObjectDetection via tfLite
                     val prediction = ObjectDetectionHelper.getInstance(context).predict(newPicture)
 
-                    val label : String = prediction?.label?: "UNABLE_TO_DETECT"
+                    val label : String = prediction[0].label
 
                     val file = saveImageInternal(newPicture, label)
                     
@@ -253,13 +253,14 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
 
                     synchroniseArtifact(
                         context,
-                        file.absolutePath,
+                        "${file.absolutePath}!$prediction",
                         CapturePicture::class.java,
                         CompositionArtifact.IArtifact.SynchronizeMode.APPEND
                     )
 
                     setButtonEnable()
                 }
+
 
                 fun addImage(filePath: String) {
                     val file = File(filePath)
@@ -295,7 +296,7 @@ class CapturePicture : Fragment(), PermissionHelper.IRequirePermission, Composit
                     synchroniseArtifact(
                         context,
                         filePath!!,
-                        Artifact.CapturePicture.javaClass,
+                        CapturePicture::class.java,
                         CompositionArtifact.IArtifact.SynchronizeMode.REMOVE
                     )
                     setButtonEnable()

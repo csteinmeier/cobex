@@ -19,125 +19,114 @@ package com.example.cobex.capture_picture
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.RectF
+import android.util.Log
 import android.util.Size
+import androidx.core.graphics.get
 import com.example.cobex.helper.SingletonHolder
+import com.example.cobex.ml.ImageScene
+import com.example.cobex.ml.LiteModelImageScene1
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.nnapi.NnApiDelegate
 import org.tensorflow.lite.support.common.FileUtil
+import org.tensorflow.lite.support.common.TensorProcessor
 import org.tensorflow.lite.support.common.ops.NormalizeOp
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
-import org.tensorflow.lite.support.image.ops.ResizeWithCropOrPadOp
-import org.tensorflow.lite.support.image.ops.Rot90Op
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import java.io.BufferedReader
+import java.io.FileInputStream
+import java.io.InputStreamReader
+import java.math.BigDecimal
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.nio.MappedByteBuffer
+import java.nio.channels.FileChannel
+import java.text.DecimalFormat
+import java.util.*
 
 /**
  * Helper class used to communicate between our app and the TF object detection model
  */
-class ObjectDetectionHelper private constructor(context: Context) {
+class ObjectDetectionHelper private constructor(private val context: Context) {
 
-    /** Abstraction object that wraps a prediction output in an easy to parse way */
-    data class ObjectPrediction(val location: RectF, val label: String, val score: Float)
+    data class ObjectPrediction(val label: String, val score: Float){
+        override fun toString() =
+            "[Label:${label}|Score: ${String.format(Locale.CANADA,"%.2f", score * 100)}%]"
 
-    private val locations = arrayOf(Array(OBJECT_COUNT) { FloatArray(4) })
-    private val labelIndices =  arrayOf(FloatArray(OBJECT_COUNT))
-    private val scores =  arrayOf(FloatArray(OBJECT_COUNT))
+    }
 
-    private var imageRotationDegrees: Int = 0
-    private val tfImageBuffer = TensorImage(DataType.UINT8)
+    private val intValues = IntArray(DIM_X * DIM_Y)
 
-    private val labels by lazy {
+    private val labels: MutableList<String> by lazy {
         FileUtil.loadLabels(context, LABELS_PATH)
     }
 
-    /**
-     * To determine required tensor shape for a model
-     */
-    private val tfInputSize by lazy {
-        val inputIndex = 0
-        val inputShape = tfLite.getInputTensor(inputIndex).shape()
-        Size(inputShape[2], inputShape[1]) // Order of axis is: {1, height, width, 3}
-        //expects squares of size 300 x 300
+
+    private val byteBuffer by lazy {
+        ByteBuffer.allocateDirect(  4 * BATCH_SIZE * DIM_X * DIM_Y * PIXEL_SIZE)
     }
 
-    /**
-     * To transform image data for a model:
-     */
-    private fun tfImageProcessor(bitmap: Bitmap): ImageProcessor? {
-        val cropSize = minOf(bitmap.width, bitmap.height)
-        return ImageProcessor.Builder()
-            .add(ResizeWithCropOrPadOp(cropSize, cropSize))
-            .add(
-                ResizeOp(
-                tfInputSize.height, tfInputSize.width, ResizeOp.ResizeMethod.NEAREST_NEIGHBOR)
-            )
-            .add(Rot90Op(-imageRotationDegrees / 90))
-            .add(NormalizeOp(0f, 1f))
-            .build()
+    private val tensorBuffer by lazy {
+        TensorBuffer.createFixedSize(intArrayOf(1, DIM_X, DIM_Y, 3), DATATYPE)
     }
 
+    private fun convertBitmapToByteBuffer(bitmap: Bitmap): ByteBuffer {
+        byteBuffer.order(ByteOrder.nativeOrder())
+        bitmap.getPixels(intValues, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+        byteBuffer.rewind()
 
-    /**
-     * TfLite Interpreter
-     * @see MODEL_PATH
-     */
-    private val tfLite by lazy {
-        Interpreter(
-            FileUtil.loadMappedFile(context, MODEL_PATH),
-            // NNAPI DELEGATE to handle hardware acceleration of the model execution
-            // Recommended but not required. (Speed up)
-            Interpreter.Options().addDelegate(nnApiDelegate))
-    }
-
-    private val nnApiDelegate by lazy  {
-        NnApiDelegate()
-    }
-
-    private val outputBuffer = mapOf(
-        0 to locations,
-        1 to labelIndices,
-        2 to scores,
-        3 to FloatArray(1)
-    )
-
-    private val predictions get() = (0 until OBJECT_COUNT).map { predictions ->
-        ObjectPrediction(
-
-            // The locations are an array of [0, 1] floats for [top, left, bottom, right]
-            location = locations[0][predictions].let {
-                RectF(it[1], it[0], it[3], it[2])
-            },
-
-            // SSD Mobilenet V1 Model assumes class 0 is background class
-            // in label file and class labels start from 1 to number_of_classes + 1,
-            // while outputClasses correspond to class index from 0 to number_of_classes
-            label = labels[1 + labelIndices[0][predictions].toInt()],
-
-            // Score is a single value of [0, 1]
-            score = scores[0][predictions]
-        )
+        var pixel = 0
+        for (i in 0 until DIM_X) {
+            for (j in 0 until DIM_Y) {
+                val `val` = intValues[pixel++]
+                byteBuffer.putFloat(((`val` shr 16 and 0xFF)  - 1f))
+                byteBuffer.putFloat(((`val` shr 8 and 0xFF)  - 1f))
+                byteBuffer.putFloat(((`val` and 0xFF) - 1f))
+            }
+        }
+        return byteBuffer
     }
 
 
-    private fun predict(image: TensorImage): List<ObjectPrediction> {
-        tfLite.runForMultipleInputsOutputs(arrayOf(image.buffer), outputBuffer)
-        return predictions
-    }
+    private fun getPredictionMap(predictions: FloatArray) = labels.zip(predictions.toList())
 
-    fun predict(bitmap: Bitmap): ObjectPrediction? {
-        val tfImage = tfImageProcessor(bitmap)?.process(tfImageBuffer.apply { load(bitmap) })
-        val predictions = tfImage?.let { predict(it) }
-        return predictions?.maxByOrNull { it.score }
+    private fun getNBest(n: Int, predictions: FloatArray) =
+        getPredictionMap(predictions).sortedByDescending { it.second }.take(n)
+
+    private fun List<Pair<String, Float>>.toObjectPredictions() =
+        this.map { ObjectPrediction(it.first, it.second) }
+
+    fun predict(bitmap: Bitmap): List<ObjectPrediction> {
+
+        val model = ImageScene.newInstance(context)
+
+        tensorBuffer.loadBuffer(convertBitmapToByteBuffer(bitmap))
+
+        val predictions = model.process(tensorBuffer).outputFeature0AsTensorBuffer.floatArray
+
+        model.close()
+
+        val bestN = getNBest(3, predictions).toObjectPredictions()
+
+        bestN.forEach { Log.i("Best:", it.toString()) }
+
+        return bestN
     }
 
     companion object : SingletonHolder<ObjectDetectionHelper, Context>(::ObjectDetectionHelper)
     {
-        const val OBJECT_COUNT = 10
-        // Settings for Object Detection Model
-        private const val ACCURACY_THRESHOLD = 0.5f
-        private const val MODEL_PATH = "coco_ssd_mobilenet_v1_1.0_quant.tflite"
-        private const val LABELS_PATH = "coco_ssd_mobilenet_v1_1.0_labels.txt"
+
+        private const val LABELS_PATH = "coco_ssd_mobilenet_v1_1.0_labels2.txt"
+
+        private const val DIM_X = 224
+        private const val DIM_Y = 224
+
+        private const val BATCH_SIZE = 1
+        private const val PIXEL_SIZE = 3
+        private val DATATYPE = DataType.FLOAT32
+
 
     }
 }
