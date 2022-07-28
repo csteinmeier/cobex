@@ -22,6 +22,8 @@ object PermissionHelper {
 
     const val FRAGMENT_INPUT_MELODY_CODE = 130
 
+    const val FRAGMENT_CREATE_RHYTHM_CODE = 140
+
     const val CAMARA_REQUEST_CODE = 11
     const val ACTIVITY_RECOGNITION_REQUEST_CODE = 43
 

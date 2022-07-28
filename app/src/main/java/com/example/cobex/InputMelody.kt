@@ -21,16 +21,13 @@ import com.example.cobex.databinding.FragmentInputMelodyBinding
 import com.example.cobex.helper.MidiHelper
 import com.example.cobex.helper.PermissionHelper
 
-
 /**
  * A simple [Fragment] subclass.
  * Use the [InputMelody.newInstance] factory method to
  * create an instance of this fragment.
  */
-class InputMelody : Fragment(), View.OnTouchListener,
-    AdapterView.OnItemSelectedListener, CompositionArtifact.IArtifact,
-    PermissionHelper.IRequirePermission {
-
+class InputMelody : Fragment(), View.OnTouchListener, AdapterView.OnItemSelectedListener, CompositionArtifact.IArtifact, PermissionHelper.IRequirePermission
+{
     private var _binding: FragmentInputMelodyBinding? = null
     private lateinit var event: ByteArray
     private var midihelper : MidiHelper = MidiHelper()
@@ -38,11 +35,8 @@ class InputMelody : Fragment(), View.OnTouchListener,
     private var mRecorder: MediaRecorder? = null
     private val mPlayer: MediaPlayer? = null
 
-    // we can record up to 5 melodies for each experience
-
-    private fun getRecNo(context: Context) = getCounter(context, Artifact.InputMelody.javaClass) % 5
-    private fun melodyFileDir(context: Context) =
-        "${getFileDir(context)}/audiorec${getRecNo(context)}.3gp"
+    private fun getRecNo(context: Context) = getCounter(context, Artifact.InputMelody.javaClass) % 5  // we can record up to 5 melodies for each experience
+    private fun melodyFileDir(context: Context) = "${getFileDir(context)}/audiorec_melody_${getRecNo(context)}.3gp"
 
     var mStartRecording = true
     var mStartPlaying = false
@@ -97,11 +91,8 @@ class InputMelody : Fragment(), View.OnTouchListener,
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
+    {
         helperOnRequestPermissionResult(
             requestCode = requestCode,
             permission = permissions,
